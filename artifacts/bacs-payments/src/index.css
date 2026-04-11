@@ -1,0 +1,77 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --font-sans: 'Livvic', sans-serif;
+  --font-body: 'Mulish', sans-serif;
+  --radius: 30px;
+
+  --primary-blue: #006cf4;
+  --primary-blue-hover: #003578;
+  --navy: #00263e;
+  --dark-navy: #002f5c;
+  --link-blue: #005a9c;
+  --secondary-blue: #04589b;
+  --highlight-blue: #05579B;
+  --green: #178830;
+  --error-red: #d72714;
+  --disabled-grey: #979797;
+  --body-text: #3d3d3d;
+  --border-grey: #BBBBBB;
+  --disabled-bg: #CCCCCC;
+  --disabled-border: #ACACAC;
+  --tab-inactive-bg: #eaf5f8;
+  --tab-active-text: #4a4a49;
+  --tab-inactive-text: #0d2c41;
+}
+
+@theme inline {
+  --font-sans: 'Livvic', sans-serif;
+  --color-primary-blue: #006cf4;
+  --color-primary-blue-hover: #003578;
+  --color-navy: #00263e;
+  --color-dark-navy: #002f5c;
+  --color-link-blue: #005a9c;
+  --color-secondary-blue: #04589b;
+  --color-highlight-blue: #05579B;
+  --color-green: #178830;
+  --color-error-red: #d72714;
+  --color-disabled-grey: #979797;
+  --color-body-text: #3d3d3d;
+  --color-border-grey: #BBBBBB;
+  --color-disabled-bg: #CCCCCC;
+  --color-disabled-border: #ACACAC;
+  --color-tab-inactive-bg: #eaf5f8;
+  --color-tab-active-text: #4a4a49;
+  --color-tab-inactive-text: #0d2c41;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Livvic', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  margin: 0;
+  padding: 0;
+  background-color: #f0f0f0;
+  color: #3d3d3d;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #62bda8;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #4ea896;
+}
