@@ -6,6 +6,7 @@ import ReadOnlyInput from "../components/ReadOnlyInput";
 import DataGrid from "../components/DataGrid";
 import SelectInput from "../components/SelectInput";
 import { MdCheck } from "react-icons/md";
+import lvLogo from "@assets/image_1775892371361.png";
 
 const TAB_LIST = [
   "Tax Free",
@@ -60,7 +61,7 @@ export default function BacsPayments() {
     <div className="min-h-screen flex flex-col bg-[#f0f0f0]">
       <header className="w-full bg-[#00263e] text-white px-8 pt-4 pb-6">
         <div className="flex items-center justify-between">
-          <span className="font-['Livvic'] text-lg font-semibold tracking-tight">LV=</span>
+          <img src={lvLogo} alt="LV= Logo" className="h-6" />
           <button className="h-8 px-4 text-white font-['Livvic'] text-sm hover:bg-white/10 rounded-[30px] transition-colors cursor-pointer">
             Logout
           </button>
@@ -344,7 +345,7 @@ export default function BacsPayments() {
       </main>
 
       <footer className="w-full bg-white border-t border-slate-200 mt-auto shrink-0 py-4 px-8 flex items-center justify-between">
-        <span className="font-['Livvic'] text-sm font-semibold text-[#00263e]">LV=</span>
+        <img src={lvLogo} alt="LV= Logo" className="h-6" />
         <div className="text-right">
           <p className="text-[10px] font-medium text-slate-400">
             Liverpool Victoria Friendly Society Limited
