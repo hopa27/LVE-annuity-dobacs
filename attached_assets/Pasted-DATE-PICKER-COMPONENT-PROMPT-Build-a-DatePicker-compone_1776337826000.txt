@@ -1,0 +1,57 @@
+DATE PICKER COMPONENT PROMPT
+
+Build a DatePicker component using React, Tailwind CSS, and these dependencies: react-day-picker, date-fns, @radix-ui/react-popover, react-icons/md. It combines a custom Input, a Popover, and a Calendar.
+
+Fonts: Load via Google Fonts — Livvic (headers/navigation) and Mulish (input text/day numbers/placeholders).
+
+TRIGGER (Input field):
+
+Height: 44px, border-radius: 8px, border: 1px solid #BBBBBB, white background
+Font: Mulish 16px, text color #3d3d3d, placeholder color #BBBBBB
+Read-only — displays selected date formatted as dd, MMM, yyyy
+Right side: vertical separator line (h-6, w-1px, bg-#BBBBBB) followed by MdOutlineCalendarToday icon in #006cf4
+Hover: border becomes #178830
+Focus / Open state (no error): border 2px solid #178830 (padding adjusts inward by 1px each side to prevent layout shift)
+Error state: border 1px solid #d72714, icon becomes #d72714, placeholder becomes #d72714
+POPUP (Calendar container):
+
+Border-radius: 12px, border: 2px solid #178830 (or #d72714 on error)
+White background, no padding, overflow-hidden to respect rounded corners
+Aligned to start of trigger
+CALENDAR (inside popup):
+
+Three internal views controlled by state: Days, Months, Years
+Days View:
+
+Caption is split into two clickable ghost buttons side-by-side: Month name (click → opens Month picker) and Year (click → opens Year picker). Both styled font-bold text-#005a9c 16px, hover → #003578
+Navigation arrows (left/right chevrons): text-#005a9c, hover #003578, 7x7px ghost buttons
+Weekday header row: background #eef4f8, text #002f5c (error state: #d72714)
+Day cells: font-['Mulish'], default rounded-none
+Hover: bg-#003578 text-white rounded-full
+Selected: bg-#006cf4 text-white rounded-full, hover → bg-#003578
+Today: text-#006cf4 font-semibold
+Outside-month days: diagonal hatch pattern (repeating-linear-gradient(45deg, transparent, transparent 5px, #e7ebec 5px, #e7ebec 10px)), 50% opacity
+Month Picker View:
+
+3-column grid of all 12 months
+Each cell shows small month number above + full month name below
+Selected month: bg-#006cf4 text-white, hover same
+Unselected: text-#3d3d3d, hover → bg-#006cf4 text-white
+Header: left/right arrows cycle years, year text is clickable → opens Year picker
+Year Picker View:
+
+5-column grid showing 25 years at a time
+Selected year: bg-#006cf4 text-white
+Unselected years: diagonal hatch pattern background (repeating-linear-gradient(45deg, transparent, transparent 5px, #e7ebec 5px, #e7ebec 10px)), hover → bg-#006cf4 text-white
+Navigation arrows shift the range by 25 years
+Header shows range (e.g. 2010 - 2034), styled font-bold text-#005a9c
+Props:
+
+error?: boolean — toggles all error styling (red borders, red icon, red weekday text)
+placeholder?: string — defaults to "DOB"
+Usage:
+
+<DatePicker />
+<DatePicker error />
+<DatePicker placeholder="Select date" />
+
