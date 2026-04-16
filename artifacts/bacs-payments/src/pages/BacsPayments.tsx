@@ -58,7 +58,7 @@ export default function BacsPayments() {
   const [statusBarText] = useState("");
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#f0f0f0]">
+    <div className="flex flex-col bg-[#f0f0f0]" style={{ minHeight: 'calc(100vh / 0.8)' }}>
       <header className="w-full bg-[#00263e] text-white px-8 pt-4 pb-6">
         <div className="flex items-center justify-between">
           <img src={lvLogo} alt="LV= Logo" className="h-6" />
