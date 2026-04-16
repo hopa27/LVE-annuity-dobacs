@@ -59,7 +59,7 @@ export default function BacsPayments() {
 
   return (
     <div className="flex flex-col bg-[#f0f0f0]" style={{ minHeight: 'calc(100vh / 0.8)' }}>
-      <header className="w-full bg-[#00263e] text-white px-8 pt-4 pb-6">
+      <header className="w-full bg-[#00263e] text-white px-[142px] pt-4 pb-6">
         <div className="flex items-center justify-between">
           <img src={lvLogo} alt="LV= Logo" className="h-6" />
           <button className="h-8 px-4 text-white font-['Livvic'] text-sm hover:bg-white/10 rounded-[30px] transition-colors cursor-pointer">
@@ -344,7 +344,7 @@ export default function BacsPayments() {
         </div>
       </main>
 
-      <footer className="w-full bg-white border-t border-slate-200 mt-auto shrink-0 py-4 px-8 flex items-center justify-between">
+      <footer className="w-full bg-white border-t border-slate-200 mt-auto shrink-0 py-4 px-[142px] flex items-center justify-between">
         <img src={lvLogo} alt="LV= Logo" className="h-6" />
         <div className="text-right">
           <p className="text-[10px] font-medium text-slate-400">
