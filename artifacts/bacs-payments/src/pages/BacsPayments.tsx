@@ -72,7 +72,7 @@ export default function BacsPayments() {
         </h1>
       </header>
 
-      <main className="flex-1 px-8 py-6">
+      <main className="flex-1 px-[142px] py-6">
         <div className="bg-white rounded-[12px] shadow-sm border border-[#BBBBBB]/30 p-6">
           <div className="flex items-center gap-6 mb-6 flex-wrap">
             <DateInput label="Completion Start" value={completionStart} onChange={setCompletionStart} />
