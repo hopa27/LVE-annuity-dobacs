@@ -301,7 +301,6 @@ export default function BacsPayments() {
 
         {/* Bottom bar */}
         <div className="flex items-center gap-6 mt-5 flex-wrap">
-          <ActionButton label="Close" variant="secondary" />
           <div className="flex-1 flex justify-center">
             <input
               type="text"
