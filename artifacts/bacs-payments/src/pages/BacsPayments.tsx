@@ -117,48 +117,17 @@ export default function BacsPayments() {
 
               {/* First and One Off Payments Tab */}
               <Tabs.Content value="First and One Off Payments">
-                <div className="border border-[#BBBBBB]/40 rounded-[8px] p-4 mb-4 bg-[#fafbfc]">
-                  <div className="flex items-center gap-6 mb-3 flex-wrap">
-                    <DateInput label="Start Run Month" value={startRunMonth} onChange={setStartRunMonth} />
-                    <DateInput label="End Run Month" value={endRunMonth} onChange={setEndRunMonth} />
-                    <div className="ml-auto flex items-center gap-3">
-                      <ActionButton label="Show Payments" variant="secondary" />
-                      <ActionButton label="Print Report" variant="secondary" />
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-6 flex-wrap">
-                    <SelectInput
-                      label="Payment Type"
-                      value={paymentType}
-                      options={["All", "First", "One Off"]}
-                      onChange={setPaymentType}
-                    />
-                    <label className="flex items-center gap-2 font-['Livvic'] text-sm font-medium text-[#3d3d3d] cursor-pointer">
-                      Include non-PAYE cases
-                      <div
-                        className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors cursor-pointer ${
-                          includeNonPaye ? "bg-[#178830] border-[#178830]" : "border-[#979797] bg-white"
-                        }`}
-                        onClick={() => setIncludeNonPaye(!includeNonPaye)}
-                      >
-                        {includeNonPaye && <MdCheck className="text-white text-sm" />}
-                      </div>
-                    </label>
-                  </div>
-                </div>
-                <div className="min-h-[300px]">
+                <div className="min-h-[350px]">
                   <DataGrid columns={paymentColumns} />
                 </div>
                 <div className="flex items-center gap-6 mt-5 flex-wrap">
                   <ReadOnlyInput label="Payments" />
-                  <ReadOnlyInput label="Total Net" width="w-[160px]" />
-                  <ReadOnlyInput label="Total Gross" width="w-[180px]" />
+                  <ReadOnlyInput label="Total First Payments" width="w-[180px]" />
                   <ReadOnlyInput label="Total Tax" width="w-[120px]" />
-                </div>
-                <div className="flex items-center gap-3 mt-4 justify-center flex-wrap">
-                  <ActionButton label="Save To Bacs" icon variant="primary" />
-                  <ActionButton label="Save And Commit To BACS" icon variant="primary" />
-                  <ActionButton label="Save To CSV" icon variant="primary" />
+                  <div className="ml-auto flex items-center gap-3">
+                    <ActionButton label="Save To Bacs" icon variant="primary" />
+                    <ActionButton label="Save And Commit To BACS" icon variant="primary" />
+                  </div>
                 </div>
               </Tabs.Content>
 
