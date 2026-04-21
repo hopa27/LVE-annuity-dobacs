@@ -53,8 +53,6 @@ export default function ReportPrintModal({
 
   if (!open) return null;
 
-  const total = rows.length;
-
   const toolbarBtn =
     "h-10 w-10 flex items-center justify-center rounded-full bg-white text-[#04589b] border border-[#04589b] font-bold hover:bg-[#003578] hover:text-white hover:border-[#003578] transition-colors cursor-pointer";
   const toolbarBtnDisabled =
@@ -109,11 +107,6 @@ export default function ReportPrintModal({
             <option>125%</option>
             <option>150%</option>
           </select>
-          <div className="ml-auto flex items-center gap-4 font-['Mulish'] text-sm text-[#3d3d3d]">
-            <span><span className="font-semibold text-[#002f5c]">Total:</span> {total}</span>
-            <span><span className="font-semibold text-[#002f5c]">Zoom:</span> {zoom}</span>
-            <span><span className="font-semibold text-[#002f5c]">Showing:</span> {total} of {total}</span>
-          </div>
         </div>
 
         <div className="flex-1 overflow-auto bg-[#f0f0f0] p-6">
