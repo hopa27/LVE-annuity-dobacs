@@ -300,9 +300,13 @@ export default function BacsPayments() {
   const [reportPrintOpen, setReportPrintOpen] = useState(false);
   const [reportPrintWarningOpen, setReportPrintWarningOpen] = useState(false);
   const handlePrintReport = () => {
-    if (["Tax Free", "First and One Off Payments", "Maturities", "FirstPayments MCP"].includes(activeTab)) {
-      setReportPrintWarningOpen(true);
+    if (!["Tax Free", "First and One Off Payments", "Maturities", "FirstPayments MCP"].includes(activeTab)) return;
+    if (!showData) {
+      setNoDataMessage("No Data found");
+      setNoDataOpen(true);
+      return;
     }
+    setReportPrintWarningOpen(true);
   };
   const openReportPrintModal = () => { setReportPrintWarningOpen(false); setReportPrintOpen(true); };
   const reportConfig = (() => {
