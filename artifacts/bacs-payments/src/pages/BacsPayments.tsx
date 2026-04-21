@@ -170,11 +170,19 @@ const monthlyDiffColumns = [
 ];
 
 const MONTHLY_DIFFERENCES = [
-  { policyNo: "221330", currentDate: "12/05/2025", currentRef: "AV2635737", currentGross: "833.33", previousDate: "12/04/2025", previousRef: "AV2635737", previousGross: "812.50" },
-  { policyNo: "222718", currentDate: "22/04/2025", currentRef: "CA25483", currentGross: "1459.65", previousDate: "22/03/2025", previousRef: "CA25483", previousGross: "1402.10" },
-  { policyNo: "225050", currentDate: "02/05/2025", currentRef: "FAE9BWPYL", currentGross: "412.58", previousDate: "02/04/2025", previousRef: "FAE9BWPYL", previousGross: "390.45" },
-  { policyNo: "225112", currentDate: "08/05/2025", currentRef: "INVENC269", currentGross: "2128.20", previousDate: "08/04/2025", previousRef: "INVENC269", previousGross: "2050.00" },
-  { policyNo: "225131", currentDate: "18/06/2025", currentRef: "AV2635801", currentGross: "860.75", previousDate: "18/05/2025", previousRef: "AV2635801", previousGross: "835.20" },
+  { policyNo: "915265.0", currentDate: "21/02/2025", currentRef: "159", currentGross: "-£211.50", previousDate: "15/02/2025", previousRef: "158", previousGross: "-£211.50" },
+  { policyNo: "986018.0", currentDate: "03/04/2025", currentRef: "10", currentGross: "-£900.00", previousDate: "30/03/2025", previousRef: "9", previousGross: "-£900.00" },
+  { policyNo: "124084.1", currentDate: "04/04/2025", currentRef: "2", currentGross: "£558.20", previousDate: "06/03/2025", previousRef: "1", previousGross: "£1,116.40" },
+  { policyNo: "987101.0", currentDate: "03/04/2025", currentRef: "49", currentGross: "£2,813.77", previousDate: "03/03/2025", previousRef: "48", previousGross: "£2,731.90" },
+  { policyNo: "102918.1", currentDate: "03/06/2025", currentRef: "47", currentGross: "£441.67", previousDate: "03/04/2025", previousRef: "", previousGross: "£196.50" },
+  { policyNo: "100272.9.0", currentDate: "03/06/2025", currentRef: "25", currentGross: "£641.29", previousDate: "03/05/2025", previousRef: "24", previousGross: "£819.79" },
+  { policyNo: "105276.1", currentDate: "10/02/2025", currentRef: "8", currentGross: "£105.05", previousDate: "10/02/2025", previousRef: "7", previousGross: "£105.14" },
+  { policyNo: "105276.1", currentDate: "10/03/2025", currentRef: "8", currentGross: "£105.05", previousDate: "10/02/2025", previousRef: "7", previousGross: "£105.14" },
+  { policyNo: "934753.0", currentDate: "12/07/2025", currentRef: "14", currentGross: "£1,155.31", previousDate: "29/06/2025", previousRef: "13", previousGross: "£200.52" },
+  { policyNo: "100161.9.0", currentDate: "03/04/2025", currentRef: "25", currentGross: "£442.04", previousDate: "03/03/2025", previousRef: "24", previousGross: "£429.24" },
+  { policyNo: "918067.0", currentDate: "03/04/2025", currentRef: "159", currentGross: "£144.88", previousDate: "24/02/2025", previousRef: "158", previousGross: "£155.01" },
+  { policyNo: "908148.0", currentDate: "03/06/2025", currentRef: "170", currentGross: "£441.67", previousDate: "03/05/2025", previousRef: "169", previousGross: "£403.65" },
+  { policyNo: "919276.0", currentDate: "29/04/2025", currentRef: "7", currentGross: "£85.42", previousDate: "29/03/2025", previousRef: "7", previousGross: "£85.42" },
 ];
 
 const maturityColumns = [
