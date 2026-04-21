@@ -251,6 +251,11 @@ export default function BacsPayments() {
   const [noDataOpen, setNoDataOpen] = useState(false);
   const [noDataMessage, setNoDataMessage] = useState("No Data found");
   const [printPreviewOpen, setPrintPreviewOpen] = useState(false);
+  const [showProcessed, setShowProcessed] = useState(false);
+  const [processedWarningOpen, setProcessedWarningOpen] = useState(false);
+  const handleShowProcessed = () => setProcessedWarningOpen(true);
+  const handleProcessedYes = () => { setProcessedWarningOpen(false); setShowProcessed(true); };
+  const handleProcessedNo = () => { setProcessedWarningOpen(false); setShowProcessed(true); };
   const handleShowPayments = () => setWarningOpen(true);
   const handleWarningYes = () => { setWarningOpen(false); setShowData(true); };
   const handleWarningNo = () => { setWarningOpen(false); setShowData(true); };
@@ -268,6 +273,12 @@ export default function BacsPayments() {
         message="Some of the payments have already been committed. Would you like to exclude these payments?"
         onYes={handleWarningYes}
         onNo={handleWarningNo}
+      />
+      <WarningDialog
+        open={processedWarningOpen}
+        message="Some of the payments have already been committed. Would you like to exclude these payments?"
+        onYes={handleProcessedYes}
+        onNo={handleProcessedNo}
       />
       <InfoDialog
         open={noDataOpen}
@@ -362,7 +373,7 @@ export default function BacsPayments() {
                     <DateInput label="Start Run Month" value={startRunMonth} onChange={setStartRunMonth} />
                     <DateInput label="End Run Month" value={endRunMonth} onChange={setEndRunMonth} />
                     <div className="ml-auto flex items-center gap-3">
-                      <ActionButton label="Show Payments" variant="secondary" onClick={handleShowPayments} />
+                      <ActionButton label="Show Payments" variant="secondary" onClick={handleShowProcessed} />
                       <ActionButton label="Print Report" variant="secondary" />
                     </div>
                   </div>
@@ -389,13 +400,13 @@ export default function BacsPayments() {
                   </div>
                 </div>
                 <div className="min-h-[300px]">
-                  <DataGrid columns={paymentColumns} data={[]} />
+                  <DataGrid columns={paymentColumns} data={showProcessed ? PROCESSED_PAYMENTS : []} />
                 </div>
                 <div className="flex items-center gap-6 mt-5 flex-wrap">
-                  <ReadOnlyInput label="Payments" value="" />
-                  <ReadOnlyInput label="Total Net" width="w-[160px]" value="" />
-                  <ReadOnlyInput label="Total Gross" width="w-[180px]" value="" />
-                  <ReadOnlyInput label="Total Tax" width="w-[120px]" value="" />
+                  <ReadOnlyInput label="Payments" value={showProcessed ? String(PROCESSED_TOTALS.count) : ""} />
+                  <ReadOnlyInput label="Total Net" width="w-[160px]" value={showProcessed ? fmt(PROCESSED_TOTALS.totalNet) : ""} />
+                  <ReadOnlyInput label="Total Gross" width="w-[180px]" value={showProcessed ? fmt(PROCESSED_TOTALS.totalGross) : ""} />
+                  <ReadOnlyInput label="Total Tax" width="w-[120px]" value={showProcessed ? fmt(PROCESSED_TOTALS.totalTax) : ""} />
                 </div>
                 <div className="flex items-center gap-3 mt-4 justify-center flex-wrap">
                   <ActionButton label="Save To Bacs" icon variant="primary" />
