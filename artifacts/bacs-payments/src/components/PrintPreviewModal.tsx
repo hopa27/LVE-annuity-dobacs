@@ -45,7 +45,9 @@ export default function PrintPreviewModal({
   const total = rows.length;
 
   const toolbarBtn =
-    "h-9 w-9 flex items-center justify-center rounded-full text-[#04589b] hover:bg-[#04589b] hover:text-white transition-colors cursor-pointer";
+    "h-10 w-10 flex items-center justify-center rounded-full bg-white text-[#04589b] border border-[#04589b] font-bold hover:bg-[#003578] hover:text-white hover:border-[#003578] transition-colors cursor-pointer";
+  const toolbarBtnDisabled =
+    "h-10 w-10 flex items-center justify-center rounded-full bg-white text-[#979797] border border-[#979797] cursor-not-allowed";
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
@@ -61,8 +63,8 @@ export default function PrintPreviewModal({
         </div>
 
         <div className="bg-white border-b border-[#BBBBBB] px-5 py-3 flex items-center gap-2 flex-wrap">
-          <button className={toolbarBtn}><MdSkipPrevious className="text-xl" /></button>
-          <button className={toolbarBtn}><MdChevronLeft className="text-xl" /></button>
+          <button disabled className={toolbarBtnDisabled}><MdSkipPrevious className="text-xl" /></button>
+          <button disabled className={toolbarBtnDisabled}><MdChevronLeft className="text-xl" /></button>
           <span className="font-['Mulish'] text-sm text-[#3d3d3d] px-2">1 of 1+</span>
           <button className={toolbarBtn}><MdChevronRight className="text-xl" /></button>
           <button className={toolbarBtn}><MdSkipNext className="text-xl" /></button>
