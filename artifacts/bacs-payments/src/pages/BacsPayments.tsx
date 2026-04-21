@@ -99,6 +99,19 @@ const TAX_FREE_TOTALS = {
   totalTaxFreeCash: 15753633.63,
 };
 
+const MATURITY_PAYMENTS = [
+  { sortCode: "77-48-14", accountNo: "24782346", zero: "0", amount: "111306", accountName: "Testaabbblc", bankRef: "AV2635737", nineNine: "99", policyNo: "191152", tax: "" },
+  { sortCode: "77-48-14", accountNo: "24782346", zero: "0", amount: "68692", accountName: "Testdpbjdb", bankRef: "CA25483", nineNine: "99", policyNo: "195931", tax: "" },
+  { sortCode: "77-48-14", accountNo: "24782346", zero: "0", amount: "71363", accountName: "Testdpbjhfa", bankRef: "CA25483", nineNine: "99", policyNo: "195750", tax: "" },
+  { sortCode: "77-48-14", accountNo: "24782346", zero: "0", amount: "64678", accountName: "Testcecaecbc", bankRef: "FAE9BWPYLDUG", nineNine: "99", policyNo: "204212", tax: "" },
+  { sortCode: "77-48-14", accountNo: "24782346", zero: "0", amount: "27915", accountName: "Testmebccg.b", bankRef: "121226", nineNine: "99", policyNo: "121226.1", tax: "0" },
+];
+
+const MATURITY_TOTALS = {
+  count: 5,
+  totalMaturityPayments: 343954,
+};
+
 const maturityColumns = [
   { key: "sortCode", label: "Sort Code" },
   { key: "accountNo", label: "Bank Account No" },
@@ -287,11 +300,11 @@ export default function BacsPayments() {
               {/* Maturities Tab */}
               <Tabs.Content value="Maturities">
                 <div className="min-h-[350px]">
-                  <DataGrid columns={maturityColumns} data={paymentRows} />
+                  <DataGrid columns={maturityColumns} data={showData ? MATURITY_PAYMENTS : []} />
                 </div>
                 <div className="flex items-center gap-6 mt-5 flex-wrap">
-                  <ReadOnlyInput label="Payments" value={showData ? String(paymentRows.length) : ""} />
-                  <ReadOnlyInput label="Total Maturity Payments" width="w-[200px]" value={showData ? fmt(totalAmount) : ""} />
+                  <ReadOnlyInput label="Payments" value={showData ? String(MATURITY_TOTALS.count) : ""} />
+                  <ReadOnlyInput label="Total Maturity Payments" width="w-[200px]" value={showData ? fmt(MATURITY_TOTALS.totalMaturityPayments) : ""} />
                   <div className="ml-auto">
                     <ActionButton label="Save and Commit To Bacs" icon variant="primary" />
                   </div>
