@@ -29,6 +29,20 @@ const paymentColumns = [
   { key: "nineNine", label: "'99'" },
   { key: "bacsDate", label: "BACS Date" },
   { key: "policyNo", label: "Policy No" },
+  { key: "tax", label: "Tax" },
+  { key: "hash", label: "Hash" },
+  { key: "payMethod", label: "Pay Method" },
+];
+
+const SAMPLE_PAYMENTS = [
+  { sortCode: "77-48-14", accountNo: "24782346", zero: "0", amount: "608.58", accountName: "Testmnccfebd", bankRef: "225413", nineNine: "99", bacsDate: "31/12/2025", policyNo: "225413", tax: "0.00", hash: "/LHH", payMethod: "B" },
+  { sortCode: "77-48-14", accountNo: "24782346", zero: "0", amount: "397.25", accountName: "Testmnccfedf", bankRef: "225435", nineNine: "99", bacsDate: "15/07/2025", policyNo: "225435", tax: "0.00", hash: "/AQN", payMethod: "B" },
+  { sortCode: "77-48-14", accountNo: "24782346", zero: "0", amount: "1502.03", accountName: "Testdnccfiaf", bankRef: "225805", nineNine: "99", bacsDate: "01/08/2025", policyNo: "225805", tax: "-113.20", hash: "/AM3", payMethod: "B" },
+  { sortCode: "77-48-14", accountNo: "24782346", zero: "0", amount: "666.66", accountName: "Testalccfiee", bankRef: "225844", nineNine: "99", bacsDate: "07/08/2025", policyNo: "225844", tax: "0.00", hash: "/CUK", payMethod: "B" },
+  { sortCode: "77-48-14", accountNo: "24782346", zero: "0", amount: "2076.33", accountName: "Testcrccfiii", bankRef: "225888", nineNine: "99", bacsDate: "04/07/2025", policyNo: "225888", tax: "-257.00", hash: "/.21", payMethod: "B" },
+  { sortCode: "77-48-14", accountNo: "24782346", zero: "0", amount: "333.33", accountName: "Testmyccgaii", bankRef: "226088", nineNine: "99", bacsDate: "15/09/2025", policyNo: "226088", tax: "0.00", hash: "/L7J", payMethod: "B" },
+  { sortCode: "77-48-14", accountNo: "24782346", zero: "0", amount: "414.91", accountName: "Testmdccgdea", bankRef: "226300", nineNine: "99", bacsDate: "15/09/2025", policyNo: "226300", tax: "0.00", hash: "/RK5", payMethod: "B" },
+  { sortCode: "77-48-14", accountNo: "24782346", zero: "0", amount: "833.33", accountName: "Testmyccgfch", bankRef: "226527", nineNine: "99", bacsDate: "12/02/2026", policyNo: "226527", tax: "0.00", hash: "/F13", payMethod: "B" },
 ];
 
 const maturityColumns = [
@@ -56,6 +70,13 @@ export default function BacsPayments() {
   const [paymentType, setPaymentType] = useState("All");
   const [includeNonPaye, setIncludeNonPaye] = useState(true);
   const [statusBarText] = useState("");
+  const [showData, setShowData] = useState(false);
+  const paymentRows = showData ? SAMPLE_PAYMENTS : [];
+  const totalAmount = paymentRows.reduce((sum, r) => sum + parseFloat(r.amount), 0);
+  const totalTax = paymentRows.reduce((sum, r) => sum + parseFloat(r.tax), 0);
+  const totalNet = totalAmount;
+  const totalGross = totalAmount - totalTax;
+  const fmt = (n: number) => n.toLocaleString("en-GB", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
   return (
     <div className="flex flex-col bg-[#f0f0f0]" style={{ minHeight: 'calc(100vh / 0.8)' }}>
@@ -79,7 +100,7 @@ export default function BacsPayments() {
             <DateInput label="Completion Start" value={completionStart} onChange={setCompletionStart} />
             <DateInput label="Completion End" value={completionEnd} onChange={setCompletionEnd} />
             <div className="ml-auto flex items-center gap-3">
-              <ActionButton label="Show Payments" variant="secondary" />
+              <ActionButton label="Show Payments" variant="secondary" onClick={() => setShowData(true)} />
               <ActionButton label="Print Report" variant="secondary" />
             </div>
           </div>
@@ -105,11 +126,11 @@ export default function BacsPayments() {
               {/* Tax Free Tab */}
               <Tabs.Content value="Tax Free">
                 <div className="min-h-[350px]">
-                  <DataGrid columns={paymentColumns} />
+                  <DataGrid columns={paymentColumns} data={paymentRows} />
                 </div>
                 <div className="flex items-center gap-6 mt-5 flex-wrap">
-                  <ReadOnlyInput label="Payments" />
-                  <ReadOnlyInput label="Total Tax Free Cash" width="w-[200px]" />
+                  <ReadOnlyInput label="Payments" value={showData ? String(paymentRows.length) : ""} />
+                  <ReadOnlyInput label="Total Tax Free Cash" width="w-[200px]" value={showData ? fmt(totalAmount) : ""} />
                   <div className="ml-auto">
                     <ActionButton label="Save To Bacs" icon variant="primary" />
                   </div>
@@ -119,12 +140,12 @@ export default function BacsPayments() {
               {/* First and One Off Payments Tab */}
               <Tabs.Content value="First and One Off Payments">
                 <div className="min-h-[350px]">
-                  <DataGrid columns={paymentColumns} />
+                  <DataGrid columns={paymentColumns} data={paymentRows} />
                 </div>
                 <div className="flex items-center gap-6 mt-5 flex-wrap">
-                  <ReadOnlyInput label="Payments" />
-                  <ReadOnlyInput label="Total First Payments" width="w-[180px]" />
-                  <ReadOnlyInput label="Total Tax" width="w-[120px]" />
+                  <ReadOnlyInput label="Payments" value={showData ? String(paymentRows.length) : ""} />
+                  <ReadOnlyInput label="Total First Payments" width="w-[180px]" value={showData ? fmt(totalAmount) : ""} />
+                  <ReadOnlyInput label="Total Tax" width="w-[120px]" value={showData ? fmt(totalTax) : ""} />
                   <div className="ml-auto flex items-center gap-3">
                     <ActionButton label="Save To Bacs" icon variant="primary" />
                     <ActionButton label="Save And Commit To BACS" icon variant="primary" />
@@ -139,7 +160,7 @@ export default function BacsPayments() {
                     <DateInput label="Start Run Month" value={startRunMonth} onChange={setStartRunMonth} />
                     <DateInput label="End Run Month" value={endRunMonth} onChange={setEndRunMonth} />
                     <div className="ml-auto flex items-center gap-3">
-                      <ActionButton label="Show Payments" variant="secondary" />
+                      <ActionButton label="Show Payments" variant="secondary" onClick={() => setShowData(true)} />
                       <ActionButton label="Print Report" variant="secondary" />
                     </div>
                   </div>
@@ -166,13 +187,13 @@ export default function BacsPayments() {
                   </div>
                 </div>
                 <div className="min-h-[300px]">
-                  <DataGrid columns={paymentColumns} />
+                  <DataGrid columns={paymentColumns} data={paymentRows} />
                 </div>
                 <div className="flex items-center gap-6 mt-5 flex-wrap">
-                  <ReadOnlyInput label="Payments" />
-                  <ReadOnlyInput label="Total Net" width="w-[160px]" />
-                  <ReadOnlyInput label="Total Gross" width="w-[180px]" />
-                  <ReadOnlyInput label="Total Tax" width="w-[120px]" />
+                  <ReadOnlyInput label="Payments" value={showData ? String(paymentRows.length) : ""} />
+                  <ReadOnlyInput label="Total Net" width="w-[160px]" value={showData ? fmt(totalNet) : ""} />
+                  <ReadOnlyInput label="Total Gross" width="w-[180px]" value={showData ? fmt(totalGross) : ""} />
+                  <ReadOnlyInput label="Total Tax" width="w-[120px]" value={showData ? fmt(totalTax) : ""} />
                 </div>
                 <div className="flex items-center gap-3 mt-4 justify-center flex-wrap">
                   <ActionButton label="Save To Bacs" icon variant="primary" />
@@ -203,11 +224,11 @@ export default function BacsPayments() {
               {/* Maturities Tab */}
               <Tabs.Content value="Maturities">
                 <div className="min-h-[350px]">
-                  <DataGrid columns={maturityColumns} />
+                  <DataGrid columns={maturityColumns} data={paymentRows} />
                 </div>
                 <div className="flex items-center gap-6 mt-5 flex-wrap">
-                  <ReadOnlyInput label="Payments" />
-                  <ReadOnlyInput label="Total Maturity Payments" width="w-[200px]" />
+                  <ReadOnlyInput label="Payments" value={showData ? String(paymentRows.length) : ""} />
+                  <ReadOnlyInput label="Total Maturity Payments" width="w-[200px]" value={showData ? fmt(totalAmount) : ""} />
                   <div className="ml-auto">
                     <ActionButton label="Save and Commit To Bacs" icon variant="primary" />
                   </div>
@@ -243,12 +264,12 @@ export default function BacsPayments() {
               {/* FirstPayments MCP Tab */}
               <Tabs.Content value="FirstPayments MCP">
                 <div className="min-h-[350px]">
-                  <DataGrid columns={paymentColumns} />
+                  <DataGrid columns={paymentColumns} data={paymentRows} />
                 </div>
                 <div className="flex items-center gap-6 mt-5 flex-wrap">
-                  <ReadOnlyInput label="Payments" />
-                  <ReadOnlyInput label="Total First Payments" width="w-[180px]" />
-                  <ReadOnlyInput label="Total Tax" width="w-[120px]" />
+                  <ReadOnlyInput label="Payments" value={showData ? String(paymentRows.length) : ""} />
+                  <ReadOnlyInput label="Total First Payments" width="w-[180px]" value={showData ? fmt(totalAmount) : ""} />
+                  <ReadOnlyInput label="Total Tax" width="w-[120px]" value={showData ? fmt(totalTax) : ""} />
                   <div className="ml-auto flex items-center gap-3">
                     <ActionButton label="Save To Bacs" icon variant="primary" />
                     <ActionButton label="Save And Commit To BACS" icon variant="primary" />
@@ -263,7 +284,7 @@ export default function BacsPayments() {
                     <DateInput label="Start Run Month" value={startRunMonth} onChange={setStartRunMonth} />
                     <DateInput label="End Run Month" value={endRunMonth} onChange={setEndRunMonth} />
                     <div className="ml-auto flex items-center gap-3">
-                      <ActionButton label="Show Payments" variant="secondary" />
+                      <ActionButton label="Show Payments" variant="secondary" onClick={() => setShowData(true)} />
                       <ActionButton label="Print Report" variant="secondary" />
                     </div>
                   </div>
@@ -290,11 +311,11 @@ export default function BacsPayments() {
                   </div>
                 </div>
                 <div className="min-h-[300px]">
-                  <DataGrid columns={paymentColumns} />
+                  <DataGrid columns={paymentColumns} data={paymentRows} />
                 </div>
                 <div className="flex items-center gap-6 mt-5 flex-wrap">
-                  <ReadOnlyInput label="Payments" />
-                  <ReadOnlyInput label="Total Tax Free Cash" width="w-[200px]" />
+                  <ReadOnlyInput label="Payments" value={showData ? String(paymentRows.length) : ""} />
+                  <ReadOnlyInput label="Total Tax Free Cash" width="w-[200px]" value={showData ? fmt(totalAmount) : ""} />
                   <div className="ml-auto">
                     <ActionButton label="Save And Commit To Bacs" icon variant="primary" />
                   </div>
