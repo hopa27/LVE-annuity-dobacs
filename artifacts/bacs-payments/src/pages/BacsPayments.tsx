@@ -151,6 +151,8 @@ export default function BacsPayments() {
   const [completionEnd, setCompletionEnd] = useState("21/03/2026");
   const [startRunMonth, setStartRunMonth] = useState("04/04/2026");
   const [endRunMonth, setEndRunMonth] = useState("05/04/2026");
+  const [mcpStartRunMonth, setMcpStartRunMonth] = useState("01/05/2024");
+  const [mcpEndRunMonth, setMcpEndRunMonth] = useState("05/04/2026");
   const [monthlyStartRun, setMonthlyStartRun] = useState("31/03/2026");
   const [monthlyEndRun, setMonthlyEndRun] = useState("31/03/2026");
   const [reportsStartRun, setReportsStartRun] = useState("01/04/2026");
@@ -378,8 +380,8 @@ export default function BacsPayments() {
               <Tabs.Content value="Processed MCP">
                 <div className="border border-[#BBBBBB]/40 rounded-[8px] p-4 mb-4 bg-[#fafbfc]">
                   <div className="flex items-center gap-6 mb-3 flex-wrap">
-                    <DateInput label="Start Run Month" value={startRunMonth} onChange={setStartRunMonth} />
-                    <DateInput label="End Run Month" value={endRunMonth} onChange={setEndRunMonth} />
+                    <DateInput label="Start Run Month" value={mcpStartRunMonth} onChange={setMcpStartRunMonth} />
+                    <DateInput label="End Run Month" value={mcpEndRunMonth} onChange={setMcpEndRunMonth} />
                     <div className="ml-auto flex items-center gap-3">
                       <ActionButton label="Show Payments" variant="secondary" onClick={handleShowPayments} />
                       <ActionButton label="Print Report" variant="secondary" />
