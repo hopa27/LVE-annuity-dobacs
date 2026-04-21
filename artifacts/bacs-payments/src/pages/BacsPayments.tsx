@@ -5,6 +5,7 @@ import ActionButton from "../components/ActionButton";
 import ReadOnlyInput from "../components/ReadOnlyInput";
 import DataGrid from "../components/DataGrid";
 import SelectInput from "../components/SelectInput";
+import WarningDialog from "../components/WarningDialog";
 import { MdCheck } from "react-icons/md";
 import lvLogo from "@assets/image_1775892371361.png";
 
@@ -71,6 +72,10 @@ export default function BacsPayments() {
   const [includeNonPaye, setIncludeNonPaye] = useState(true);
   const [statusBarText] = useState("");
   const [showData, setShowData] = useState(false);
+  const [warningOpen, setWarningOpen] = useState(false);
+  const handleShowPayments = () => setWarningOpen(true);
+  const handleWarningYes = () => { setWarningOpen(false); setShowData(true); };
+  const handleWarningNo = () => { setWarningOpen(false); setShowData(true); };
   const paymentRows = showData ? SAMPLE_PAYMENTS : [];
   const totalAmount = paymentRows.reduce((sum, r) => sum + parseFloat(r.amount), 0);
   const totalTax = paymentRows.reduce((sum, r) => sum + parseFloat(r.tax), 0);
@@ -80,6 +85,12 @@ export default function BacsPayments() {
 
   return (
     <div className="flex flex-col bg-[#f0f0f0]" style={{ minHeight: 'calc(100vh / 0.8)' }}>
+      <WarningDialog
+        open={warningOpen}
+        message="Some of the payments have already been committed. Would you like to exclude these payments?"
+        onYes={handleWarningYes}
+        onNo={handleWarningNo}
+      />
       <header className="w-full bg-[#00263e] text-white px-[142px] pt-4 pb-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-6">
@@ -100,7 +111,7 @@ export default function BacsPayments() {
             <DateInput label="Completion Start" value={completionStart} onChange={setCompletionStart} />
             <DateInput label="Completion End" value={completionEnd} onChange={setCompletionEnd} />
             <div className="ml-auto flex items-center gap-3">
-              <ActionButton label="Show Payments" variant="secondary" onClick={() => setShowData(true)} />
+              <ActionButton label="Show Payments" variant="secondary" onClick={handleShowPayments} />
               <ActionButton label="Print Report" variant="secondary" />
             </div>
           </div>
@@ -160,7 +171,7 @@ export default function BacsPayments() {
                     <DateInput label="Start Run Month" value={startRunMonth} onChange={setStartRunMonth} />
                     <DateInput label="End Run Month" value={endRunMonth} onChange={setEndRunMonth} />
                     <div className="ml-auto flex items-center gap-3">
-                      <ActionButton label="Show Payments" variant="secondary" onClick={() => setShowData(true)} />
+                      <ActionButton label="Show Payments" variant="secondary" onClick={handleShowPayments} />
                       <ActionButton label="Print Report" variant="secondary" />
                     </div>
                   </div>
@@ -283,7 +294,7 @@ export default function BacsPayments() {
                     <DateInput label="Start Run Month" value={startRunMonth} onChange={setStartRunMonth} />
                     <DateInput label="End Run Month" value={endRunMonth} onChange={setEndRunMonth} />
                     <div className="ml-auto flex items-center gap-3">
-                      <ActionButton label="Show Payments" variant="secondary" onClick={() => setShowData(true)} />
+                      <ActionButton label="Show Payments" variant="secondary" onClick={handleShowPayments} />
                       <ActionButton label="Print Report" variant="secondary" />
                     </div>
                   </div>
