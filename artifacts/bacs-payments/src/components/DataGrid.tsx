@@ -13,24 +13,24 @@ export default function DataGrid({ columns, data = [], minHeight = "min-h-[300px
   return (
     <div className={`border border-[#BBBBBB] rounded-[8px] bg-white overflow-hidden ${minHeight}`}>
       <table className="w-full border-separate border-spacing-0">
-        <thead>
-          <tr>
-            {columns.map((col) => (
-              <th
-                key={col.key}
-                className="py-3 px-[5px] font-['Livvic'] font-semibold text-[#002f5c] text-sm text-left border-b-[3px] border-b-[#04589b] border-t-[3px] border-t-[#04589b] bg-white"
-              >
-                {col.label}
-              </th>
-            ))}
-          </tr>
-        </thead>
+        {data.length > 0 && (
+          <thead>
+            <tr>
+              {columns.map((col) => (
+                <th
+                  key={col.key}
+                  className="py-3 px-[5px] font-['Livvic'] font-semibold text-[#002f5c] text-sm text-left border-b-[3px] border-b-[#04589b] border-t-[3px] border-t-[#04589b] bg-white"
+                >
+                  {col.label}
+                </th>
+              ))}
+            </tr>
+          </thead>
+        )}
         <tbody>
           {data.length === 0 ? (
             <tr>
-              <td colSpan={columns.length} className="py-8 text-center font-['Mulish'] text-[#979797] text-sm">
-                No data to display
-              </td>
+              <td className="p-0"></td>
             </tr>
           ) : (
             data.map((row, i) => (
