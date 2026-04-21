@@ -324,17 +324,6 @@ export default function BacsPayments() {
           </Tabs.Root>
         </div>
 
-        {/* Bottom bar */}
-        <div className="flex items-center gap-6 mt-5 flex-wrap">
-          <div className="flex-1 flex justify-center">
-            <input
-              type="text"
-              readOnly
-              value={statusBarText}
-              className="h-[44px] w-[200px] rounded-[8px] border border-[#BBBBBB] bg-white px-[12px] py-[8px] font-['Mulish'] text-[16px] leading-[26px] text-[#3d3d3d] outline-none"
-            />
-          </div>
-        </div>
       </main>
 
       <footer className="w-full bg-white border-t border-slate-200 mt-auto shrink-0 py-4 px-[142px] flex items-center justify-between">
