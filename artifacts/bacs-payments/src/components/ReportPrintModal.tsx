@@ -7,6 +7,11 @@ import {
   MdPrint,
   MdSave,
   MdClose,
+  MdInsertDriveFile,
+  MdViewModule,
+  MdViewAgenda,
+  MdFolderOpen,
+  MdLocalPrintshop,
 } from "react-icons/md";
 
 export interface ReportColumn {
@@ -69,14 +74,29 @@ export default function ReportPrintModal({
         </div>
 
         <div className="bg-white border-b border-[#BBBBBB] px-5 py-3 flex items-center gap-2 flex-wrap">
-          <button disabled className={toolbarBtnDisabled}><MdSkipPrevious className="text-xl" /></button>
-          <button disabled className={toolbarBtnDisabled}><MdChevronLeft className="text-xl" /></button>
-          <span className="font-['Mulish'] text-sm text-[#3d3d3d] px-2">1 of 1</span>
-          <button className={toolbarBtn}><MdChevronRight className="text-xl" /></button>
-          <button className={toolbarBtn}><MdSkipNext className="text-xl" /></button>
+          <button title="Single page" className={toolbarBtn}><MdInsertDriveFile className="text-xl" /></button>
+          <button title="Multiple pages" className={toolbarBtn}><MdViewModule className="text-xl" /></button>
+          <button title="Page width" className={toolbarBtn}><MdViewAgenda className="text-xl" /></button>
           <div className="w-px h-6 bg-[#BBBBBB] mx-2" />
-          <button className={toolbarBtn}><MdPrint className="text-xl" /></button>
-          <button className={toolbarBtn}><MdSave className="text-xl" /></button>
+          <button title="First page" disabled className={toolbarBtnDisabled}><MdSkipPrevious className="text-xl" /></button>
+          <button title="Previous page" disabled className={toolbarBtnDisabled}><MdChevronLeft className="text-xl" /></button>
+          <span className="font-['Mulish'] text-sm text-[#3d3d3d] px-2">1 of 1</span>
+          <button title="Next page" className={toolbarBtn}><MdChevronRight className="text-xl" /></button>
+          <button title="Last page" className={toolbarBtn}><MdSkipNext className="text-xl" /></button>
+          <div className="w-px h-6 bg-[#BBBBBB] mx-2" />
+          <button title="Print" className={toolbarBtn}><MdPrint className="text-xl" /></button>
+          <button title="Quick print" className={toolbarBtn}><MdLocalPrintshop className="text-xl" /></button>
+          <div className="w-px h-6 bg-[#BBBBBB] mx-2" />
+          <button title="Save" className={toolbarBtn}><MdSave className="text-xl" /></button>
+          <button title="Open" className={toolbarBtn}><MdFolderOpen className="text-xl" /></button>
+          <div className="w-px h-6 bg-[#BBBBBB] mx-2" />
+          <button
+            onClick={onClose}
+            title="Close"
+            className="h-10 px-5 rounded-[30px] font-['Livvic'] text-sm font-bold bg-white text-[#04589b] border border-[#04589b] hover:bg-[#003578] hover:text-white hover:border-[#003578] transition-colors cursor-pointer"
+          >
+            Close
+          </button>
           <div className="w-px h-6 bg-[#BBBBBB] mx-2" />
           <select
             value={zoom}
