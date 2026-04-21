@@ -61,15 +61,16 @@ export default function BacsPayments() {
     <div className="flex flex-col bg-[#f0f0f0]" style={{ minHeight: 'calc(100vh / 0.8)' }}>
       <header className="w-full bg-[#00263e] text-white px-[142px] pt-4 pb-6">
         <div className="flex items-center justify-between">
-          <img src={lvLogo} alt="LV= Logo" className="h-6" />
+          <div className="flex items-center gap-6">
+            <img src={lvLogo} alt="LV= Logo" className="h-6" />
+            <h1 className="font-['Livvic'] text-3xl font-normal tracking-tight text-white">
+              BACS Payments for Liverpool Victoria Friendly Society Limited
+            </h1>
+          </div>
           <button className="h-8 px-4 text-white font-['Livvic'] text-sm hover:bg-white/10 rounded-[30px] transition-colors cursor-pointer">
             Logout
           </button>
         </div>
-        <div className="h-px bg-slate-600/50 my-3" />
-        <h1 className="font-['Livvic'] text-3xl font-normal tracking-tight text-white">
-          BACS Payments for Liverpool Victoria Friendly Society Limited
-        </h1>
       </header>
 
       <main className="flex-1 px-[142px] py-6">
