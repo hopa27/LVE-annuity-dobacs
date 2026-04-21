@@ -133,6 +133,19 @@ const FIRST_PAYMENTS_MCP_TOTALS = {
   totalTax: 0,
 };
 
+const PROCESSED_MCP_PAYMENTS = [
+  { sortCode: "77-48-14", accountNo: "24782346", zero: "0", amount: "412.58", accountName: "Testjeccfafa", bankRef: "225050", nineNine: "99", bacsDate: "02/05/2025", policyNo: "225050", tax: "0.00", hash: "/63S", payMethod: "B" },
+  { sortCode: "77-48-14", accountNo: "24782346", zero: "0", amount: "860.75", accountName: "Testmnccfbdb", bankRef: "225131", nineNine: "99", bacsDate: "18/06/2025", policyNo: "225131", tax: "0.00", hash: "/XQA", payMethod: "B" },
+  { sortCode: "77-48-14", accountNo: "24782346", zero: "0", amount: "1075.22", accountName: "Testmnccgaed", bankRef: "226043", nineNine: "99", bacsDate: "09/04/2025", policyNo: "226043", tax: "0.00", hash: "/U3-", payMethod: "B" },
+  { sortCode: "77-48-14", accountNo: "24782346", zero: "0", amount: "750.00", accountName: "Testnyccfcdf", bankRef: "INVENC269064", nineNine: "99", bacsDate: "14/04/2025", policyNo: "225235", tax: "0.00", hash: "/MGC", payMethod: "B" },
+  { sortCode: "77-48-14", accountNo: "24782346", zero: "0", amount: "526.99", accountName: "Testmdccfdcfa", bankRef: "225939", nineNine: "99", bacsDate: "04/04/2025", policyNo: "225939", tax: "0.00", hash: "/VQL", payMethod: "B" },
+];
+
+const PROCESSED_MCP_TOTALS = {
+  count: 5,
+  totalTaxFreeCash: 3625.54,
+};
+
 const maturityColumns = [
   { key: "sortCode", label: "Sort Code" },
   { key: "accountNo", label: "Bank Account No" },
@@ -410,11 +423,11 @@ export default function BacsPayments() {
                   </div>
                 </div>
                 <div className="min-h-[300px]">
-                  <DataGrid columns={paymentColumns} data={[]} />
+                  <DataGrid columns={paymentColumns} data={showData ? PROCESSED_MCP_PAYMENTS : []} />
                 </div>
                 <div className="flex items-center gap-6 mt-5 flex-wrap">
-                  <ReadOnlyInput label="Payments" value="" />
-                  <ReadOnlyInput label="Total Tax Free Cash" width="w-[200px]" value="" />
+                  <ReadOnlyInput label="Payments" value={showData ? String(PROCESSED_MCP_TOTALS.count) : ""} />
+                  <ReadOnlyInput label="Total Tax Free Cash" width="w-[200px]" value={showData ? fmt(PROCESSED_MCP_TOTALS.totalTaxFreeCash) : ""} />
                   <div className="ml-auto">
                     <ActionButton label="Save And Commit To Bacs" icon variant="primary" />
                   </div>
