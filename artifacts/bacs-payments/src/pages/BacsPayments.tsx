@@ -228,6 +228,7 @@ export default function BacsPayments() {
   const [showMonthlyDiff, setShowMonthlyDiff] = useState(false);
   const [showNilIncome, setShowNilIncome] = useState(false);
   const [noDataOpen, setNoDataOpen] = useState(false);
+  const [noDataMessage, setNoDataMessage] = useState("No Data found");
   const handleShowPayments = () => setWarningOpen(true);
   const handleWarningYes = () => { setWarningOpen(false); setShowData(true); };
   const handleWarningNo = () => { setWarningOpen(false); setShowData(true); };
@@ -249,7 +250,7 @@ export default function BacsPayments() {
       <InfoDialog
         open={noDataOpen}
         title="DoBacs"
-        message="No Data found"
+        message={noDataMessage}
         onOk={() => setNoDataOpen(false)}
       />
       <header className="w-full bg-[#00263e] text-white px-[142px] pt-4 pb-6">
@@ -382,8 +383,11 @@ export default function BacsPayments() {
                     <DateInput label="End Run Month" value={monthlyEndRun} onChange={setMonthlyEndRun} />
                     <div className="ml-auto flex items-center gap-3">
                       <ActionButton label="Produce List" variant="secondary" onClick={() => { setShowMonthlyDiff(true); setShowNilIncome(false); }} />
-                      <ActionButton label="Produce Nil-Income List" variant="secondary" onClick={() => { setShowNilIncome(true); setShowMonthlyDiff(false); setNoDataOpen(true); }} />
-                      <ActionButton label="Print Preview" variant="secondary" />
+                      <ActionButton label="Produce Nil-Income List" variant="secondary" onClick={() => { setShowNilIncome(true); setShowMonthlyDiff(false); setNoDataMessage("No Data found"); setNoDataOpen(true); }} />
+                      <ActionButton label="Print Preview" variant="secondary" onClick={() => {
+                        const hasData = (showMonthlyDiff && MONTHLY_DIFFERENCES.length > 0) || (showNilIncome && false);
+                        if (!hasData) { setNoDataMessage("No data to print"); setNoDataOpen(true); }
+                      }} />
                     </div>
                   </div>
                 </div>
