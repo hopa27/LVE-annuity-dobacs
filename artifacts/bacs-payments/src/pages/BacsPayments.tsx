@@ -389,13 +389,13 @@ export default function BacsPayments() {
                   </div>
                 </div>
                 <div className="min-h-[300px]">
-                  <DataGrid columns={paymentColumns} data={showData ? PROCESSED_PAYMENTS : []} />
+                  <DataGrid columns={paymentColumns} data={[]} />
                 </div>
                 <div className="flex items-center gap-6 mt-5 flex-wrap">
-                  <ReadOnlyInput label="Payments" value={showData ? String(PROCESSED_TOTALS.count) : ""} />
-                  <ReadOnlyInput label="Total Net" width="w-[160px]" value={showData ? fmt(PROCESSED_TOTALS.totalNet) : ""} />
-                  <ReadOnlyInput label="Total Gross" width="w-[180px]" value={showData ? fmt(PROCESSED_TOTALS.totalGross) : ""} />
-                  <ReadOnlyInput label="Total Tax" width="w-[120px]" value={showData ? fmt(PROCESSED_TOTALS.totalTax) : ""} />
+                  <ReadOnlyInput label="Payments" value="" />
+                  <ReadOnlyInput label="Total Net" width="w-[160px]" value="" />
+                  <ReadOnlyInput label="Total Gross" width="w-[180px]" value="" />
+                  <ReadOnlyInput label="Total Tax" width="w-[120px]" value="" />
                 </div>
                 <div className="flex items-center gap-3 mt-4 justify-center flex-wrap">
                   <ActionButton label="Save To Bacs" icon variant="primary" />
