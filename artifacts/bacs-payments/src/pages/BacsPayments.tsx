@@ -198,13 +198,13 @@ export default function BacsPayments() {
                   </div>
                 </div>
                 <div className="min-h-[300px]">
-                  <DataGrid columns={paymentColumns} data={paymentRows} />
+                  <DataGrid columns={paymentColumns} data={[]} />
                 </div>
                 <div className="flex items-center gap-6 mt-5 flex-wrap">
-                  <ReadOnlyInput label="Payments" value={showData ? String(paymentRows.length) : ""} />
-                  <ReadOnlyInput label="Total Net" width="w-[160px]" value={showData ? fmt(totalNet) : ""} />
-                  <ReadOnlyInput label="Total Gross" width="w-[180px]" value={showData ? fmt(totalGross) : ""} />
-                  <ReadOnlyInput label="Total Tax" width="w-[120px]" value={showData ? fmt(totalTax) : ""} />
+                  <ReadOnlyInput label="Payments" value="" />
+                  <ReadOnlyInput label="Total Net" width="w-[160px]" value="" />
+                  <ReadOnlyInput label="Total Gross" width="w-[180px]" value="" />
+                  <ReadOnlyInput label="Total Tax" width="w-[120px]" value="" />
                 </div>
                 <div className="flex items-center gap-3 mt-4 justify-center flex-wrap">
                   <ActionButton label="Save To Bacs" icon variant="primary" />
@@ -321,11 +321,11 @@ export default function BacsPayments() {
                   </div>
                 </div>
                 <div className="min-h-[300px]">
-                  <DataGrid columns={paymentColumns} data={paymentRows} />
+                  <DataGrid columns={paymentColumns} data={[]} />
                 </div>
                 <div className="flex items-center gap-6 mt-5 flex-wrap">
-                  <ReadOnlyInput label="Payments" value={showData ? String(paymentRows.length) : ""} />
-                  <ReadOnlyInput label="Total Tax Free Cash" width="w-[200px]" value={showData ? fmt(totalAmount) : ""} />
+                  <ReadOnlyInput label="Payments" value="" />
+                  <ReadOnlyInput label="Total Tax Free Cash" width="w-[200px]" value="" />
                   <div className="ml-auto">
                     <ActionButton label="Save And Commit To Bacs" icon variant="primary" />
                   </div>
