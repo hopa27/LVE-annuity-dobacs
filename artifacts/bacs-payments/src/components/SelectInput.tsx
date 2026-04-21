@@ -11,7 +11,7 @@ interface SelectInputProps {
 export default function SelectInput({ label, value, options, onChange, width = "w-[100px]" }: SelectInputProps) {
   return (
     <div className="flex items-center gap-3">
-      <label className="font-['Livvic'] text-sm font-medium text-[#3d3d3d] whitespace-nowrap">
+      <label className="font-['Livvic'] text-sm font-medium text-[#3d3d3d] whitespace-nowrap min-w-[107px]">
         {label}
       </label>
       <div className="relative">
