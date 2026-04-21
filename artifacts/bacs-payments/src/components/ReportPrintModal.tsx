@@ -139,12 +139,12 @@ export default function ReportPrintModal({
                 {rows.map((r, i) => (
                   <tr
                     key={i}
-                    className={`group hover:bg-[#05579B] ${i % 2 === 0 ? "bg-white" : "bg-[#e7ebec34]"}`}
+                    className={i % 2 === 0 ? "bg-white" : "bg-[#e7ebec34]"}
                   >
                     {columns.map((col) => (
                       <td
                         key={col.key}
-                        className={`py-1.5 px-2 group-hover:text-white ${col.align === "right" ? "text-right" : "text-left"}`}
+                        className={`py-1.5 px-2 ${col.align === "right" ? "text-right" : "text-left"}`}
                       >
                         {r[col.key] ?? ""}
                       </td>
