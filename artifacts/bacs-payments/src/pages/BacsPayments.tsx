@@ -146,6 +146,19 @@ const PROCESSED_MCP_TOTALS = {
   totalTaxFreeCash: 3625.54,
 };
 
+const PROCESSED_PAYMENTS = [
+  { sortCode: "77-48-14", accountNo: "24782346", zero: "0", amount: "1459.65", accountName: "Testpsccchbi", bankRef: "222718", nineNine: "99", bacsDate: "22/04/2025", policyNo: "222718", tax: "-102.60", hash: "/PQS", payMethod: "B" },
+  { sortCode: "77-48-14", accountNo: "24782346", zero: "0", amount: "2128.20", accountName: "Testmeccfbbc", bankRef: "225112", nineNine: "99", bacsDate: "08/05/2025", policyNo: "225112", tax: "-269.80", hash: "/4C7", payMethod: "B" },
+  { sortCode: "77-48-14", accountNo: "24782346", zero: "0", amount: "890.73", accountName: "Testmsccfcbc", bankRef: "225212", nineNine: "99", bacsDate: "25/04/2025", policyNo: "225212", tax: "0.00", hash: "/MUC", payMethod: "B" },
+];
+
+const PROCESSED_TOTALS = {
+  count: 3,
+  totalNet: 4478.58,
+  totalGross: 4850.98,
+  totalTax: -372.40,
+};
+
 const maturityColumns = [
   { key: "sortCode", label: "Sort Code" },
   { key: "accountNo", label: "Bank Account No" },
@@ -300,13 +313,13 @@ export default function BacsPayments() {
                   </div>
                 </div>
                 <div className="min-h-[300px]">
-                  <DataGrid columns={paymentColumns} data={[]} />
+                  <DataGrid columns={paymentColumns} data={showData ? PROCESSED_PAYMENTS : []} />
                 </div>
                 <div className="flex items-center gap-6 mt-5 flex-wrap">
-                  <ReadOnlyInput label="Payments" value="" />
-                  <ReadOnlyInput label="Total Net" width="w-[160px]" value="" />
-                  <ReadOnlyInput label="Total Gross" width="w-[180px]" value="" />
-                  <ReadOnlyInput label="Total Tax" width="w-[120px]" value="" />
+                  <ReadOnlyInput label="Payments" value={showData ? String(PROCESSED_TOTALS.count) : ""} />
+                  <ReadOnlyInput label="Total Net" width="w-[160px]" value={showData ? fmt(PROCESSED_TOTALS.totalNet) : ""} />
+                  <ReadOnlyInput label="Total Gross" width="w-[180px]" value={showData ? fmt(PROCESSED_TOTALS.totalGross) : ""} />
+                  <ReadOnlyInput label="Total Tax" width="w-[120px]" value={showData ? fmt(PROCESSED_TOTALS.totalTax) : ""} />
                 </div>
                 <div className="flex items-center gap-3 mt-4 justify-center flex-wrap">
                   <ActionButton label="Save To Bacs" icon variant="primary" />
