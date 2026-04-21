@@ -144,12 +144,14 @@ export default function BacsPayments() {
                     </div>
                   </div>
                   <div className="flex items-center gap-6 flex-wrap">
-                    <SelectInput
-                      label="Payment Type"
-                      value={paymentType}
-                      options={["All", "First", "One Off"]}
-                      onChange={setPaymentType}
-                    />
+                    <div className="min-w-[302px]">
+                      <SelectInput
+                        label="Payment Type"
+                        value={paymentType}
+                        options={["All", "First", "One Off"]}
+                        onChange={setPaymentType}
+                      />
+                    </div>
                     <label className="flex items-center gap-2 font-['Livvic'] text-sm font-medium text-[#3d3d3d] cursor-pointer">
                       Include non-PAYE cases
                       <div
@@ -266,12 +268,14 @@ export default function BacsPayments() {
                     </div>
                   </div>
                   <div className="flex items-center gap-6 flex-wrap">
-                    <SelectInput
-                      label="Payment Type"
-                      value={paymentType}
-                      options={["All", "First", "One Off"]}
-                      onChange={setPaymentType}
-                    />
+                    <div className="min-w-[302px]">
+                      <SelectInput
+                        label="Payment Type"
+                        value={paymentType}
+                        options={["All", "First", "One Off"]}
+                        onChange={setPaymentType}
+                      />
+                    </div>
                     <label className="flex items-center gap-2 font-['Livvic'] text-sm font-medium text-[#3d3d3d] cursor-pointer">
                       Include non-PAYE cases
                       <div
