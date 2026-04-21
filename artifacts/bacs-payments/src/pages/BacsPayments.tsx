@@ -46,6 +46,27 @@ const SAMPLE_PAYMENTS = [
   { sortCode: "77-48-14", accountNo: "24782346", zero: "0", amount: "833.33", accountName: "Testmyccgfch", bankRef: "226527", nineNine: "99", bacsDate: "12/02/2026", policyNo: "226527", tax: "0.00", hash: "/F13", payMethod: "B" },
 ];
 
+const FIRST_PAYMENTS = [
+  { sortCode: "77-48-14", accountNo: "24782346", zero: "0", amount: "833.33", accountName: "Testmsccbdda", bankRef: "221330", nineNine: "99", bacsDate: "12/05/2025", policyNo: "221330", tax: "0.00", hash: "/9K4", payMethod: "B" },
+  { sortCode: "77-48-14", accountNo: "24782346", zero: "0", amount: "1459.65", accountName: "Testpsccchbi", bankRef: "222718", nineNine: "99", bacsDate: "22/04/2025", policyNo: "222718", tax: "-102.60", hash: "/PQS", payMethod: "B" },
+  { sortCode: "77-48-14", accountNo: "24782346", zero: "0", amount: "412.58", accountName: "Testjeccfafa", bankRef: "225050", nineNine: "99", bacsDate: "02/05/2025", policyNo: "225050", tax: "0.00", hash: "/63S", payMethod: "B" },
+  { sortCode: "77-48-14", accountNo: "24782346", zero: "0", amount: "2128.20", accountName: "Testmeccfbbc", bankRef: "225112", nineNine: "99", bacsDate: "08/05/2025", policyNo: "225112", tax: "-269.80", hash: "/4C7", payMethod: "B" },
+  { sortCode: "77-48-14", accountNo: "24782346", zero: "0", amount: "860.75", accountName: "Testmnccfbdb", bankRef: "225131", nineNine: "99", bacsDate: "18/06/2025", policyNo: "225131", tax: "0.00", hash: "/XQA", payMethod: "B" },
+  { sortCode: "77-48-14", accountNo: "24782346", zero: "0", amount: "890.73", accountName: "Testmsccfcbc", bankRef: "225212", nineNine: "99", bacsDate: "25/04/2025", policyNo: "225212", tax: "0.00", hash: "/MUC", payMethod: "B" },
+  { sortCode: "77-48-14", accountNo: "24782346", zero: "0", amount: "269.11", accountName: "Testmsccfcbc", bankRef: "225212", nineNine: "99", bacsDate: "01/05/2025", policyNo: "225212", tax: "-27.80", hash: "/H4B", payMethod: "B" },
+  { sortCode: "77-48-14", accountNo: "24782346", zero: "0", amount: "750.00", accountName: "Testnyccfcdf", bankRef: "INVENC269064", nineNine: "99", bacsDate: "14/04/2025", policyNo: "225235", tax: "0.00", hash: "/MGC", payMethod: "B" },
+  { sortCode: "77-48-14", accountNo: "24782346", zero: "0", amount: "753.41", accountName: "Testjlccfcje", bankRef: "225294", nineNine: "99", bacsDate: "22/04/2025", policyNo: "225294", tax: "0.00", hash: "/A.H", payMethod: "B" },
+  { sortCode: "77-48-14", accountNo: "24782346", zero: "0", amount: "1047.50", accountName: "Testmnccfdbf", bankRef: "225315", nineNine: "99", bacsDate: "17/06/2025", policyNo: "225315", tax: "0.00", hash: "//01", payMethod: "B" },
+  { sortCode: "77-48-14", accountNo: "24782346", zero: "0", amount: "174.75", accountName: "Testmnccfdbh", bankRef: "225317", nineNine: "99", bacsDate: "28/04/2025", policyNo: "225317", tax: "0.00", hash: "/S3J", payMethod: "B" },
+  { sortCode: "77-48-14", accountNo: "24782346", zero: "0", amount: "1000.00", accountName: "Testmyccfdii", bankRef: "225388", nineNine: "99", bacsDate: "14/05/2025", policyNo: "225388", tax: "0.00", hash: "/N12", payMethod: "B" },
+];
+
+const FIRST_PAYMENTS_TOTALS = {
+  count: 867,
+  totalFirstPayments: 1532011.10,
+  totalTax: -305357.03,
+};
+
 const maturityColumns = [
   { key: "sortCode", label: "Sort Code" },
   { key: "accountNo", label: "Bank Account No" },
@@ -151,12 +172,12 @@ export default function BacsPayments() {
               {/* First and One Off Payments Tab */}
               <Tabs.Content value="First and One Off Payments">
                 <div className="min-h-[350px]">
-                  <DataGrid columns={paymentColumns} data={paymentRows} />
+                  <DataGrid columns={paymentColumns} data={showData ? FIRST_PAYMENTS : []} />
                 </div>
                 <div className="flex items-center gap-6 mt-5 flex-wrap">
-                  <ReadOnlyInput label="Payments" value={showData ? String(paymentRows.length) : ""} />
-                  <ReadOnlyInput label="Total First Payments" width="w-[180px]" value={showData ? fmt(totalAmount) : ""} />
-                  <ReadOnlyInput label="Total Tax" width="w-[120px]" value={showData ? fmt(totalTax) : ""} />
+                  <ReadOnlyInput label="Payments" value={showData ? String(FIRST_PAYMENTS_TOTALS.count) : ""} />
+                  <ReadOnlyInput label="Total First Payments" width="w-[180px]" value={showData ? fmt(FIRST_PAYMENTS_TOTALS.totalFirstPayments) : ""} />
+                  <ReadOnlyInput label="Total Tax" width="w-[120px]" value={showData ? fmt(FIRST_PAYMENTS_TOTALS.totalTax) : ""} />
                   <div className="ml-auto flex items-center gap-3">
                     <ActionButton label="Save To Bacs" icon variant="primary" />
                     <ActionButton label="Save And Commit To BACS" icon variant="primary" />
