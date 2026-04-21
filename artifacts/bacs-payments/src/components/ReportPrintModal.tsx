@@ -64,7 +64,7 @@ export default function ReportPrintModal({
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
       <div className="bg-white rounded-[12px] shadow-2xl border border-[#BBBBBB] w-[1100px] max-h-[92vh] overflow-hidden flex flex-col">
         <div className="bg-[#00263e] text-white px-5 py-3 flex items-center justify-between">
-          <span className="font-['Livvic'] text-base font-semibold">Print Preview</span>
+          <span className="font-['Livvic'] text-base font-semibold">Print Report</span>
           <button
             onClick={onClose}
             className="text-white hover:bg-white/10 w-8 h-8 rounded-full flex items-center justify-center cursor-pointer"
