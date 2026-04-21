@@ -6,6 +6,7 @@ import ReadOnlyInput from "../components/ReadOnlyInput";
 import DataGrid from "../components/DataGrid";
 import SelectInput from "../components/SelectInput";
 import WarningDialog from "../components/WarningDialog";
+import InfoDialog from "../components/InfoDialog";
 import { MdCheck } from "react-icons/md";
 import lvLogo from "@assets/image_1775892371361.png";
 
@@ -159,6 +160,16 @@ const PROCESSED_TOTALS = {
   totalTax: -372.40,
 };
 
+const nilIncomeColumns = [
+  { key: "policyRef", label: "Policy Ref" },
+  { key: "paykey", label: "Paykey" },
+  { key: "benefitType", label: "Benefit Type" },
+  { key: "newAnnuityAmount", label: "New Annuity Amount" },
+  { key: "previousAnnuityAmount", label: "Previous Annuity Amount" },
+  { key: "currentPaymentDate", label: "Current Payment Date" },
+  { key: "previousPaymentDate", label: "Previous Payment Date" },
+];
+
 const monthlyDiffColumns = [
   { key: "policyNo", label: "Policy No" },
   { key: "currentDate", label: "Current Date" },
@@ -215,6 +226,8 @@ export default function BacsPayments() {
   const [showData, setShowData] = useState(false);
   const [warningOpen, setWarningOpen] = useState(false);
   const [showMonthlyDiff, setShowMonthlyDiff] = useState(false);
+  const [showNilIncome, setShowNilIncome] = useState(false);
+  const [noDataOpen, setNoDataOpen] = useState(false);
   const handleShowPayments = () => setWarningOpen(true);
   const handleWarningYes = () => { setWarningOpen(false); setShowData(true); };
   const handleWarningNo = () => { setWarningOpen(false); setShowData(true); };
@@ -232,6 +245,12 @@ export default function BacsPayments() {
         message="Some of the payments have already been committed. Would you like to exclude these payments?"
         onYes={handleWarningYes}
         onNo={handleWarningNo}
+      />
+      <InfoDialog
+        open={noDataOpen}
+        title="DoBacs"
+        message="No Data found"
+        onOk={() => setNoDataOpen(false)}
       />
       <header className="w-full bg-[#00263e] text-white px-[142px] pt-4 pb-6">
         <div className="flex items-center justify-between">
@@ -362,14 +381,18 @@ export default function BacsPayments() {
                     <DateInput label="Start Run Month" value={monthlyStartRun} onChange={setMonthlyStartRun} />
                     <DateInput label="End Run Month" value={monthlyEndRun} onChange={setMonthlyEndRun} />
                     <div className="ml-auto flex items-center gap-3">
-                      <ActionButton label="Produce List" variant="secondary" onClick={() => setShowMonthlyDiff(true)} />
-                      <ActionButton label="Produce Nil-Income List" variant="secondary" />
+                      <ActionButton label="Produce List" variant="secondary" onClick={() => { setShowMonthlyDiff(true); setShowNilIncome(false); }} />
+                      <ActionButton label="Produce Nil-Income List" variant="secondary" onClick={() => { setShowNilIncome(true); setShowMonthlyDiff(false); setNoDataOpen(true); }} />
                       <ActionButton label="Print Preview" variant="secondary" />
                     </div>
                   </div>
                 </div>
                 <div className="min-h-[350px]">
-                  <DataGrid columns={monthlyDiffColumns} data={showMonthlyDiff ? MONTHLY_DIFFERENCES : []} />
+                  {showNilIncome ? (
+                    <DataGrid columns={nilIncomeColumns} data={[]} />
+                  ) : (
+                    <DataGrid columns={monthlyDiffColumns} data={showMonthlyDiff ? MONTHLY_DIFFERENCES : []} />
+                  )}
                 </div>
               </Tabs.Content>
 
