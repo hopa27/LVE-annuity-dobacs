@@ -159,6 +159,24 @@ const PROCESSED_TOTALS = {
   totalTax: -372.40,
 };
 
+const monthlyDiffColumns = [
+  { key: "policyNo", label: "Policy No" },
+  { key: "currentDate", label: "Current Date" },
+  { key: "currentRef", label: "Current Ref" },
+  { key: "currentGross", label: "Current Gross" },
+  { key: "previousDate", label: "Previous Date" },
+  { key: "previousRef", label: "Previous Ref" },
+  { key: "previousGross", label: "Previous Gross" },
+];
+
+const MONTHLY_DIFFERENCES = [
+  { policyNo: "221330", currentDate: "12/05/2025", currentRef: "AV2635737", currentGross: "833.33", previousDate: "12/04/2025", previousRef: "AV2635737", previousGross: "812.50" },
+  { policyNo: "222718", currentDate: "22/04/2025", currentRef: "CA25483", currentGross: "1459.65", previousDate: "22/03/2025", previousRef: "CA25483", previousGross: "1402.10" },
+  { policyNo: "225050", currentDate: "02/05/2025", currentRef: "FAE9BWPYL", currentGross: "412.58", previousDate: "02/04/2025", previousRef: "FAE9BWPYL", previousGross: "390.45" },
+  { policyNo: "225112", currentDate: "08/05/2025", currentRef: "INVENC269", currentGross: "2128.20", previousDate: "08/04/2025", previousRef: "INVENC269", previousGross: "2050.00" },
+  { policyNo: "225131", currentDate: "18/06/2025", currentRef: "AV2635801", currentGross: "860.75", previousDate: "18/05/2025", previousRef: "AV2635801", previousGross: "835.20" },
+];
+
 const maturityColumns = [
   { key: "sortCode", label: "Sort Code" },
   { key: "accountNo", label: "Bank Account No" },
@@ -188,6 +206,7 @@ export default function BacsPayments() {
   const [statusBarText] = useState("");
   const [showData, setShowData] = useState(false);
   const [warningOpen, setWarningOpen] = useState(false);
+  const [showMonthlyDiff, setShowMonthlyDiff] = useState(false);
   const handleShowPayments = () => setWarningOpen(true);
   const handleWarningYes = () => { setWarningOpen(false); setShowData(true); };
   const handleWarningNo = () => { setWarningOpen(false); setShowData(true); };
@@ -335,14 +354,14 @@ export default function BacsPayments() {
                     <DateInput label="Start Run Month" value={monthlyStartRun} onChange={setMonthlyStartRun} />
                     <DateInput label="End Run Month" value={monthlyEndRun} onChange={setMonthlyEndRun} />
                     <div className="ml-auto flex items-center gap-3">
-                      <ActionButton label="Produce List" variant="secondary" />
+                      <ActionButton label="Produce List" variant="secondary" onClick={() => setShowMonthlyDiff(true)} />
                       <ActionButton label="Produce Nil-Income List" variant="secondary" />
                       <ActionButton label="Print Preview" variant="secondary" />
                     </div>
                   </div>
                 </div>
-                <div className="flex gap-4 min-h-[350px]">
-                  <div className="flex-1 border border-[#BBBBBB] rounded-[8px] bg-white" />
+                <div className="min-h-[350px]">
+                  <DataGrid columns={monthlyDiffColumns} data={showMonthlyDiff ? MONTHLY_DIFFERENCES : []} />
                 </div>
               </Tabs.Content>
 
