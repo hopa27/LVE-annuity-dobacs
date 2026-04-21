@@ -162,7 +162,7 @@ export default function BacsPayments() {
   const [activeTab, setActiveTab] = useState("Tax Free");
   const [completionStart, setCompletionStart] = useState("01/03/2025");
   const [completionEnd, setCompletionEnd] = useState("21/03/2026");
-  const [startRunMonth, setStartRunMonth] = useState("04/04/2026");
+  const [startRunMonth, setStartRunMonth] = useState("01/01/2026");
   const [endRunMonth, setEndRunMonth] = useState("05/04/2026");
   const [mcpStartRunMonth, setMcpStartRunMonth] = useState("01/05/2024");
   const [mcpEndRunMonth, setMcpEndRunMonth] = useState("05/04/2026");
