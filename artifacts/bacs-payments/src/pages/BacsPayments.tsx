@@ -112,6 +112,27 @@ const MATURITY_TOTALS = {
   totalMaturityPayments: 343954,
 };
 
+const FIRST_PAYMENTS_MCP = [
+  { sortCode: "77-48-14", accountNo: "24782346", zero: "0", amount: "526.99", accountName: "Testmdccfdcfa", bankRef: "225939", nineNine: "99", bacsDate: "04/04/2025", policyNo: "225939", tax: "0.00", hash: "/VQL", payMethod: "B" },
+  { sortCode: "77-48-14", accountNo: "24782346", zero: "0", amount: "1251.22", accountName: "Testmdccfdfg", bankRef: "225956", nineNine: "99", bacsDate: "09/04/2025", policyNo: "225956", tax: "0.00", hash: "/RB9", payMethod: "B" },
+  { sortCode: "77-48-14", accountNo: "24782346", zero: "0", amount: "372.69", accountName: "Testmnccgabi", bankRef: "226018", nineNine: "99", bacsDate: "09/04/2025", policyNo: "226018", tax: "0.00", hash: "/GYI", payMethod: "B" },
+  { sortCode: "77-48-14", accountNo: "24782346", zero: "0", amount: "126.23", accountName: "Testmnccgabj", bankRef: "226040", nineNine: "99", bacsDate: "04/04/2025", policyNo: "226040", tax: "0.00", hash: "/M.U", payMethod: "B" },
+  { sortCode: "77-48-14", accountNo: "24782346", zero: "0", amount: "1075.22", accountName: "Testmnccgaed", bankRef: "226043", nineNine: "99", bacsDate: "09/04/2025", policyNo: "226043", tax: "0.00", hash: "/U3-", payMethod: "B" },
+  { sortCode: "77-48-14", accountNo: "24782346", zero: "0", amount: "1157.31", accountName: "Testmnccgafg", bankRef: "226056", nineNine: "99", bacsDate: "04/04/2025", policyNo: "226056", tax: "0.00", hash: "/ZTG", payMethod: "B" },
+  { sortCode: "77-48-14", accountNo: "24782346", zero: "0", amount: "834.66", accountName: "Testmnccgafi", bankRef: "226058", nineNine: "99", bacsDate: "04/04/2025", policyNo: "226058", tax: "0.00", hash: "/A.B", payMethod: "B" },
+  { sortCode: "77-48-14", accountNo: "24782346", zero: "0", amount: "139.42", accountName: "Testmnccggii", bankRef: "226065", nineNine: "99", bacsDate: "04/04/2025", policyNo: "226065", tax: "0.00", hash: "/B0G", payMethod: "B" },
+  { sortCode: "77-48-14", accountNo: "24782346", zero: "0", amount: "500.00", accountName: "Testdpccgaaf", bankRef: "226065", nineNine: "99", bacsDate: "04/04/2025", policyNo: "226065", tax: "0.00", hash: "/OPS", payMethod: "B" },
+  { sortCode: "77-48-14", accountNo: "24782346", zero: "0", amount: "300.42", accountName: "Testmnccggaf", bankRef: "226065", nineNine: "99", bacsDate: "04/04/2025", policyNo: "226065", tax: "0.00", hash: "/UQO", payMethod: "B" },
+  { sortCode: "77-48-14", accountNo: "24782346", zero: "0", amount: "192.45", accountName: "Testmccccgaf", bankRef: "226065", nineNine: "99", bacsDate: "04/04/2025", policyNo: "226065", tax: "0.00", hash: "/OPS", payMethod: "B" },
+  { sortCode: "77-48-14", accountNo: "24782346", zero: "0", amount: "257.57", accountName: "Testmnccgaai", bankRef: "226068", nineNine: "99", bacsDate: "18/04/2025", policyNo: "226068", tax: "0.00", hash: "/SKH", payMethod: "B" },
+];
+
+const FIRST_PAYMENTS_MCP_TOTALS = {
+  count: 753,
+  totalFirstPayments: 606906.17,
+  totalTax: 0,
+};
+
 const maturityColumns = [
   { key: "sortCode", label: "Sort Code" },
   { key: "accountNo", label: "Bank Account No" },
@@ -340,12 +361,12 @@ export default function BacsPayments() {
               {/* FirstPayments MCP Tab */}
               <Tabs.Content value="FirstPayments MCP">
                 <div className="min-h-[350px]">
-                  <DataGrid columns={paymentColumns} data={paymentRows} />
+                  <DataGrid columns={paymentColumns} data={showData ? FIRST_PAYMENTS_MCP : []} />
                 </div>
                 <div className="flex items-center gap-6 mt-5 flex-wrap">
-                  <ReadOnlyInput label="Payments" value={showData ? String(paymentRows.length) : ""} />
-                  <ReadOnlyInput label="Total First Payments" width="w-[180px]" value={showData ? fmt(totalAmount) : ""} />
-                  <ReadOnlyInput label="Total Tax" width="w-[120px]" value={showData ? fmt(totalTax) : ""} />
+                  <ReadOnlyInput label="Payments" value={showData ? String(FIRST_PAYMENTS_MCP_TOTALS.count) : ""} />
+                  <ReadOnlyInput label="Total First Payments" width="w-[180px]" value={showData ? fmt(FIRST_PAYMENTS_MCP_TOTALS.totalFirstPayments) : ""} />
+                  <ReadOnlyInput label="Total Tax" width="w-[120px]" value={showData ? fmt(FIRST_PAYMENTS_MCP_TOTALS.totalTax) : ""} />
                   <div className="ml-auto flex items-center gap-3">
                     <ActionButton label="Save To Bacs" icon variant="primary" />
                     <ActionButton label="Save And Commit To BACS" icon variant="primary" />
