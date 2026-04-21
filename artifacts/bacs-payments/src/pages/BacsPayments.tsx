@@ -611,7 +611,6 @@ export default function BacsPayments() {
                     </div>
                   </label>
                 </div>
-                <div className="min-h-[350px] border border-[#BBBBBB] rounded-[8px] bg-white" />
               </Tabs.Content>
 
               {/* FirstPayments MCP Tab */}
