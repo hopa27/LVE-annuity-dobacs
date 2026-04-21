@@ -216,7 +216,6 @@ export default function BacsPayments() {
                   </div>
                 </div>
                 <div className="flex gap-4 min-h-[350px]">
-                  <div className="w-[80px] border border-[#BBBBBB] rounded-[8px] bg-white" />
                   <div className="flex-1 border border-[#BBBBBB] rounded-[8px] bg-white" />
                 </div>
               </Tabs.Content>
