@@ -8,6 +8,7 @@ import SelectInput from "../components/SelectInput";
 import WarningDialog from "../components/WarningDialog";
 import InfoDialog from "../components/InfoDialog";
 import PrintPreviewModal, { type PrintRow } from "../components/PrintPreviewModal";
+import ReportPrintModal, { type ReportColumn, type ReportTotal } from "../components/ReportPrintModal";
 import { MdCheck } from "react-icons/md";
 import lvLogo from "@assets/image_1775892371361.png";
 
@@ -161,6 +162,51 @@ const PROCESSED_TOTALS = {
   totalTax: -372.40,
 };
 
+const reportPaymentColumns: ReportColumn[] = [
+  { key: "sortCode", label: "Bank Sort Code" },
+  { key: "accountNo", label: "Bank Account No" },
+  { key: "zero", label: "0" },
+  { key: "amount", label: "Amount To Pay", align: "right" },
+  { key: "accountName", label: "Bank Account Name" },
+  { key: "bankRef", label: "Bank Ref" },
+  { key: "nineNine", label: "99" },
+  { key: "bacsDate", label: "BACS Date" },
+  { key: "tax", label: "Tax", align: "right" },
+  { key: "policyNo", label: "Policy Ref" },
+];
+
+const reportTaxFreeColumns: ReportColumn[] = [
+  { key: "sortCode", label: "Bank Sort Code" },
+  { key: "accountNo", label: "Bank Account No" },
+  { key: "amount", label: "Tax Free Cash", align: "right" },
+  { key: "accountName", label: "Bank Account Name" },
+  { key: "bankRef", label: "Bank Ref" },
+  { key: "nineNine", label: "99" },
+  { key: "cDate", label: "C Date" },
+  { key: "tax", label: "Tax", align: "right" },
+  { key: "policyNo", label: "Policy Ref" },
+];
+
+const reportMaturityColumns: ReportColumn[] = [
+  { key: "sortCode", label: "Bank Sort Code" },
+  { key: "accountNo", label: "Bank Account No" },
+  { key: "zero", label: "0" },
+  { key: "amount", label: "Amount To Pay", align: "right" },
+  { key: "accountName", label: "Bank Account Name" },
+  { key: "bankRef", label: "Bank Ref" },
+  { key: "nineNine", label: "99" },
+  { key: "tax", label: "Tax", align: "right" },
+  { key: "policyNo", label: "Policy Ref" },
+];
+
+const MONTH_ABBR = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+function formatDateLong(d: string): string {
+  const m = d.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+  if (!m) return d;
+  const monthIdx = parseInt(m[2], 10) - 1;
+  return `${m[1]}-${MONTH_ABBR[monthIdx] ?? m[2]}-${m[3]}`;
+}
+
 const MONTHLY_DIFF_PRINT_ROWS: PrintRow[] = [
   { policyNo: "920735.0", policyRef: "131855.0", paykey: "920735", currentDate: "13/03/2025", currentRef: "156", currentGross: "£2,353.07", previousDate: "13/02/2025", previousRef: "155", previousGross: "£2,349.77", paymentType: "B", pctChange: "0.14" },
   { policyNo: "920735.0", policyRef: "131855.0", paykey: "920735", currentDate: "13/03/2026", currentRef: "168", currentGross: "£2,356.58", previousDate: "13/02/2025", previousRef: "167", previousGross: "£2,353.15", paymentType: "B", pctChange: "0.15" },
@@ -251,6 +297,68 @@ export default function BacsPayments() {
   const [noDataOpen, setNoDataOpen] = useState(false);
   const [noDataMessage, setNoDataMessage] = useState("No Data found");
   const [printPreviewOpen, setPrintPreviewOpen] = useState(false);
+  const [reportPrintOpen, setReportPrintOpen] = useState(false);
+  const [reportPrintWarningOpen, setReportPrintWarningOpen] = useState(false);
+  const handlePrintReport = () => {
+    if (["Tax Free", "First and One Off Payments", "Maturities", "FirstPayments MCP"].includes(activeTab)) {
+      setReportPrintWarningOpen(true);
+    }
+  };
+  const openReportPrintModal = () => { setReportPrintWarningOpen(false); setReportPrintOpen(true); };
+  const reportConfig = (() => {
+    const dateRange = `${formatDateLong(completionStart)} to ${formatDateLong(completionEnd)}`;
+    if (activeTab === "Tax Free") {
+      return {
+        title: "Tax Free Report",
+        dateRange,
+        columns: reportTaxFreeColumns,
+        rows: TAX_FREE_PAYMENTS as Record<string, string | number>[],
+        totals: [
+          { columnKey: "amount", label: "Total Tax Free Cash", value: fmt(TAX_FREE_TOTALS.totalTaxFreeCash) },
+        ] as ReportTotal[],
+        recordsLabel: "Tax Free Records Count",
+        recordsCount: TAX_FREE_TOTALS.count,
+      };
+    }
+    if (activeTab === "First and One Off Payments") {
+      return {
+        title: "First Payment Report",
+        dateRange,
+        columns: reportPaymentColumns,
+        rows: FIRST_PAYMENTS as Record<string, string | number>[],
+        totals: [
+          { columnKey: "amount", label: "Total", value: fmt(FIRST_PAYMENTS_TOTALS.totalFirstPayments) },
+          { columnKey: "tax", label: "Tax", value: fmt(FIRST_PAYMENTS_TOTALS.totalTax) },
+        ] as ReportTotal[],
+        recordsLabel: "First Payment Records Count",
+        recordsCount: FIRST_PAYMENTS_TOTALS.count,
+      };
+    }
+    if (activeTab === "Maturities") {
+      return {
+        title: "Maturity Payment Report",
+        dateRange,
+        columns: reportMaturityColumns,
+        rows: MATURITY_PAYMENTS as Record<string, string | number>[],
+        totals: [
+          { columnKey: "amount", label: "Total", value: fmt(MATURITY_TOTALS.totalMaturityPayments) },
+        ] as ReportTotal[],
+        recordsLabel: "Maturity Records Count",
+        recordsCount: MATURITY_TOTALS.count,
+      };
+    }
+    return {
+      title: "First Payments MCP Report",
+      dateRange,
+      columns: reportPaymentColumns,
+      rows: FIRST_PAYMENTS_MCP as Record<string, string | number>[],
+      totals: [
+        { columnKey: "amount", label: "Total", value: fmt(FIRST_PAYMENTS_MCP_TOTALS.totalFirstPayments) },
+      ] as ReportTotal[],
+      recordsLabel: "First Payments MCP Records Count",
+      recordsCount: FIRST_PAYMENTS_MCP_TOTALS.count,
+    };
+  })();
   const [showProcessed, setShowProcessed] = useState(false);
   const [processedWarningOpen, setProcessedWarningOpen] = useState(false);
   const handleShowProcessed = () => setProcessedWarningOpen(true);
@@ -286,6 +394,23 @@ export default function BacsPayments() {
         message={noDataMessage}
         onOk={() => setNoDataOpen(false)}
       />
+      <WarningDialog
+        open={reportPrintWarningOpen}
+        message="Some of the payments have already been committed. Would you like to exclude these payments?"
+        onYes={openReportPrintModal}
+        onNo={openReportPrintModal}
+      />
+      <ReportPrintModal
+        open={reportPrintOpen}
+        onClose={() => setReportPrintOpen(false)}
+        title={reportConfig.title}
+        dateRange={reportConfig.dateRange}
+        columns={reportConfig.columns}
+        rows={reportConfig.rows}
+        totals={reportConfig.totals}
+        recordsLabel={reportConfig.recordsLabel}
+        recordsCount={reportConfig.recordsCount}
+      />
       <PrintPreviewModal
         open={printPreviewOpen}
         onClose={() => setPrintPreviewOpen(false)}
@@ -314,7 +439,7 @@ export default function BacsPayments() {
             <DateInput label="Completion End" value={completionEnd} onChange={setCompletionEnd} />
             <div className="ml-auto flex items-center gap-3">
               <ActionButton label="Show Payments" variant="secondary" onClick={handleShowPayments} />
-              <ActionButton label="Print Report" variant="secondary" />
+              <ActionButton label="Print Report" variant="secondary" onClick={handlePrintReport} />
             </div>
           </div>
 
