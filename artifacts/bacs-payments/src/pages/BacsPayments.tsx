@@ -306,6 +306,7 @@ export default function BacsPayments() {
   };
   const openReportPrintModal = () => { setReportPrintWarningOpen(false); setReportPrintOpen(true); };
   const reportConfig = (() => {
+    const fmtNum = (n: number) => n.toLocaleString("en-GB", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     const dateRange = `${formatDateLong(completionStart)} to ${formatDateLong(completionEnd)}`;
     if (activeTab === "Tax Free") {
       return {
@@ -314,7 +315,7 @@ export default function BacsPayments() {
         columns: reportTaxFreeColumns,
         rows: TAX_FREE_PAYMENTS as Record<string, string | number>[],
         totals: [
-          { columnKey: "amount", label: "Total Tax Free Cash", value: fmt(TAX_FREE_TOTALS.totalTaxFreeCash) },
+          { columnKey: "amount", label: "Total Tax Free Cash", value: fmtNum(TAX_FREE_TOTALS.totalTaxFreeCash) },
         ] as ReportTotal[],
         recordsLabel: "Tax Free Records Count",
         recordsCount: TAX_FREE_TOTALS.count,
@@ -327,8 +328,8 @@ export default function BacsPayments() {
         columns: reportPaymentColumns,
         rows: FIRST_PAYMENTS as Record<string, string | number>[],
         totals: [
-          { columnKey: "amount", label: "Total", value: fmt(FIRST_PAYMENTS_TOTALS.totalFirstPayments) },
-          { columnKey: "tax", label: "Tax", value: fmt(FIRST_PAYMENTS_TOTALS.totalTax) },
+          { columnKey: "amount", label: "Total", value: fmtNum(FIRST_PAYMENTS_TOTALS.totalFirstPayments) },
+          { columnKey: "tax", label: "Tax", value: fmtNum(FIRST_PAYMENTS_TOTALS.totalTax) },
         ] as ReportTotal[],
         recordsLabel: "First Payment Records Count",
         recordsCount: FIRST_PAYMENTS_TOTALS.count,
@@ -341,7 +342,7 @@ export default function BacsPayments() {
         columns: reportMaturityColumns,
         rows: MATURITY_PAYMENTS as Record<string, string | number>[],
         totals: [
-          { columnKey: "amount", label: "Total", value: fmt(MATURITY_TOTALS.totalMaturityPayments) },
+          { columnKey: "amount", label: "Total", value: fmtNum(MATURITY_TOTALS.totalMaturityPayments) },
         ] as ReportTotal[],
         recordsLabel: "Maturity Records Count",
         recordsCount: MATURITY_TOTALS.count,
@@ -353,7 +354,7 @@ export default function BacsPayments() {
       columns: reportPaymentColumns,
       rows: FIRST_PAYMENTS_MCP as Record<string, string | number>[],
       totals: [
-        { columnKey: "amount", label: "Total", value: fmt(FIRST_PAYMENTS_MCP_TOTALS.totalFirstPayments) },
+        { columnKey: "amount", label: "Total", value: fmtNum(FIRST_PAYMENTS_MCP_TOTALS.totalFirstPayments) },
       ] as ReportTotal[],
       recordsLabel: "First Payments MCP Records Count",
       recordsCount: FIRST_PAYMENTS_MCP_TOTALS.count,
