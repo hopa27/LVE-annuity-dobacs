@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   MdSkipPrevious,
   MdSkipNext,
@@ -49,8 +48,6 @@ export default function ReportPrintModal({
   recordsLabel = "Records Count",
   recordsCount,
 }: ReportPrintModalProps) {
-  const [zoom, setZoom] = useState("100%");
-
   if (!open) return null;
 
   const toolbarBtn =
@@ -87,26 +84,6 @@ export default function ReportPrintModal({
           <div className="w-px h-6 bg-[#BBBBBB] mx-2" />
           <button title="Save" className={toolbarBtn}><MdSave className="text-xl" /></button>
           <button title="Open" className={toolbarBtn}><MdFolderOpen className="text-xl" /></button>
-          <div className="w-px h-6 bg-[#BBBBBB] mx-2" />
-          <button
-            onClick={onClose}
-            title="Close"
-            className="h-10 px-5 rounded-[30px] font-['Livvic'] text-sm font-bold bg-white text-[#04589b] border border-[#04589b] hover:bg-[#003578] hover:text-white hover:border-[#003578] transition-colors cursor-pointer"
-          >
-            Close
-          </button>
-          <div className="w-px h-6 bg-[#BBBBBB] mx-2" />
-          <select
-            value={zoom}
-            onChange={(e) => setZoom(e.target.value)}
-            className="h-9 px-3 rounded-[8px] border border-[#BBBBBB] bg-white font-['Mulish'] text-sm text-[#3d3d3d] outline-none hover:border-[#178830] focus:border-[#178830] cursor-pointer"
-          >
-            <option>50%</option>
-            <option>75%</option>
-            <option>100%</option>
-            <option>125%</option>
-            <option>150%</option>
-          </select>
         </div>
 
         <div className="flex-1 overflow-auto bg-[#f0f0f0] p-6">
