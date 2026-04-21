@@ -7,6 +7,7 @@ import DataGrid from "../components/DataGrid";
 import SelectInput from "../components/SelectInput";
 import WarningDialog from "../components/WarningDialog";
 import InfoDialog from "../components/InfoDialog";
+import PrintPreviewModal, { type PrintRow } from "../components/PrintPreviewModal";
 import { MdCheck } from "react-icons/md";
 import lvLogo from "@assets/image_1775892371361.png";
 
@@ -160,6 +161,26 @@ const PROCESSED_TOTALS = {
   totalTax: -372.40,
 };
 
+const MONTHLY_DIFF_PRINT_ROWS: PrintRow[] = [
+  { policyNo: "920735.0", policyRef: "131855.0", paykey: "920735", currentDate: "13/03/2025", currentRef: "156", currentGross: "£2,353.07", previousDate: "13/02/2025", previousRef: "155", previousGross: "£2,349.77", paymentType: "B", pctChange: "0.14" },
+  { policyNo: "920735.0", policyRef: "131855.0", paykey: "920735", currentDate: "13/03/2026", currentRef: "168", currentGross: "£2,356.58", previousDate: "13/02/2025", previousRef: "167", previousGross: "£2,353.15", paymentType: "B", pctChange: "0.15" },
+  { policyNo: "892618.0", policyRef: "105469.0", paykey: "892618", currentDate: "20/02/2025", currentRef: "200", currentGross: "£2,087.92", previousDate: "20/01/2025", previousRef: "199", previousGross: "£2,084.75", paymentType: "B", pctChange: "0.15" },
+  { policyNo: "892618.0", policyRef: "105469.0", paykey: "892618", currentDate: "20/02/2025", currentRef: "212", currentGross: "£2,091.22", previousDate: "20/01/2025", previousRef: "211", previousGross: "£2,087.97", paymentType: "B", pctChange: "0.16" },
+  { policyNo: "964423.0", policyRef: "174201.0", paykey: "964423", currentDate: "16/05/2025", currentRef: "106", currentGross: "£2,800.71", previousDate: "16/04/2025", previousRef: "105", previousGross: "£2,794.45", paymentType: "B", pctChange: "0.22" },
+  { policyNo: "894408.0", policyRef: "107255.0", paykey: "894408", currentDate: "17/06/2025", currentRef: "192", currentGross: "£440.94", previousDate: "17/05/2025", previousRef: "191", previousGross: "£439.90", paymentType: "B", pctChange: "0.24" },
+  { policyNo: "961628.0", policyRef: "171884.0", paykey: "961628", currentDate: "31/03/2025", currentRef: "123", currentGross: "£564.54", previousDate: "28/02/2025", previousRef: "122", previousGross: "£563.01", paymentType: "B", pctChange: "0.27" },
+  { policyNo: "962106.0", policyRef: "171884.0", paykey: "962106", currentDate: "29/03/2025", currentRef: "123", currentGross: "£368.84", previousDate: "28/02/2025", previousRef: "122", previousGross: "£367.82", paymentType: "B", pctChange: "0.28" },
+  { policyNo: "114278.1", policyRef: "114278.1", paykey: "114278", currentDate: "30/11/2025", currentRef: "50", currentGross: "£381.90", previousDate: "30/10/2025", previousRef: "49", previousGross: "£380.81", paymentType: "B", pctChange: "0.29" },
+  { policyNo: "952381.0", policyRef: "162159.0", paykey: "952381", currentDate: "11/02/2025", currentRef: "135", currentGross: "£460.63", previousDate: "11/01/2025", previousRef: "134", previousGross: "£459.16", paymentType: "B", pctChange: "0.32" },
+  { policyNo: "908657.0", policyRef: "121428.0", paykey: "908657", currentDate: "16/05/2025", currentRef: "169", currentGross: "£1,973.08", previousDate: "16/04/2025", previousRef: "168", previousGross: "£1,965.82", paymentType: "B", pctChange: "0.37" },
+  { policyNo: "888469.0", policyRef: "101333.0", paykey: "888469", currentDate: "19/05/2025", currentRef: "205", currentGross: "£721.64", previousDate: "19/04/2025", previousRef: "204", previousGross: "£718.77", paymentType: "B", pctChange: "0.40" },
+  { policyNo: "146434.1", policyRef: "146434.1", paykey: "146434", currentDate: "01/07/2025", currentRef: "144", currentGross: "£1,036.19", previousDate: "01/06/2025", previousRef: "143", previousGross: "£1,031.93", paymentType: "B", pctChange: "0.41" },
+  { policyNo: "938717.0", policyRef: "148495.0", paykey: "938717", currentDate: "28/11/2025", currentRef: "145", currentGross: "£308.73", previousDate: "28/10/2025", previousRef: "144", previousGross: "£307.43", paymentType: "B", pctChange: "0.42" },
+  { policyNo: "923866.0", policyRef: "134498.0", paykey: "923866", currentDate: "30/04/2025", currentRef: "155", currentGross: "£335.57", previousDate: "30/03/2025", previousRef: "154", previousGross: "£334.13", paymentType: "B", pctChange: "0.43" },
+  { policyNo: "100069.1", policyRef: "100069.1", paykey: "100069", currentDate: "25/03/2025", currentRef: "60", currentGross: "£240.38", previousDate: "25/02/2025", previousRef: "59", previousGross: "£239.32", paymentType: "B", pctChange: "0.44" },
+  { policyNo: "100069.1", policyRef: "100069.1", paykey: "100069", currentDate: "25/03/2025", currentRef: "72", currentGross: "£241.55", previousDate: "25/02/2025", previousRef: "71", previousGross: "£240.48", paymentType: "B", pctChange: "0.44" },
+];
+
 const nilIncomeColumns = [
   { key: "policyRef", label: "Policy Ref" },
   { key: "paykey", label: "Paykey" },
@@ -229,6 +250,7 @@ export default function BacsPayments() {
   const [showNilIncome, setShowNilIncome] = useState(false);
   const [noDataOpen, setNoDataOpen] = useState(false);
   const [noDataMessage, setNoDataMessage] = useState("No Data found");
+  const [printPreviewOpen, setPrintPreviewOpen] = useState(false);
   const handleShowPayments = () => setWarningOpen(true);
   const handleWarningYes = () => { setWarningOpen(false); setShowData(true); };
   const handleWarningNo = () => { setWarningOpen(false); setShowData(true); };
@@ -252,6 +274,13 @@ export default function BacsPayments() {
         title="DoBacs"
         message={noDataMessage}
         onOk={() => setNoDataOpen(false)}
+      />
+      <PrintPreviewModal
+        open={printPreviewOpen}
+        onClose={() => setPrintPreviewOpen(false)}
+        title="MAP Difference List"
+        reportDate="21/04/2026"
+        rows={MONTHLY_DIFF_PRINT_ROWS}
       />
       <header className="w-full bg-[#00263e] text-white px-[142px] pt-4 pb-6">
         <div className="flex items-center justify-between">
@@ -385,8 +414,12 @@ export default function BacsPayments() {
                       <ActionButton label="Produce List" variant="secondary" onClick={() => { setShowMonthlyDiff(true); setShowNilIncome(false); }} />
                       <ActionButton label="Produce Nil-Income List" variant="secondary" onClick={() => { setShowNilIncome(true); setShowMonthlyDiff(false); setNoDataMessage("No Data found"); setNoDataOpen(true); }} />
                       <ActionButton label="Print Preview" variant="secondary" onClick={() => {
-                        const hasData = (showMonthlyDiff && MONTHLY_DIFFERENCES.length > 0) || (showNilIncome && false);
-                        if (!hasData) { setNoDataMessage("No data to print"); setNoDataOpen(true); }
+                        if (showMonthlyDiff && MONTHLY_DIFFERENCES.length > 0) {
+                          setPrintPreviewOpen(true);
+                        } else {
+                          setNoDataMessage("No data to print");
+                          setNoDataOpen(true);
+                        }
                       }} />
                     </div>
                   </div>
