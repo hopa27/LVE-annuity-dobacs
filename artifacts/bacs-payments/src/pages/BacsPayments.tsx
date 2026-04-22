@@ -300,8 +300,17 @@ export default function BacsPayments() {
   const [reportPrintOpen, setReportPrintOpen] = useState(false);
   const [reportPrintWarningOpen, setReportPrintWarningOpen] = useState(false);
   const handlePrintReport = () => {
-    if (!["Tax Free", "First and One Off Payments", "Maturities", "FirstPayments MCP"].includes(activeTab)) return;
-    if (!showData) {
+    const tabHasData =
+      (["Tax Free", "First and One Off Payments", "Maturities", "FirstPayments MCP"].includes(activeTab) && showData) ||
+      (activeTab === "Processed" && showProcessed) ||
+      (activeTab === "Processed MCP" && showProcessedMcp) ||
+      (activeTab === "Monthly Differences" && showMonthlyDiff);
+    if (!tabHasData) {
+      setNoDataMessage("No Data found");
+      setNoDataOpen(true);
+      return;
+    }
+    if (!["Tax Free", "First and One Off Payments", "Maturities", "FirstPayments MCP"].includes(activeTab)) {
       setNoDataMessage("No Data found");
       setNoDataOpen(true);
       return;
