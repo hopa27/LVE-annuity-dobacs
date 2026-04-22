@@ -368,6 +368,10 @@ export default function BacsPayments() {
   const [processedWarningOpen, setProcessedWarningOpen] = useState(false);
   const handleShowProcessed = () => setProcessedWarningOpen(true);
   const handleProcessedYes = () => { setProcessedWarningOpen(false); setShowProcessed(true); };
+  const [showProcessedMcp, setShowProcessedMcp] = useState(false);
+  const [processedMcpWarningOpen, setProcessedMcpWarningOpen] = useState(false);
+  const handleShowProcessedMcp = () => setProcessedMcpWarningOpen(true);
+  const handleProcessedMcpYes = () => { setProcessedMcpWarningOpen(false); setShowProcessedMcp(true); };
   const handleProcessedNo = () => { setProcessedWarningOpen(false); setShowProcessed(true); };
   const handleShowPayments = () => setWarningOpen(true);
   const handleWarningYes = () => { setWarningOpen(false); setShowData(true); };
@@ -392,6 +396,12 @@ export default function BacsPayments() {
         message="Some of the payments have already been committed. Would you like to exclude these payments?"
         onYes={handleProcessedYes}
         onNo={handleProcessedNo}
+      />
+      <WarningDialog
+        open={processedMcpWarningOpen}
+        message="Some of the payments have already been committed. Would you like to exclude these payments?"
+        onYes={handleProcessedMcpYes}
+        onNo={handleProcessedMcpYes}
       />
       <InfoDialog
         open={noDataOpen}
@@ -443,18 +453,8 @@ export default function BacsPayments() {
             <DateInput label="Completion Start" value={completionStart} onChange={setCompletionStart} />
             <DateInput label="Completion End" value={completionEnd} onChange={setCompletionEnd} />
             <div className="ml-auto flex items-center gap-3">
-              <ActionButton
-                label="Show Payments"
-                variant="secondary"
-                onClick={handleShowPayments}
-                disabled={["Processed MCP", "Processed", "Monthly Differences", "Reports"].includes(activeTab)}
-              />
-              <ActionButton
-                label="Print Report"
-                variant="secondary"
-                onClick={handlePrintReport}
-                disabled={["Processed MCP", "Processed", "Monthly Differences", "Reports"].includes(activeTab)}
-              />
+              <ActionButton label="Show Payments" variant="secondary" onClick={handleShowPayments} />
+              <ActionButton label="Print Report" variant="secondary" onClick={handlePrintReport} />
             </div>
           </div>
 
@@ -646,7 +646,7 @@ export default function BacsPayments() {
                     <DateInput label="Start Run Month" value={mcpStartRunMonth} onChange={setMcpStartRunMonth} />
                     <DateInput label="End Run Month" value={mcpEndRunMonth} onChange={setMcpEndRunMonth} />
                     <div className="ml-auto flex items-center gap-3">
-                      <ActionButton label="Show Payments" variant="secondary" onClick={handleShowPayments} />
+                      <ActionButton label="Show Payments" variant="secondary" onClick={handleShowProcessedMcp} />
                       <ActionButton label="Print Report" variant="secondary" />
                     </div>
                   </div>
@@ -673,11 +673,11 @@ export default function BacsPayments() {
                   </div>
                 </div>
                 <div className="min-h-[300px]">
-                  <DataGrid columns={paymentColumns} data={showData ? PROCESSED_MCP_PAYMENTS : []} />
+                  <DataGrid columns={paymentColumns} data={showProcessedMcp ? PROCESSED_MCP_PAYMENTS : []} />
                 </div>
                 <div className="flex items-center gap-6 mt-5 flex-wrap">
-                  <ReadOnlyInput label="Payments" value={showData ? String(PROCESSED_MCP_TOTALS.count) : ""} />
-                  <ReadOnlyInput label="Total Tax Free Cash" width="w-[200px]" value={showData ? fmt(PROCESSED_MCP_TOTALS.totalTaxFreeCash) : ""} />
+                  <ReadOnlyInput label="Payments" value={showProcessedMcp ? String(PROCESSED_MCP_TOTALS.count) : ""} />
+                  <ReadOnlyInput label="Total Tax Free Cash" width="w-[200px]" value={showProcessedMcp ? fmt(PROCESSED_MCP_TOTALS.totalTaxFreeCash) : ""} />
                   <div className="ml-auto">
                     <ActionButton label="Save And Commit To Bacs" icon variant="primary" />
                   </div>
