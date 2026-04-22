@@ -285,7 +285,7 @@ export default function BacsPayments() {
   const [mcpEndRunMonth, setMcpEndRunMonth] = useState("05/04/2026");
   const [monthlyStartRun, setMonthlyStartRun] = useState("01/02/2025");
   const [monthlyEndRun, setMonthlyEndRun] = useState("21/04/2026");
-  const [reportsStartRun, setReportsStartRun] = useState("01/04/2026");
+  const [reportsStartRun, setReportsStartRun] = useState("01/05/2025");
   const [reportsEndRun, setReportsEndRun] = useState("05/04/2026");
   const [paymentType, setPaymentType] = useState("All");
   const [includeNonPaye, setIncludeNonPaye] = useState(true);
