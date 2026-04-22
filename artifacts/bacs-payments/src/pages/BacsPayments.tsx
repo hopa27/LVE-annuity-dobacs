@@ -443,8 +443,18 @@ export default function BacsPayments() {
             <DateInput label="Completion Start" value={completionStart} onChange={setCompletionStart} />
             <DateInput label="Completion End" value={completionEnd} onChange={setCompletionEnd} />
             <div className="ml-auto flex items-center gap-3">
-              <ActionButton label="Show Payments" variant="secondary" onClick={handleShowPayments} />
-              <ActionButton label="Print Report" variant="secondary" onClick={handlePrintReport} />
+              <ActionButton
+                label="Show Payments"
+                variant="secondary"
+                onClick={handleShowPayments}
+                disabled={["Processed MCP", "Processed", "Monthly Differences", "Reports"].includes(activeTab)}
+              />
+              <ActionButton
+                label="Print Report"
+                variant="secondary"
+                onClick={handlePrintReport}
+                disabled={["Processed MCP", "Processed", "Monthly Differences", "Reports"].includes(activeTab)}
+              />
             </div>
           </div>
 
