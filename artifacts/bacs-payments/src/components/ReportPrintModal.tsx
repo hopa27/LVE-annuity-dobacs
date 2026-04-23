@@ -14,6 +14,7 @@ import {
   MdSettings,
   MdLocalPrintshop,
 } from "react-icons/md";
+import { saveElementAsPdf } from "../lib/savePdf";
 
 export interface ReportColumn {
   key: string;
@@ -137,7 +138,7 @@ export default function ReportPrintModal({
           <button title="Printer Setup" onClick={() => window.print()} className={toolbarBtn}><MdSettings className="text-xl" /></button>
           <button title="Print" onClick={() => window.print()} className={toolbarBtn}><MdLocalPrintshop className="text-xl" /></button>
           <div className="w-px h-6 bg-[#BBBBBB] mx-2" />
-          <button title="Save" className={toolbarBtn}><MdSave className="text-xl" /></button>
+          <button title="Save as PDF" onClick={() => pageRef.current && saveElementAsPdf(pageRef.current, `${title.replace(/\s+/g, "_")}.pdf`)} className={toolbarBtn}><MdSave className="text-xl" /></button>
           <button title="Open" className={toolbarBtn}><MdFolderOpen className="text-xl" /></button>
         </div>
 
