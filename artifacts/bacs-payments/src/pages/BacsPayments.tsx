@@ -76,7 +76,8 @@ const FIRST_PAYMENTS_TOTALS = {
 const taxFreeColumns = [
   { key: "sortCode", label: "BANK_SORT_CODE" },
   { key: "accountNo", label: "BANK_ACCOUNT_NO" },
-  { key: "amount", label: "TAX FREE CASH" },
+  { key: "zero", label: "'0'" },
+  { key: "amount", label: "TAXFREECASH" },
   { key: "accountName", label: "BANK_ACCOUNT_NAME" },
   { key: "bankRef", label: "BANK_REF" },
   { key: "nineNine", label: "'99'" },
@@ -86,18 +87,18 @@ const taxFreeColumns = [
 ];
 
 const TAX_FREE_PAYMENTS = [
-  { sortCode: "77-48-14", accountNo: "24782346", amount: "16563.41", accountName: "Testpsccchbi", bankRef: "222718", nineNine: "99", cDate: "17/04/2025", policyNo: "222718", tax: "0" },
-  { sortCode: "77-48-14", accountNo: "24782346", amount: "4893.12", accountName: "Testjeccfafa", bankRef: "225050", nineNine: "99", cDate: "01/05/2025", policyNo: "225050", tax: "0" },
-  { sortCode: "77-48-14", accountNo: "24782346", amount: "53032.52", accountName: "Testmeccfbbc", bankRef: "225112", nineNine: "99", cDate: "07/05/2025", policyNo: "225112", tax: "0" },
-  { sortCode: "77-48-14", accountNo: "24782346", amount: "31423.71", accountName: "Testmnccfbdb", bankRef: "225131", nineNine: "99", cDate: "17/06/2025", policyNo: "225131", tax: "0" },
-  { sortCode: "77-48-14", accountNo: "24782346", amount: "52180.62", accountName: "Testmsccfceh", bankRef: "225247", nineNine: "99", cDate: "03/04/2025", policyNo: "225247", tax: "0" },
-  { sortCode: "77-48-14", accountNo: "24782346", amount: "12713.44", accountName: "Testjlccfcje", bankRef: "225294", nineNine: "99", cDate: "22/04/2025", policyNo: "225294", tax: "0" },
-  { sortCode: "77-48-14", accountNo: "24782346", amount: "5851.69", accountName: "Testmnccfddh", bankRef: "225317", nineNine: "99", cDate: "25/04/2025", policyNo: "225317", tax: "0" },
-  { sortCode: "77-48-14", accountNo: "24782346", amount: "57000.59", accountName: "Testmnccgdla", bankRef: "225319", nineNine: "99", cDate: "11/07/2025", policyNo: "225319", tax: "0" },
-  { sortCode: "77-48-14", accountNo: "24782346", amount: "78965.47", accountName: "Testmnccfdfb", bankRef: "225351", nineNine: "99", cDate: "26/04/2025", policyNo: "225351", tax: "0" },
-  { sortCode: "77-48-14", accountNo: "24782346", amount: "12345.67", accountName: "Testmnccfdhg", bankRef: "225381", nineNine: "99", cDate: "22/04/2025", policyNo: "225381", tax: "0" },
-  { sortCode: "77-48-14", accountNo: "24782346", amount: "12518.74", accountName: "Testmnccfdfb", bankRef: "225381", nineNine: "99", cDate: "22/04/2025", policyNo: "225381", tax: "0" },
-  { sortCode: "77-48-14", accountNo: "24782346", amount: "36605.41", accountName: "Testmnccdcdg", bankRef: "225386", nineNine: "99", cDate: "02/04/2025", policyNo: "225386", tax: "0" },
+  { sortCode: "77-48-14", accountNo: "24782346", zero: "0", amount: "16563.41", accountName: "Testpsccchbi", bankRef: "222718", nineNine: "99", cDate: "17/04/2025", policyNo: "222718", tax: "0" },
+  { sortCode: "77-48-14", accountNo: "24782346", zero: "0", amount: "4893.12", accountName: "Testjeccfafa", bankRef: "225050", nineNine: "99", cDate: "01/05/2025", policyNo: "225050", tax: "0" },
+  { sortCode: "77-48-14", accountNo: "24782346", zero: "0", amount: "53032.52", accountName: "Testmeccfbbc", bankRef: "225112", nineNine: "99", cDate: "07/05/2025", policyNo: "225112", tax: "0" },
+  { sortCode: "77-48-14", accountNo: "24782346", zero: "0", amount: "31423.71", accountName: "Testmnccfbdb", bankRef: "225131", nineNine: "99", cDate: "17/06/2025", policyNo: "225131", tax: "0" },
+  { sortCode: "77-48-14", accountNo: "24782346", zero: "0", amount: "52180.62", accountName: "Testmsccfceh", bankRef: "225247", nineNine: "99", cDate: "03/04/2025", policyNo: "225247", tax: "0" },
+  { sortCode: "77-48-14", accountNo: "24782346", zero: "0", amount: "12713.44", accountName: "Testjlccfcje", bankRef: "225294", nineNine: "99", cDate: "22/04/2025", policyNo: "225294", tax: "0" },
+  { sortCode: "77-48-14", accountNo: "24782346", zero: "0", amount: "5851.69", accountName: "Testmnccfddh", bankRef: "225317", nineNine: "99", cDate: "25/04/2025", policyNo: "225317", tax: "0" },
+  { sortCode: "77-48-14", accountNo: "24782346", zero: "0", amount: "57000.59", accountName: "Testmnccgdla", bankRef: "225319", nineNine: "99", cDate: "11/07/2025", policyNo: "225319", tax: "0" },
+  { sortCode: "77-48-14", accountNo: "24782346", zero: "0", amount: "78965.47", accountName: "Testmnccfdfb", bankRef: "225351", nineNine: "99", cDate: "26/04/2025", policyNo: "225351", tax: "0" },
+  { sortCode: "77-48-14", accountNo: "24782346", zero: "0", amount: "12345.67", accountName: "Testmnccfdhg", bankRef: "225381", nineNine: "99", cDate: "22/04/2025", policyNo: "225381", tax: "0" },
+  { sortCode: "77-48-14", accountNo: "24782346", zero: "0", amount: "12518.74", accountName: "Testmnccfdfb", bankRef: "225381", nineNine: "99", cDate: "22/04/2025", policyNo: "225381", tax: "0" },
+  { sortCode: "77-48-14", accountNo: "24782346", zero: "0", amount: "36605.41", accountName: "Testmnccdcdg", bankRef: "225386", nineNine: "99", cDate: "02/04/2025", policyNo: "225386", tax: "0" },
 ];
 
 const TAX_FREE_TOTALS = {
