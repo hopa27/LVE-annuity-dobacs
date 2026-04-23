@@ -37,7 +37,7 @@ const paymentColumns = [
   { key: "bacsDate", label: "BACS Date" },
   { key: "policyNo", label: "Policy No" },
   { key: "tax", label: "Tax" },
-  { key: "hash", label: "Hash" },
+  { key: "hash", label: "Hash Code" },
   { key: "payMethod", label: "Pay Method" },
 ];
 
