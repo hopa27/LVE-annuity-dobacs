@@ -196,6 +196,47 @@ footer:
 on_save: callback(filename) -> caller writes blob download
 ```
 
+### 4.2b LoadReportDialog — Windows 11 Open Dialog (`src/components/LoadReportDialog.tsx`)
+
+```yaml
+style: Windows 11 File Explorer "Open" (mirrors SaveAsDialog visuals)
+width: 860px
+triggers:
+  - 📂 "Load Report" toolbar button in:
+      - PrintPreviewModal
+      - ReportPrintModal
+      - FirstPaymentReportModal
+      - ProcessedReportModal
+title_bar:
+  text: "Load Report"
+  controls: [minimize, maximize, close (red hover)]
+toolbar:
+  nav: [Back, Forward (disabled), Up, Refresh]
+  breadcrumb: "📁 This PC > Ual3 (H:) > Annuities > Reports"
+  search: "Search Reports"
+left_nav: same as SaveAsDialog
+file_list:
+  columns: [Name, Date modified, Type, Size]
+  rows: mock list of 9 saved *.qrp report files
+  icon: 📄 MdInsertDriveFile (blue)
+  interactions:
+    single_click: select row + fill File name field
+    double_click: load + close
+  selection_color: "#cfe4f7"
+footer:
+  - file_name: input + dropdown chevron (placeholder: "Select a saved report or browse...")
+  - files_of_type: "QuickReport file (*.QRP)" (display only)
+actions:
+  - "Browse this computer..."  -> hidden <input type=file accept=".qrp"> -> reads File.text() and calls onLoad(name, content)
+  - Open   (primary blue)      -> onLoad(name) for selected/typed filename
+  - Cancel                     -> close, no callback
+on_load:
+  signature: "(fileName: string, content?: string) => void"
+  notes:
+    - Static app: mock entries are visual only; real content arrives only via "Browse this computer..."
+    - Parent modals currently consume the callback but do not yet swap their rendered report from loaded QRP content.
+```
+
 ### 4.3 PrintPreviewModal (`src/components/PrintPreviewModal.tsx`)
 
 Used by **Monthly Differences → Print Preview**.
@@ -207,13 +248,14 @@ toolbar:
   nav:    [⏮, ⏪, "1 of 1+", ⏩, ⏭]
   print:  "🖨 -> window.print()"
   save:   "💾 -> SaveAsDialog (QRP) -> downloadQrp(...)"
+  load:   "📂 -> LoadReportDialog (.qrp open)"
   zoom:   [50%, 75%, 100%, 125%, 150%]
   status: Total / Zoom / Showing
 body:
   class: print-area  # only this prints via @media print
   content: 11-column compare table
            (Policy / Ref / Paykey / Current.../Previous.../Type / % Change)
-footer: none  # closed via header X; print/save are toolbar-only
+footer: none  # closed via header X; print/save/load are toolbar-only
 ```
 
 ### 4.4 ReportPrintModal (`src/components/ReportPrintModal.tsx`)
@@ -227,7 +269,7 @@ toolbar:
   ⚙ Printer Setup: PrintDialog
   🖨 Print:         window.print()
   💾 Save:          SaveAsDialog (QRP) -> downloadQrp(...)
-  📂 Open
+  📂 Load Report:   LoadReportDialog (open .qrp)
 body:
   class: print-area
   content: report header + table + totals + signature lines
@@ -386,8 +428,8 @@ InfoDialog "From and To date should not be in past date to save the BACS file."
 ### 5.7 Reports tab
 
 ```text
-[ Print First ]      ─▶ FirstPaymentReportModal ─▶ { ⚙ PrintDialog | 🖨 print | 💾 SaveAsDialog QRP }
-[ Print Processed ]  ─▶ ProcessedReportModal    ─▶ { ⚙ PrintDialog | 🖨 print | 💾 SaveAsDialog QRP }
+[ Print First ]      ─▶ FirstPaymentReportModal ─▶ { ⚙ PrintDialog | 🖨 print | 💾 SaveAsDialog QRP | 📂 LoadReportDialog }
+[ Print Processed ]  ─▶ ProcessedReportModal    ─▶ { ⚙ PrintDialog | 🖨 print | 💾 SaveAsDialog QRP | 📂 LoadReportDialog }
 ```
 
 ---
@@ -446,6 +488,7 @@ global:
   - showData, showProcessed,
     showProcessedMcp, showMonthlyDiff       # per-tab "data populated" flags
   - saveAsOpen, saveAsType (BACS|CSV|QRP)   # SaveAsDialog state
+  - loadOpen                                # LoadReportDialog state (per print modal)
   - noDataOpen, noDataMessage               # InfoDialog state
   - commitWarningOpen                       # WarningDialog state for commits
 ```
@@ -460,4 +503,4 @@ global:
 - **Disabled buttons:** white background, gray `#979797` border + text.
 - **Tables:** zebra rows `#e7ebec34`; full-row hover `#05579B` with white text.
 - **Print modals:** open over a 40% black backdrop, `shadow-2xl`, 12px radius.
-- **SaveAsDialog and PrintDialog** match Windows 11 Fluent visuals: Segoe UI Variable, 4px corner radius, accent `#0067c0`, light Mica grey `#f3f3f3`.
+- **SaveAsDialog, LoadReportDialog and PrintDialog** match Windows 11 Fluent visuals: Segoe UI Variable, 4px corner radius, accent `#0067c0`, light Mica grey `#f3f3f3`.

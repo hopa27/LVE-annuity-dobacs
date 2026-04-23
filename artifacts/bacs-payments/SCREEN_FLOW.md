@@ -237,6 +237,7 @@ dialog. Clicking **Save** triggers a browser download with the chosen filename.
 * ⚙ → Print Dialog
 * 🖨 → browser print
 * 💾 → Save As Dialog (QRP)
+* 📂 → **Load Report Dialog** (Win11 Open dialog, lists previously saved `.qrp` files)
 * Window header `X` closes the modal.
 * Zoom-to-Width / Zoom-to-Fit calculations leave a 2px buffer so no horizontal scrollbar appears in those modes.
 
@@ -265,9 +266,53 @@ dialog. Clicking **Save** triggers a browser download with the chosen filename.
 ### 4E. First Payment Report Modal / Processed Report Modal
 
 Opened from the **Reports** tab via *Print First* / *Print Processed*.
-Same toolbar as Report Print Modal (⏮⏪⏩⏭, ⚙, 🖨, 💾, 📂). All actions are
-in the toolbar; the modal is closed via the header `X` button.
+Same toolbar as Report Print Modal (⏮⏪⏩⏭, ⚙, 🖨, 💾, 📂 Load Report). All
+actions are in the toolbar; the modal is closed via the header `X` button.
 The body renders the appropriate report layout.
+
+### 4E-bis. Load Report Dialog (`LoadReportDialog`)
+
+Opened from the 📂 toolbar button in any Print/Report preview modal
+(Print Preview, Report Print, First Payment Report, Processed Report).
+Visually mirrors the Save As dialog — a Windows 11 File Explorer
+"Open" window.
+
+```
++----------------------------------------------------------------------+
+| Load Report                                          ▁  ▢  ✕         |
++----------------------------------------------------------------------+
+| ←  →  ↑  ↻ | This PC > Ual3 (H:) > Annuities > Reports |  🔍 Search |
++----------------------------------------------------------------------+
+| ⭐ Home          | Name                          | Date modified |...|
+| 🖼 Gallery       | 📄 Monthly_Differences_Mar... | 31/03/2026    |...|
+| ☁ OneDrive       | 📄 Tax_Free_Payments_Apr...   | 15/04/2026    |...|
+|   This PC        | 📄 First_Payments_Apr2026.qrp | 14/04/2026    |...|
+|   ▸ Desktop      | 📄 Maturities_Mar2026.qrp     | 28/03/2026    |...|
+|   ▸ Documents    | 📄 MCP_Payments_Q1_2026.qrp   | 02/04/2026    |...|
+|   ▸ Downloads    | 📄 Processed_Payments_Apr...  | 20/04/2026    |...|
+|   ▸ Ual3 (H:) ●  | ...                                                |
+| 🖥 Network        |                                                    |
++----------------------------------------------------------------------+
+| File name:      [_____________________________________] [v]          |
+| Files of type:  [ QuickReport file (*.QRP)              v]           |
++----------------------------------------------------------------------+
+| Browse this computer...                       [ Open ]   [ Cancel ]  |
++----------------------------------------------------------------------+
+```
+
+* Single-click a row → selects it and fills the *File name* field.
+* Double-click a row → loads it immediately and closes the dialog.
+* **Browse this computer...** → opens an OS file picker scoped to
+  `.qrp` files; the picked file is read with `File.text()` and passed
+  to the parent via `onLoad(name, content)`.
+* **Open** → loads the selected/typed name (no content) via
+  `onLoad(name)` and closes.
+* Header `X` or **Cancel** closes without loading.
+
+> Static-app note: the listed files are mock entries for visual
+> fidelity. Real loading is supported only through *Browse this
+> computer...*; the parent modal currently consumes the callback but
+> does not yet replace its rendered report from the loaded content.
 
 ### 4F. Information Dialog (`InfoDialog` / "DoBacs")
 
