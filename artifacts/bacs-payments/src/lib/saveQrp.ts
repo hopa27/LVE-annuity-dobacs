@@ -29,6 +29,20 @@ function buildQrpContent(report: QrpReport): string {
   return lines.join("\n");
 }
 
+export function downloadQrp(report: QrpReport, fileName: string) {
+  const content = buildQrpContent(report);
+  const blob = new Blob([content], { type: "application/octet-stream" });
+  const name = fileName.toLowerCase().endsWith(".qrp") ? fileName : `${fileName}.qrp`;
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = name;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
 export async function saveReportAsQrp(report: QrpReport, suggestedName: string) {
   const content = buildQrpContent(report);
   const blob = new Blob([content], { type: "application/octet-stream" });

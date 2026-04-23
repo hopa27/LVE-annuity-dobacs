@@ -14,7 +14,8 @@ interface SaveAsDialogProps {
   open: boolean;
   onClose: () => void;
   defaultFileName: string;
-  fileType: "BACS" | "CSV";
+  fileType: "BACS" | "CSV" | "QRP";
+  onSave?: (fileName: string) => void;
 }
 
 const FOLDERS = [
@@ -36,7 +37,7 @@ const SIDEBAR = [
   { label: "Ual3 on", sub: "'hk/li01' (H:)" },
 ];
 
-export default function SaveAsDialog({ open, onClose, defaultFileName, fileType }: SaveAsDialogProps) {
+export default function SaveAsDialog({ open, onClose, defaultFileName, fileType, onSave }: SaveAsDialogProps) {
   const [fileName, setFileName] = useState(defaultFileName);
   const [selected, setSelected] = useState<number | null>(null);
   useEffect(() => {
@@ -126,7 +127,7 @@ export default function SaveAsDialog({ open, onClose, defaultFileName, fileType 
             className="border border-[#BBBBBB] rounded-[8px] bg-white px-3 h-10 font-['Mulish'] text-sm text-[#3d3d3d] focus:outline-none focus:border-[#04589b]"
           />
           <button
-            onClick={onClose}
+            onClick={() => { onSave?.(fileName); onClose(); }}
             className="h-10 px-8 rounded-[30px] font-['Livvic'] text-sm font-bold bg-[#006cf4] text-white shadow-md hover:bg-[#003578] transition-colors cursor-pointer"
           >
             Save

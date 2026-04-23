@@ -14,8 +14,9 @@ import {
   MdSettings,
   MdLocalPrintshop,
 } from "react-icons/md";
-import { saveReportAsQrp } from "../lib/saveQrp";
+import { downloadQrp } from "../lib/saveQrp";
 import PrintDialog from "./PrintDialog";
+import SaveAsDialog from "./SaveAsDialog";
 
 export interface ReportColumn {
   key: string;
@@ -59,6 +60,7 @@ export default function ReportPrintModal({
   const [zoomMode, setZoomMode] = useState<ZoomMode>("actual");
   const [zoom, setZoom] = useState(1);
   const [printDialogOpen, setPrintDialogOpen] = useState(false);
+  const [saveAsOpen, setSaveAsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const pageRef = useRef<HTMLDivElement>(null);
   const naturalHRef = useRef<number | null>(null);
@@ -140,7 +142,7 @@ export default function ReportPrintModal({
           <button title="Printer Setup" onClick={() => setPrintDialogOpen(true)} className={toolbarBtn}><MdSettings className="text-xl" /></button>
           <button title="Print" onClick={() => window.print()} className={toolbarBtn}><MdLocalPrintshop className="text-xl" /></button>
           <div className="w-px h-6 bg-[#BBBBBB] mx-2" />
-          <button title="Save" onClick={() => saveReportAsQrp({ title, dateRange, columns, rows, totals: Object.fromEntries(totals.map(t => [t.label, t.value])), recordsLabel, recordsCount }, `${title.replace(/\s+/g, "_")}.qrp`)} className={toolbarBtn}><MdSave className="text-xl" /></button>
+          <button title="Save" onClick={() => setSaveAsOpen(true)} className={toolbarBtn}><MdSave className="text-xl" /></button>
           <button title="Open" className={toolbarBtn}><MdFolderOpen className="text-xl" /></button>
         </div>
 
@@ -241,6 +243,13 @@ export default function ReportPrintModal({
         </div>
       </div>
       <PrintDialog open={printDialogOpen} onClose={() => setPrintDialogOpen(false)} totalPages={1} />
+      <SaveAsDialog
+        open={saveAsOpen}
+        onClose={() => setSaveAsOpen(false)}
+        defaultFileName={`${title.replace(/\s+/g, "_")}.qrp`}
+        fileType="QRP"
+        onSave={(name) => downloadQrp({ title, dateRange, columns, rows, totals: Object.fromEntries(totals.map(t => [t.label, t.value])), recordsLabel, recordsCount }, name)}
+      />
     </div>
   );
 }

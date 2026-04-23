@@ -14,8 +14,9 @@ import {
   MdFolderOpen,
   MdLocalPrintshop,
 } from "react-icons/md";
-import { saveReportAsQrp } from "../lib/saveQrp";
+import { downloadQrp } from "../lib/saveQrp";
 import PrintDialog from "./PrintDialog";
+import SaveAsDialog from "./SaveAsDialog";
 
 const PAGE_W = 1080;
 type ZoomMode = "fit" | "actual" | "width";
@@ -195,6 +196,7 @@ export default function FirstPaymentReportModal({ open, onClose, dateRange }: Fi
   const [zoomMode, setZoomMode] = useState<ZoomMode>("actual");
   const [zoom, setZoom] = useState(1);
   const [printDialogOpen, setPrintDialogOpen] = useState(false);
+  const [saveAsOpen, setSaveAsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const pageRef = useRef<HTMLDivElement>(null);
   const naturalHRef = useRef<number | null>(null);
@@ -293,7 +295,7 @@ export default function FirstPaymentReportModal({ open, onClose, dateRange }: Fi
           <button title="Printer Setup" onClick={() => setPrintDialogOpen(true)} className={toolbarBtn}><MdSettings className="text-xl" /></button>
           <button title="Print" onClick={() => window.print()} className={toolbarBtn}><MdLocalPrintshop className="text-xl" /></button>
           <div className="w-px h-6 bg-[#BBBBBB] mx-2" />
-          <button title="Save" onClick={() => saveReportAsQrp({ title: "First Payments Report", dateRange, columns: [{key:"sortCode",label:"Bank Sort Code"},{key:"accountNo",label:"Bank Account No"},{key:"zero",label:"0"},{key:"accountName",label:"Bank Account Name"},{key:"bankRef",label:"Bank Ref"},{key:"nineNine",label:"99"},{key:"grossAnn",label:"Gross Ann"},{key:"amountToPay",label:"Amount To Pay"},{key:"tax",label:"Tax"},{key:"policyRef",label:"Policy Ref"}], rows: ROWS as unknown as Record<string, unknown>[], totals: { Count: TOTAL_COUNT, "Total Gross": TOTAL_GROSS, "Total Amount": TOTAL_AMOUNT, "Total Tax": TOTAL_TAX } }, "First_Payments_Report.qrp")} className={toolbarBtn}><MdSave className="text-xl" /></button>
+          <button title="Save" onClick={() => setSaveAsOpen(true)} className={toolbarBtn}><MdSave className="text-xl" /></button>
           <button title="Open" className={toolbarBtn}><MdFolderOpen className="text-xl" /></button>
         </div>
 
@@ -380,6 +382,13 @@ export default function FirstPaymentReportModal({ open, onClose, dateRange }: Fi
         </div>
       </div>
       <PrintDialog open={printDialogOpen} onClose={() => setPrintDialogOpen(false)} totalPages={TOTAL_PAGES} />
+      <SaveAsDialog
+        open={saveAsOpen}
+        onClose={() => setSaveAsOpen(false)}
+        defaultFileName="First_Payments_Report.qrp"
+        fileType="QRP"
+        onSave={(name) => downloadQrp({ title: "First Payments Report", dateRange, columns: [{key:"sortCode",label:"Bank Sort Code"},{key:"accountNo",label:"Bank Account No"},{key:"zero",label:"0"},{key:"accountName",label:"Bank Account Name"},{key:"bankRef",label:"Bank Ref"},{key:"nineNine",label:"99"},{key:"grossAnn",label:"Gross Ann"},{key:"amountToPay",label:"Amount To Pay"},{key:"tax",label:"Tax"},{key:"policyRef",label:"Policy Ref"}], rows: ROWS as unknown as Record<string, unknown>[], totals: { Count: TOTAL_COUNT, "Total Gross": TOTAL_GROSS, "Total Amount": TOTAL_AMOUNT, "Total Tax": TOTAL_TAX } }, name)}
+      />
     </div>
   );
 }
