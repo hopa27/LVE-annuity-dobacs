@@ -376,55 +376,61 @@ export default function BacsPayments() {
     const fmtNum = (n: number) => n.toLocaleString("en-GB", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     const dateRange = `${formatDateLong(completionStart)} to ${formatDateLong(completionEnd)}`;
     if (activeTab === "Tax Free") {
+      const rows = (showData ? TAX_FREE_PAYMENTS : []) as Record<string, string | number>[];
       return {
         title: "Tax Free Report",
         dateRange,
         columns: reportTaxFreeColumns,
-        rows: TAX_FREE_PAYMENTS as Record<string, string | number>[],
-        totals: [
-          { columnKey: "amount", label: "Total Tax Free Cash", value: fmtNum(TAX_FREE_TOTALS.totalTaxFreeCash) },
-        ] as ReportTotal[],
+        rows,
+        totals: rows.length
+          ? ([{ columnKey: "amount", label: "Total Tax Free Cash", value: fmtNum(TAX_FREE_TOTALS.totalTaxFreeCash) }] as ReportTotal[])
+          : ([] as ReportTotal[]),
         recordsLabel: "Tax Free Records Count",
-        recordsCount: TAX_FREE_TOTALS.count,
+        recordsCount: rows.length ? TAX_FREE_TOTALS.count : 0,
       };
     }
     if (activeTab === "First and One Off Payments") {
+      const rows = (showData ? FIRST_PAYMENTS : []) as Record<string, string | number>[];
       return {
         title: "First Payment Report",
         dateRange,
         columns: reportPaymentColumns,
-        rows: FIRST_PAYMENTS as Record<string, string | number>[],
-        totals: [
-          { columnKey: "amount", label: "Total", value: fmtNum(FIRST_PAYMENTS_TOTALS.totalFirstPayments) },
-          { columnKey: "tax", label: "Tax", value: fmtNum(FIRST_PAYMENTS_TOTALS.totalTax) },
-        ] as ReportTotal[],
+        rows,
+        totals: rows.length
+          ? ([
+              { columnKey: "amount", label: "Total", value: fmtNum(FIRST_PAYMENTS_TOTALS.totalFirstPayments) },
+              { columnKey: "tax", label: "Tax", value: fmtNum(FIRST_PAYMENTS_TOTALS.totalTax) },
+            ] as ReportTotal[])
+          : ([] as ReportTotal[]),
         recordsLabel: "First Payment Records Count",
-        recordsCount: FIRST_PAYMENTS_TOTALS.count,
+        recordsCount: rows.length ? FIRST_PAYMENTS_TOTALS.count : 0,
       };
     }
     if (activeTab === "Maturities") {
+      const rows = (showData ? MATURITY_PAYMENTS : []) as Record<string, string | number>[];
       return {
         title: "Maturity Payment Report",
         dateRange,
         columns: reportMaturityColumns,
-        rows: MATURITY_PAYMENTS as Record<string, string | number>[],
-        totals: [
-          { columnKey: "amount", label: "Total", value: fmtNum(MATURITY_TOTALS.totalMaturityPayments) },
-        ] as ReportTotal[],
+        rows,
+        totals: rows.length
+          ? ([{ columnKey: "amount", label: "Total", value: fmtNum(MATURITY_TOTALS.totalMaturityPayments) }] as ReportTotal[])
+          : ([] as ReportTotal[]),
         recordsLabel: "Maturity Records Count",
-        recordsCount: MATURITY_TOTALS.count,
+        recordsCount: rows.length ? MATURITY_TOTALS.count : 0,
       };
     }
+    const rows = (showData ? FIRST_PAYMENTS_MCP : []) as Record<string, string | number>[];
     return {
       title: "First Payments MCP Report",
       dateRange,
       columns: reportPaymentColumns,
-      rows: FIRST_PAYMENTS_MCP as Record<string, string | number>[],
-      totals: [
-        { columnKey: "amount", label: "Total", value: fmtNum(FIRST_PAYMENTS_MCP_TOTALS.totalFirstPayments) },
-      ] as ReportTotal[],
+      rows,
+      totals: rows.length
+        ? ([{ columnKey: "amount", label: "Total", value: fmtNum(FIRST_PAYMENTS_MCP_TOTALS.totalFirstPayments) }] as ReportTotal[])
+        : ([] as ReportTotal[]),
       recordsLabel: "First Payments MCP Records Count",
-      recordsCount: FIRST_PAYMENTS_MCP_TOTALS.count,
+      recordsCount: rows.length ? FIRST_PAYMENTS_MCP_TOTALS.count : 0,
     };
   })();
   const [showProcessed, setShowProcessed] = useState(false);
