@@ -14,7 +14,7 @@ import {
   MdFolderOpen,
   MdLocalPrintshop,
 } from "react-icons/md";
-import { saveElementAsPdf } from "../lib/savePdf";
+import { saveReportAsQrp } from "../lib/saveQrp";
 
 export interface ProcessedReportColumn {
   key: string;
@@ -127,7 +127,7 @@ export default function ProcessedReportModal({ open, onClose, dateRange, columns
           <button title="Printer Setup" onClick={() => window.print()} className={toolbarBtn}><MdSettings className="text-xl" /></button>
           <button title="Print" onClick={() => window.print()} className={toolbarBtn}><MdLocalPrintshop className="text-xl" /></button>
           <div className="w-px h-6 bg-[#BBBBBB] mx-2" />
-          <button title="Save as PDF" onClick={() => pageRef.current && saveElementAsPdf(pageRef.current, "Payments_Report.pdf")} className={toolbarBtn}><MdSave className="text-xl" /></button>
+          <button title="Save" onClick={() => saveReportAsQrp({ title: "Payments Report", dateRange, columns: columns ?? [], rows: rows ?? [], totals: totals ? { Count: totals.count, "Total Net": totals.totalNet, "Total Gross": totals.totalGross, "Total Tax": totals.totalTax } : undefined }, "Payments_Report.qrp")} className={toolbarBtn}><MdSave className="text-xl" /></button>
           <button title="Open" className={toolbarBtn}><MdFolderOpen className="text-xl" /></button>
         </div>
 

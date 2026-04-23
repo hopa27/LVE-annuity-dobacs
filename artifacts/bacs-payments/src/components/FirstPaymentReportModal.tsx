@@ -14,7 +14,7 @@ import {
   MdFolderOpen,
   MdLocalPrintshop,
 } from "react-icons/md";
-import { saveElementAsPdf } from "../lib/savePdf";
+import { saveReportAsQrp } from "../lib/saveQrp";
 
 const PAGE_W = 1080;
 type ZoomMode = "fit" | "actual" | "width";
@@ -291,7 +291,7 @@ export default function FirstPaymentReportModal({ open, onClose, dateRange }: Fi
           <button title="Printer Setup" onClick={() => window.print()} className={toolbarBtn}><MdSettings className="text-xl" /></button>
           <button title="Print" onClick={() => window.print()} className={toolbarBtn}><MdLocalPrintshop className="text-xl" /></button>
           <div className="w-px h-6 bg-[#BBBBBB] mx-2" />
-          <button title="Save as PDF" onClick={() => pageRef.current && saveElementAsPdf(pageRef.current, "First_Payments_Report.pdf")} className={toolbarBtn}><MdSave className="text-xl" /></button>
+          <button title="Save" onClick={() => saveReportAsQrp({ title: "First Payments Report", dateRange, columns: [{key:"sortCode",label:"Bank Sort Code"},{key:"accountNo",label:"Bank Account No"},{key:"zero",label:"0"},{key:"accountName",label:"Bank Account Name"},{key:"bankRef",label:"Bank Ref"},{key:"nineNine",label:"99"},{key:"grossAnn",label:"Gross Ann"},{key:"amountToPay",label:"Amount To Pay"},{key:"tax",label:"Tax"},{key:"policyRef",label:"Policy Ref"}], rows: ROWS as unknown as Record<string, unknown>[], totals: { Count: TOTAL_COUNT, "Total Gross": TOTAL_GROSS, "Total Amount": TOTAL_AMOUNT, "Total Tax": TOTAL_TAX } }, "First_Payments_Report.qrp")} className={toolbarBtn}><MdSave className="text-xl" /></button>
           <button title="Open" className={toolbarBtn}><MdFolderOpen className="text-xl" /></button>
         </div>
 
