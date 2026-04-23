@@ -8,6 +8,8 @@ import {
   MdSave,
   MdClose,
 } from "react-icons/md";
+import SaveAsDialog from "./SaveAsDialog";
+import { downloadQrp } from "../lib/saveQrp";
 
 export interface PrintRow {
   policyNo: string;
@@ -39,6 +41,7 @@ export default function PrintPreviewModal({
   rows,
 }: PrintPreviewModalProps) {
   const [zoom, setZoom] = useState("100%");
+  const [saveAsOpen, setSaveAsOpen] = useState(false);
 
   if (!open) return null;
 
@@ -70,7 +73,7 @@ export default function PrintPreviewModal({
           <button className={toolbarBtn}><MdSkipNext className="text-xl" /></button>
           <div className="w-px h-6 bg-[#BBBBBB] mx-2" />
           <button onClick={() => window.print()} className={toolbarBtn}><MdPrint className="text-xl" /></button>
-          <button className={toolbarBtn}><MdSave className="text-xl" /></button>
+          <button onClick={() => setSaveAsOpen(true)} className={toolbarBtn}><MdSave className="text-xl" /></button>
           <div className="w-px h-6 bg-[#BBBBBB] mx-2" />
           <select
             value={zoom}
@@ -164,6 +167,36 @@ export default function PrintPreviewModal({
           </button>
         </div>
       </div>
+      <SaveAsDialog
+        open={saveAsOpen}
+        onClose={() => setSaveAsOpen(false)}
+        defaultFileName={`${title.replace(/\s+/g, "_")}.qrp`}
+        fileType="QRP"
+        onSave={(name) =>
+          downloadQrp(
+            {
+              title,
+              dateRange: reportDate,
+              columns: [
+                { key: "policyNo", label: "Policy No" },
+                { key: "policyRef", label: "Policy_ref" },
+                { key: "paykey", label: "Paykey" },
+                { key: "currentDate", label: "Current Date" },
+                { key: "currentRef", label: "Current Ref" },
+                { key: "currentGross", label: "Current Gross" },
+                { key: "previousDate", label: "Previous Date" },
+                { key: "previousRef", label: "Previous Ref" },
+                { key: "previousGross", label: "Previous Gross" },
+                { key: "paymentType", label: "Payment Type" },
+                { key: "pctChange", label: "% Change" },
+              ],
+              rows: rows as unknown as Record<string, unknown>[],
+              totals: { Count: total },
+            },
+            name
+          )
+        }
+      />
     </div>
   );
 }
