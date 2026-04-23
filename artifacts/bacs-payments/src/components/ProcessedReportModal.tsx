@@ -17,6 +17,7 @@ import {
 import { downloadQrp } from "../lib/saveQrp";
 import PrintDialog from "./PrintDialog";
 import SaveAsDialog from "./SaveAsDialog";
+import LoadReportDialog from "./LoadReportDialog";
 
 export interface ProcessedReportColumn {
   key: string;
@@ -49,6 +50,7 @@ export default function ProcessedReportModal({ open, onClose, dateRange, columns
   const [zoom, setZoom] = useState(1);
   const [printDialogOpen, setPrintDialogOpen] = useState(false);
   const [saveAsOpen, setSaveAsOpen] = useState(false);
+  const [loadOpen, setLoadOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const pageRef = useRef<HTMLDivElement>(null);
   const naturalHRef = useRef<number | null>(null);
@@ -132,7 +134,7 @@ export default function ProcessedReportModal({ open, onClose, dateRange, columns
           <button title="Print" onClick={() => window.print()} className={toolbarBtn}><MdLocalPrintshop className="text-xl" /></button>
           <div className="w-px h-6 bg-[#BBBBBB] mx-2" />
           <button title="Save" onClick={() => setSaveAsOpen(true)} className={toolbarBtn}><MdSave className="text-xl" /></button>
-          <button title="Open" className={toolbarBtn}><MdFolderOpen className="text-xl" /></button>
+          <button title="Load Report" onClick={() => setLoadOpen(true)} className={toolbarBtn}><MdFolderOpen className="text-xl" /></button>
         </div>
 
         <div ref={containerRef} className="flex-1 overflow-auto bg-[#f0f0f0] p-6">
@@ -219,6 +221,7 @@ export default function ProcessedReportModal({ open, onClose, dateRange, columns
         fileType="QRP"
         onSave={(name) => downloadQrp({ title: "Payments Report", dateRange, columns: columns ?? [], rows: rows ?? [], totals: totals ? { Count: totals.count, "Total Net": totals.totalNet, "Total Gross": totals.totalGross, "Total Tax": totals.totalTax } : undefined }, name)}
       />
+      <LoadReportDialog open={loadOpen} onClose={() => setLoadOpen(false)} />
     </div>
   );
 }

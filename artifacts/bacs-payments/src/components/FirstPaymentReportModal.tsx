@@ -17,6 +17,7 @@ import {
 import { downloadQrp } from "../lib/saveQrp";
 import PrintDialog from "./PrintDialog";
 import SaveAsDialog from "./SaveAsDialog";
+import LoadReportDialog from "./LoadReportDialog";
 
 const PAGE_W = 1080;
 type ZoomMode = "fit" | "actual" | "width";
@@ -197,6 +198,7 @@ export default function FirstPaymentReportModal({ open, onClose, dateRange }: Fi
   const [zoom, setZoom] = useState(1);
   const [printDialogOpen, setPrintDialogOpen] = useState(false);
   const [saveAsOpen, setSaveAsOpen] = useState(false);
+  const [loadOpen, setLoadOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const pageRef = useRef<HTMLDivElement>(null);
   const naturalHRef = useRef<number | null>(null);
@@ -296,7 +298,7 @@ export default function FirstPaymentReportModal({ open, onClose, dateRange }: Fi
           <button title="Print" onClick={() => window.print()} className={toolbarBtn}><MdLocalPrintshop className="text-xl" /></button>
           <div className="w-px h-6 bg-[#BBBBBB] mx-2" />
           <button title="Save" onClick={() => setSaveAsOpen(true)} className={toolbarBtn}><MdSave className="text-xl" /></button>
-          <button title="Open" className={toolbarBtn}><MdFolderOpen className="text-xl" /></button>
+          <button title="Load Report" onClick={() => setLoadOpen(true)} className={toolbarBtn}><MdFolderOpen className="text-xl" /></button>
         </div>
 
         <div ref={containerRef} className="flex-1 overflow-auto bg-[#f0f0f0] p-6">
@@ -389,6 +391,7 @@ export default function FirstPaymentReportModal({ open, onClose, dateRange }: Fi
         fileType="QRP"
         onSave={(name) => downloadQrp({ title: "First Payments Report", dateRange, columns: [{key:"sortCode",label:"Bank Sort Code"},{key:"accountNo",label:"Bank Account No"},{key:"zero",label:"0"},{key:"accountName",label:"Bank Account Name"},{key:"bankRef",label:"Bank Ref"},{key:"nineNine",label:"99"},{key:"grossAnn",label:"Gross Ann"},{key:"amountToPay",label:"Amount To Pay"},{key:"tax",label:"Tax"},{key:"policyRef",label:"Policy Ref"}], rows: ROWS as unknown as Record<string, unknown>[], totals: { Count: TOTAL_COUNT, "Total Gross": TOTAL_GROSS, "Total Amount": TOTAL_AMOUNT, "Total Tax": TOTAL_TAX } }, name)}
       />
+      <LoadReportDialog open={loadOpen} onClose={() => setLoadOpen(false)} />
     </div>
   );
 }
