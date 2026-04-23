@@ -303,6 +303,10 @@ export default function BacsPayments() {
   const [reportPrintWarningOpen, setReportPrintWarningOpen] = useState(false);
   const [firstReportOpen, setFirstReportOpen] = useState(false);
   const [processedReportOpen, setProcessedReportOpen] = useState(false);
+  const handleSaveCommitBacs = () => {
+    setNoDataMessage("From and To date should not be in past date to save the BACS file.");
+    setNoDataOpen(true);
+  };
   const handlePrintReport = () => {
     const tabHasData =
       (["Tax Free", "First and One Off Payments", "Maturities", "FirstPayments MCP"].includes(activeTab) && showData) ||
@@ -524,7 +528,7 @@ export default function BacsPayments() {
                   <ReadOnlyInput label="Total Tax" width="w-[120px]" value={showData ? fmt(FIRST_PAYMENTS_TOTALS.totalTax) : ""} />
                   <div className="ml-auto flex items-center gap-3">
                     <ActionButton label="Save To Bacs" icon variant="primary" />
-                    <ActionButton label="Save And Commit To BACS" icon variant="primary" />
+                    <ActionButton label="Save And Commit To BACS" icon variant="primary" onClick={handleSaveCommitBacs} />
                   </div>
                 </div>
               </Tabs.Content>
@@ -573,7 +577,7 @@ export default function BacsPayments() {
                 </div>
                 <div className="flex items-center gap-3 mt-4 justify-center flex-wrap">
                   <ActionButton label="Save To Bacs" icon variant="primary" />
-                  <ActionButton label="Save And Commit To BACS" icon variant="primary" />
+                  <ActionButton label="Save And Commit To BACS" icon variant="primary" onClick={handleSaveCommitBacs} />
                   <ActionButton label="Save To CSV" icon variant="primary" />
                 </div>
               </Tabs.Content>
@@ -657,7 +661,7 @@ export default function BacsPayments() {
                   <ReadOnlyInput label="Total Tax" width="w-[120px]" value={showData ? fmt(FIRST_PAYMENTS_MCP_TOTALS.totalTax) : ""} />
                   <div className="ml-auto flex items-center gap-3">
                     <ActionButton label="Save To Bacs" icon variant="primary" />
-                    <ActionButton label="Save And Commit To BACS" icon variant="primary" />
+                    <ActionButton label="Save And Commit To BACS" icon variant="primary" onClick={handleSaveCommitBacs} />
                   </div>
                 </div>
               </Tabs.Content>
