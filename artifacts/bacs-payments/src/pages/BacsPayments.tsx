@@ -304,7 +304,16 @@ export default function BacsPayments() {
   const [firstReportOpen, setFirstReportOpen] = useState(false);
   const [processedReportOpen, setProcessedReportOpen] = useState(false);
   const handleSaveCommitBacs = () => {
-    setNoDataMessage("From and To date should not be in past date to save the BACS file.");
+    const tabHasData =
+      (["Tax Free", "First and One Off Payments", "Maturities", "FirstPayments MCP"].includes(activeTab) && showData) ||
+      (activeTab === "Processed" && showProcessed) ||
+      (activeTab === "Processed MCP" && showProcessedMcp) ||
+      (activeTab === "Monthly Differences" && showMonthlyDiff);
+    if (!tabHasData) {
+      setNoDataMessage("No BACS payments present.");
+    } else {
+      setNoDataMessage("From and To date should not be in past date to save the BACS file.");
+    }
     setNoDataOpen(true);
   };
   const handlePrintReport = () => {
