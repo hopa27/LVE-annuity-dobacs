@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import {
   MdSkipPrevious,
   MdSkipNext,
@@ -175,8 +176,32 @@ const TOTAL_GROSS = "1545474.00";
 const TOTAL_AMOUNT = "1265797.77";
 const TOTAL_TAX = "-279676.23";
 
+const TOTAL_PAGES = 22;
+const LAST_PAGE = TOTAL_PAGES;
+const DATA_ROWS = ROWS.slice(0, ROWS.length - 1);
+const LAST_PAGE_ROW = ROWS[ROWS.length - 1];
+const ROWS_PER_PAGE = Math.ceil(DATA_ROWS.length / 5);
+const DATA_PAGES = [1, 2, 3, 4, 5];
+const NAV_SEQUENCE = [...DATA_PAGES, LAST_PAGE];
+
 export default function FirstPaymentReportModal({ open, onClose, dateRange }: FirstPaymentReportModalProps) {
+  const [page, setPage] = useState(1);
+  useEffect(() => { if (open) setPage(1); }, [open]);
   if (!open) return null;
+
+  const navIdx = NAV_SEQUENCE.indexOf(page);
+  const isFirst = navIdx <= 0;
+  const isLast = navIdx === NAV_SEQUENCE.length - 1;
+  const goPrev = () => { if (!isFirst) setPage(NAV_SEQUENCE[navIdx - 1]); };
+  const goNext = () => { if (!isLast) setPage(NAV_SEQUENCE[navIdx + 1]); };
+  const goFirst = () => setPage(NAV_SEQUENCE[0]);
+  const goLast = () => setPage(LAST_PAGE);
+
+  const isLastPage = page === LAST_PAGE;
+  const pageRows: Row[] = isLastPage
+    ? [LAST_PAGE_ROW]
+    : DATA_ROWS.slice((page - 1) * ROWS_PER_PAGE, page * ROWS_PER_PAGE);
+  const showBacsHeader = page === 1;
 
   const toolbarBtn =
     "h-10 w-10 flex items-center justify-center rounded-full bg-white text-[#04589b] border border-[#04589b] font-bold hover:bg-[#003578] hover:text-white hover:border-[#003578] transition-colors cursor-pointer";
@@ -201,11 +226,11 @@ export default function FirstPaymentReportModal({ open, onClose, dateRange }: Fi
           <button title="Multiple pages" className={toolbarBtn}><MdViewModule className="text-xl" /></button>
           <button title="Page width" className={toolbarBtn}><MdViewAgenda className="text-xl" /></button>
           <div className="w-px h-6 bg-[#BBBBBB] mx-2" />
-          <button title="First page" disabled className={toolbarBtnDisabled}><MdSkipPrevious className="text-xl" /></button>
-          <button title="Previous page" disabled className={toolbarBtnDisabled}><MdChevronLeft className="text-xl" /></button>
-          <span className="font-['Mulish'] text-sm text-[#3d3d3d] px-2">1 of 22</span>
-          <button title="Next page" className={toolbarBtn}><MdChevronRight className="text-xl" /></button>
-          <button title="Last page" className={toolbarBtn}><MdSkipNext className="text-xl" /></button>
+          <button title="First page" onClick={goFirst} disabled={isFirst} className={isFirst ? toolbarBtnDisabled : toolbarBtn}><MdSkipPrevious className="text-xl" /></button>
+          <button title="Previous page" onClick={goPrev} disabled={isFirst} className={isFirst ? toolbarBtnDisabled : toolbarBtn}><MdChevronLeft className="text-xl" /></button>
+          <span className="font-['Mulish'] text-sm text-[#3d3d3d] px-2">{page} of {TOTAL_PAGES}</span>
+          <button title="Next page" onClick={goNext} disabled={isLast} className={isLast ? toolbarBtnDisabled : toolbarBtn}><MdChevronRight className="text-xl" /></button>
+          <button title="Last page" onClick={goLast} disabled={isLast} className={isLast ? toolbarBtnDisabled : toolbarBtn}><MdSkipNext className="text-xl" /></button>
           <div className="w-px h-6 bg-[#BBBBBB] mx-2" />
           <button title="Print" className={toolbarBtn}><MdPrint className="text-xl" /></button>
           <button title="Quick print" className={toolbarBtn}><MdLocalPrintshop className="text-xl" /></button>
@@ -220,7 +245,7 @@ export default function FirstPaymentReportModal({ open, onClose, dateRange }: Fi
               <h2 className="font-['Livvic'] text-2xl font-bold text-[#002f5c]">
                 First Payments Report : <span className="font-normal text-[#3d3d3d]">{dateRange}</span>
               </h2>
-              <span className="font-['Mulish'] text-xs text-[#3d3d3d]">Page 1 of 22</span>
+              <span className="font-['Mulish'] text-xs text-[#3d3d3d]">Page {page} of {TOTAL_PAGES}</span>
             </div>
 
             <table className="w-full border-separate border-spacing-0 font-['Mulish'] text-[12px] text-[#3d3d3d]">
@@ -237,10 +262,12 @@ export default function FirstPaymentReportModal({ open, onClose, dateRange }: Fi
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td colSpan={12} className="py-2 px-2 font-['Livvic'] font-bold text-[#002f5c]">BACS</td>
-                </tr>
-                {ROWS.map((r, i) => (
+                {showBacsHeader && (
+                  <tr>
+                    <td colSpan={12} className="py-2 px-2 font-['Livvic'] font-bold text-[#002f5c]">BACS</td>
+                  </tr>
+                )}
+                {pageRows.map((r, i) => (
                   <tr key={i} className={i % 2 === 0 ? "bg-white" : "bg-[#e7ebec34]"}>
                     <td className="py-1.5 px-2 text-left"></td>
                     <td className="py-1.5 px-2 text-left"></td>
@@ -256,6 +283,7 @@ export default function FirstPaymentReportModal({ open, onClose, dateRange }: Fi
                     <td className="py-1.5 px-2 text-left">{r.policyRef}</td>
                   </tr>
                 ))}
+                {isLastPage && (
                 <tr className="border-t-[2px] border-[#002f5c]">
                   <td className="py-2 px-2 font-['Livvic'] font-bold text-[#002f5c] border-t-[2px] border-[#002f5c] text-left"></td>
                   <td className="py-2 px-2 font-['Livvic'] font-bold text-[#002f5c] border-t-[2px] border-[#002f5c] text-left">{TOTAL_COUNT}</td>
@@ -270,22 +298,25 @@ export default function FirstPaymentReportModal({ open, onClose, dateRange }: Fi
                   <td className="py-2 px-2 font-['Livvic'] font-bold text-[#002f5c] border-t-[2px] border-[#002f5c] text-right">{TOTAL_TAX}</td>
                   <td className="py-2 px-2 font-['Livvic'] font-bold text-[#002f5c] border-t-[2px] border-[#002f5c] text-left"></td>
                 </tr>
+                )}
               </tbody>
             </table>
 
-            <div className="mt-12 flex flex-col gap-8 max-w-[420px]">
-              <div className="flex items-end gap-3">
-                <span className="font-['Mulish'] text-sm text-[#3d3d3d] whitespace-nowrap">Checked by:</span>
-                <span className="flex-1 border-b border-dotted border-[#3d3d3d] h-5" />
+            {isLastPage && (
+              <div className="mt-12 flex flex-col gap-8 max-w-[420px]">
+                <div className="flex items-end gap-3">
+                  <span className="font-['Mulish'] text-sm text-[#3d3d3d] whitespace-nowrap">Checked by:</span>
+                  <span className="flex-1 border-b border-dotted border-[#3d3d3d] h-5" />
+                </div>
+                <div className="flex items-end gap-3">
+                  <span className="font-['Mulish'] text-sm text-[#3d3d3d] whitespace-nowrap">Authorised by:</span>
+                  <span className="flex-1 border-b border-dotted border-[#3d3d3d] h-5" />
+                </div>
               </div>
-              <div className="flex items-end gap-3">
-                <span className="font-['Mulish'] text-sm text-[#3d3d3d] whitespace-nowrap">Authorised by:</span>
-                <span className="flex-1 border-b border-dotted border-[#3d3d3d] h-5" />
-              </div>
-            </div>
+            )}
 
             <div className="mt-10 text-right font-['Mulish'] text-xs text-[#979797]">
-              Page 22 of 22
+              Page {page} of {TOTAL_PAGES}
             </div>
           </div>
         </div>
