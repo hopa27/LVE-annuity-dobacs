@@ -19,6 +19,7 @@ const TAB_LIST = [
   "Tax Free",
   "First and One Off Payments",
   "Processed",
+  "Parameters",
   "Monthly Differences",
   "Maturities",
   "Reports",
@@ -294,6 +295,10 @@ export default function BacsPayments() {
   const [mcpEndRunMonth, setMcpEndRunMonth] = useState("05/04/2026");
   const [monthlyStartRun, setMonthlyStartRun] = useState("01/02/2025");
   const [monthlyEndRun, setMonthlyEndRun] = useState("21/04/2026");
+  const [arStartRunMonth, setArStartRunMonth] = useState("01/05/2025");
+  const [arEndRunMonth, setArEndRunMonth] = useState("31/05/2025");
+  const [adStartRunMonth, setAdStartRunMonth] = useState("01/06/2025");
+  const [adEndRunMonth, setAdEndRunMonth] = useState("24/06/2025");
   const [reportsStartRun, setReportsStartRun] = useState("01/05/2025");
   const [reportsEndRun, setReportsEndRun] = useState("05/04/2026");
   const [paymentType, setPaymentType] = useState("All");
@@ -691,6 +696,32 @@ export default function BacsPayments() {
                   <ActionButton label="Save To Bacs" icon variant="primary" disabled={!showProcessed} onClick={() => openSaveAs("BACS")} />
                   <ActionButton label="Save And Commit To BACS" icon variant="primary" disabled={!showProcessed} onClick={handleSaveCommitBacs} />
                   <ActionButton label="Save To CSV" icon variant="primary" disabled={!showProcessed} onClick={() => { setSaveAsType("CSV"); setSaveAsOpen(true); }} />
+                </div>
+              </Tabs.Content>
+
+              {/* Parameters Tab */}
+              <Tabs.Content value="Parameters">
+                <div className="border border-[#BBBBBB]/40 rounded-[8px] p-4 mb-4 bg-[#fafbfc]">
+                  <div className="flex items-center gap-2 mb-5">
+                    <button title="Insert" className="h-8 w-9 border border-[#BBBBBB] bg-white rounded-[4px] hover:bg-[#f0f0f0] cursor-pointer flex items-center justify-center text-[#3d3d3d]">▲</button>
+                    <button title="Post" className="h-8 w-9 border border-[#BBBBBB] bg-white rounded-[4px] hover:bg-[#f0f0f0] cursor-pointer flex items-center justify-center text-[#3d3d3d]">✓</button>
+                    <button title="Cancel" className="h-8 w-9 border border-[#BBBBBB] bg-white rounded-[4px] hover:bg-[#f0f0f0] cursor-pointer flex items-center justify-center text-[#3d3d3d]">✗</button>
+                    <button title="Refresh" className="h-8 w-9 border border-[#BBBBBB] bg-white rounded-[4px] hover:bg-[#f0f0f0] cursor-pointer flex items-center justify-center text-[#3d3d3d]">↻</button>
+                  </div>
+
+                  <div className="flex flex-col gap-4 max-w-[260px]">
+                    <DateInput label="ARSTARTRUNMONTH" value={arStartRunMonth} onChange={setArStartRunMonth} stacked />
+                    <DateInput label="ARENDRUNMONTH"   value={arEndRunMonth}   onChange={setArEndRunMonth}   stacked />
+                    <DateInput label="ADSTARTRUNMONTH" value={adStartRunMonth} onChange={setAdStartRunMonth} stacked />
+                    <DateInput label="ADENDRUNMONTH"   value={adEndRunMonth}   onChange={setAdEndRunMonth}   stacked />
+                  </div>
+                </div>
+
+                <div className="flex justify-center mt-3">
+                  <input
+                    readOnly
+                    className="w-[280px] h-7 px-2 border border-[#BBBBBB] bg-white text-[12px] text-[#3d3d3d] rounded-[3px] focus:outline-none"
+                  />
                 </div>
               </Tabs.Content>
 

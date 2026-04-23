@@ -6,6 +6,7 @@ interface DateInputProps {
   value: string;
   onChange: (value: string) => void;
   error?: boolean;
+  stacked?: boolean;
 }
 
 const MONTH_NAMES = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -47,7 +48,7 @@ function getFirstDayOfMonth(year: number, month: number): number {
 
 type CalendarView = "days" | "months" | "years";
 
-export default function DateInput({ label, value, onChange, error = false }: DateInputProps) {
+export default function DateInput({ label, value, onChange, error = false, stacked = false }: DateInputProps) {
   const [open, setOpen] = useState(false);
   const [view, setView] = useState<CalendarView>("days");
   const popoverRef = useRef<HTMLDivElement>(null);
@@ -152,8 +153,8 @@ export default function DateInput({ label, value, onChange, error = false }: Dat
   const hatchPattern = "repeating-linear-gradient(45deg, transparent, transparent 5px, #e7ebec 5px, #e7ebec 10px)";
 
   return (
-    <div className="flex items-center gap-3 relative">
-      <label className="font-['Livvic'] text-sm font-medium text-[#3d3d3d] whitespace-nowrap">
+    <div className={`relative ${stacked ? "flex flex-col gap-1 items-start" : "flex items-center gap-3"}`}>
+      <label className={`font-['Livvic'] font-medium text-[#3d3d3d] whitespace-nowrap ${stacked ? "text-[11px] tracking-wide uppercase text-[#5f5f5f]" : "text-sm"}`}>
         {label}
       </label>
       <div className="relative" ref={triggerRef}>
