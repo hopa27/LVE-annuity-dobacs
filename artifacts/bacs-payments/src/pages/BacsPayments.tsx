@@ -737,7 +737,7 @@ export default function BacsPayments() {
                   <ReadOnlyInput label="Payments" value={showProcessedMcp ? String(PROCESSED_MCP_TOTALS.count) : ""} />
                   <ReadOnlyInput label="Total Tax Free Cash" width="w-[200px]" value={showProcessedMcp ? fmt(PROCESSED_MCP_TOTALS.totalTaxFreeCash) : ""} />
                   <div className="ml-auto">
-                    <ActionButton label="Save And Commit To Bacs" icon variant="primary" />
+                    <ActionButton label="Save And Commit To Bacs" icon variant="primary" disabled={!showProcessedMcp} onClick={handleSaveCommitBacs} />
                   </div>
                 </div>
               </Tabs.Content>
