@@ -380,7 +380,7 @@ export default function BacsPayments() {
       return {
         title: "Tax Free Report",
         dateRange,
-        columns: reportTaxFreeColumns,
+        columns: taxFreeColumns as ReportColumn[],
         rows,
         totals: rows.length
           ? ([{ columnKey: "amount", label: "Total Tax Free Cash", value: fmtNum(TAX_FREE_TOTALS.totalTaxFreeCash) }] as ReportTotal[])
@@ -394,7 +394,7 @@ export default function BacsPayments() {
       return {
         title: "First Payment Report",
         dateRange,
-        columns: reportPaymentColumns,
+        columns: paymentColumns as ReportColumn[],
         rows,
         totals: rows.length
           ? ([
@@ -411,7 +411,7 @@ export default function BacsPayments() {
       return {
         title: "Maturity Payment Report",
         dateRange,
-        columns: reportMaturityColumns,
+        columns: maturityColumns as ReportColumn[],
         rows,
         totals: rows.length
           ? ([{ columnKey: "amount", label: "Total", value: fmtNum(MATURITY_TOTALS.totalMaturityPayments) }] as ReportTotal[])
@@ -424,7 +424,7 @@ export default function BacsPayments() {
     return {
       title: "First Payments MCP Report",
       dateRange,
-      columns: reportPaymentColumns,
+      columns: paymentColumns as ReportColumn[],
       rows,
       totals: rows.length
         ? ([{ columnKey: "amount", label: "Total", value: fmtNum(FIRST_PAYMENTS_MCP_TOTALS.totalFirstPayments) }] as ReportTotal[])
