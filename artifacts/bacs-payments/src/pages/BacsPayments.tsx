@@ -310,7 +310,7 @@ export default function BacsPayments() {
   const [reportPrintWarningOpen, setReportPrintWarningOpen] = useState(false);
   const [firstReportOpen, setFirstReportOpen] = useState(false);
   const [processedReportOpen, setProcessedReportOpen] = useState(false);
-  const [processedReportFromTab, setProcessedReportFromTab] = useState(false);
+  const [processedReportFromTab, setProcessedReportFromTab] = useState<null | "processed" | "mcp">(null);
   const [commitWarningOpen, setCommitWarningOpen] = useState(false);
   const [saveAsOpen, setSaveAsOpen] = useState(false);
   const [saveAsType, setSaveAsType] = useState<"BACS" | "CSV">("BACS");
@@ -491,14 +491,37 @@ export default function BacsPayments() {
       />
       <ProcessedReportModal
         open={processedReportOpen}
-        onClose={() => { setProcessedReportOpen(false); setProcessedReportFromTab(false); }}
+        onClose={() => { setProcessedReportOpen(false); setProcessedReportFromTab(null); }}
         dateRange={
-          processedReportFromTab
+          processedReportFromTab === "processed"
             ? `${startRunMonth} to ${endRunMonth}`
-            : `${reportsStartRun} to ${reportsEndRun}`
+            : processedReportFromTab === "mcp"
+              ? `${mcpStartRunMonth} to ${mcpEndRunMonth}`
+              : `${reportsStartRun} to ${reportsEndRun}`
         }
-        rows={processedReportFromTab ? PROCESSED_PAYMENTS : undefined}
-        totals={processedReportFromTab ? PROCESSED_TOTALS : undefined}
+        rows={
+          processedReportFromTab === "processed"
+            ? PROCESSED_PAYMENTS
+            : processedReportFromTab === "mcp"
+              ? PROCESSED_MCP_PAYMENTS
+              : undefined
+        }
+        totals={
+          processedReportFromTab === "processed"
+            ? PROCESSED_TOTALS
+            : processedReportFromTab === "mcp"
+              ? (() => {
+                  const gross = PROCESSED_MCP_PAYMENTS.reduce((s, r) => s + parseFloat(r.amount || "0"), 0);
+                  const tax = PROCESSED_MCP_PAYMENTS.reduce((s, r) => s + parseFloat(r.tax || "0"), 0);
+                  return {
+                    count: PROCESSED_MCP_TOTALS.count,
+                    totalNet: gross - tax,
+                    totalGross: gross,
+                    totalTax: tax,
+                  };
+                })()
+              : undefined
+        }
       />
       <InfoDialog
         open={noDataOpen}
@@ -620,7 +643,7 @@ export default function BacsPayments() {
                             setNoDataOpen(true);
                             return;
                           }
-                          setProcessedReportFromTab(true);
+                          setProcessedReportFromTab("processed");
                           setProcessedReportOpen(true);
                         }}
                       />
@@ -756,7 +779,19 @@ export default function BacsPayments() {
                     <DateInput label="End Run Month" value={mcpEndRunMonth} onChange={setMcpEndRunMonth} />
                     <div className="ml-auto flex items-center gap-3">
                       <ActionButton label="Show Payments" variant="secondary" onClick={handleShowProcessedMcp} />
-                      <ActionButton label="Print Report" variant="secondary" />
+                      <ActionButton
+                        label="Print Report"
+                        variant="secondary"
+                        onClick={() => {
+                          if (!showProcessedMcp) {
+                            setNoDataMessage("No Data found");
+                            setNoDataOpen(true);
+                            return;
+                          }
+                          setProcessedReportFromTab("mcp");
+                          setProcessedReportOpen(true);
+                        }}
+                      />
                     </div>
                   </div>
                   <div className="flex items-center gap-6 flex-wrap">
