@@ -151,21 +151,6 @@ export default function PrintPreviewModal({
           </div>
         </div>
 
-        <div className="bg-white border-t border-[#BBBBBB] px-5 py-3 flex items-center justify-end gap-3">
-          <button
-            onClick={onClose}
-            className="h-[44px] px-8 rounded-[30px] font-['Livvic'] text-base font-bold bg-white text-[#04589b] border border-[#04589b] hover:bg-[#003578] hover:text-white hover:border-[#003578] transition-colors cursor-pointer"
-          >
-            Close
-          </button>
-          <button
-            onClick={() => window.print()}
-            className="h-[44px] px-8 rounded-[30px] font-['Livvic'] text-base font-bold bg-[#006cf4] text-white hover:bg-[#003578] transition-colors cursor-pointer flex items-center gap-2"
-          >
-            <MdPrint className="text-lg" />
-            Print
-          </button>
-        </div>
       </div>
       <SaveAsDialog
         open={saveAsOpen}
