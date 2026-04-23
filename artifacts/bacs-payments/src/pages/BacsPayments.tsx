@@ -11,6 +11,7 @@ import PrintPreviewModal, { type PrintRow } from "../components/PrintPreviewModa
 import ReportPrintModal, { type ReportColumn, type ReportTotal } from "../components/ReportPrintModal";
 import FirstPaymentReportModal from "../components/FirstPaymentReportModal";
 import ProcessedReportModal from "../components/ProcessedReportModal";
+import SaveAsDialog from "../components/SaveAsDialog";
 import { MdCheck } from "react-icons/md";
 import lvLogo from "@assets/image_1775892371361.png";
 
@@ -304,6 +305,9 @@ export default function BacsPayments() {
   const [firstReportOpen, setFirstReportOpen] = useState(false);
   const [processedReportOpen, setProcessedReportOpen] = useState(false);
   const [commitWarningOpen, setCommitWarningOpen] = useState(false);
+  const [saveAsOpen, setSaveAsOpen] = useState(false);
+  const [saveAsType, setSaveAsType] = useState<"BACS" | "CSV">("BACS");
+  const openSaveAs = (type: "BACS" | "CSV") => { setSaveAsType(type); setSaveAsOpen(true); };
   const handleSaveCommitBacs = () => {
     const tabHasData =
       (["Tax Free", "First and One Off Payments", "Maturities", "FirstPayments MCP"].includes(activeTab) && showData) ||
@@ -441,6 +445,12 @@ export default function BacsPayments() {
         onYes={() => setCommitWarningOpen(false)}
         onNo={() => setCommitWarningOpen(false)}
       />
+      <SaveAsDialog
+        open={saveAsOpen}
+        onClose={() => setSaveAsOpen(false)}
+        fileType={saveAsType}
+        defaultFileName={`${completionStart} to ${completionEnd} including PLA.${saveAsType === "CSV" ? "csv" : "txt"}`}
+      />
       <FirstPaymentReportModal
         open={firstReportOpen}
         onClose={() => setFirstReportOpen(false)}
@@ -533,7 +543,7 @@ export default function BacsPayments() {
                   <ReadOnlyInput label="Payments" value={showData ? String(TAX_FREE_TOTALS.count) : ""} />
                   <ReadOnlyInput label="Total Tax Free Cash" width="w-[200px]" value={showData ? fmt(TAX_FREE_TOTALS.totalTaxFreeCash) : ""} />
                   <div className="ml-auto">
-                    <ActionButton label="Save To Bacs" icon variant="primary" />
+                    <ActionButton label="Save To Bacs" icon variant="primary" onClick={() => openSaveAs("BACS")} />
                   </div>
                 </div>
               </Tabs.Content>
@@ -548,7 +558,7 @@ export default function BacsPayments() {
                   <ReadOnlyInput label="Total First Payments" width="w-[180px]" value={showData ? fmt(FIRST_PAYMENTS_TOTALS.totalFirstPayments) : ""} />
                   <ReadOnlyInput label="Total Tax" width="w-[120px]" value={showData ? fmt(FIRST_PAYMENTS_TOTALS.totalTax) : ""} />
                   <div className="ml-auto flex items-center gap-3">
-                    <ActionButton label="Save To Bacs" icon variant="primary" />
+                    <ActionButton label="Save To Bacs" icon variant="primary" onClick={() => openSaveAs("BACS")} />
                     <ActionButton label="Save And Commit To BACS" icon variant="primary" onClick={handleSaveCommitBacs} />
                   </div>
                 </div>
@@ -597,9 +607,9 @@ export default function BacsPayments() {
                   <ReadOnlyInput label="Total Tax" width="w-[120px]" value={showProcessed ? fmt(PROCESSED_TOTALS.totalTax) : ""} />
                 </div>
                 <div className="flex items-center gap-3 mt-4 justify-center flex-wrap">
-                  <ActionButton label="Save To Bacs" icon variant="primary" />
+                  <ActionButton label="Save To Bacs" icon variant="primary" onClick={() => openSaveAs("BACS")} />
                   <ActionButton label="Save And Commit To BACS" icon variant="primary" onClick={handleSaveCommitBacs} />
-                  <ActionButton label="Save To CSV" icon variant="primary" />
+                  <ActionButton label="Save To CSV" icon variant="primary" onClick={() => openSaveAs("CSV")} />
                 </div>
               </Tabs.Content>
 
@@ -681,7 +691,7 @@ export default function BacsPayments() {
                   <ReadOnlyInput label="Total First Payments" width="w-[180px]" value={showData ? fmt(FIRST_PAYMENTS_MCP_TOTALS.totalFirstPayments) : ""} />
                   <ReadOnlyInput label="Total Tax" width="w-[120px]" value={showData ? fmt(FIRST_PAYMENTS_MCP_TOTALS.totalTax) : ""} />
                   <div className="ml-auto flex items-center gap-3">
-                    <ActionButton label="Save To Bacs" icon variant="primary" />
+                    <ActionButton label="Save To Bacs" icon variant="primary" onClick={() => openSaveAs("BACS")} />
                     <ActionButton label="Save And Commit To BACS" icon variant="primary" onClick={handleSaveCommitBacs} />
                   </div>
                 </div>
