@@ -84,8 +84,8 @@ export default function ReportPrintModal({
     const ch = c.clientHeight - 48;
     const naturalH = naturalHRef.current ?? 1000;
     if (zoomMode === "actual") setZoom(1);
-    else if (zoomMode === "width") setZoom(Math.max(0.3, Math.min(2, cw / PAGE_W)));
-    else setZoom(Math.max(0.3, Math.min(cw / PAGE_W, ch / naturalH)));
+    else if (zoomMode === "width") setZoom(Math.max(0.3, Math.min(2, (cw - 2) / PAGE_W)));
+    else setZoom(Math.max(0.3, Math.min((cw - 2) / PAGE_W, (ch - 2) / naturalH)));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [zoomMode, open]);
 
@@ -97,8 +97,8 @@ export default function ReportPrintModal({
       const cw = c.clientWidth - 48;
       const ch = c.clientHeight - 48;
       const naturalH = naturalHRef.current ?? 1000;
-      if (zoomMode === "width") setZoom(Math.max(0.3, Math.min(2, cw / PAGE_W)));
-      else if (zoomMode === "fit") setZoom(Math.max(0.3, Math.min(cw / PAGE_W, ch / naturalH)));
+      if (zoomMode === "width") setZoom(Math.max(0.3, Math.min(2, (cw - 2) / PAGE_W)));
+      else if (zoomMode === "fit") setZoom(Math.max(0.3, Math.min((cw - 2) / PAGE_W, (ch - 2) / naturalH)));
     });
     ro.observe(c);
     return () => ro.disconnect();
