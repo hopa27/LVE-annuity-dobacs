@@ -1,0 +1,89 @@
+import {
+  MdSkipPrevious,
+  MdSkipNext,
+  MdChevronLeft,
+  MdChevronRight,
+  MdPrint,
+  MdSave,
+  MdClose,
+  MdInsertDriveFile,
+  MdViewModule,
+  MdViewAgenda,
+  MdFolderOpen,
+  MdLocalPrintshop,
+} from "react-icons/md";
+
+interface ProcessedReportModalProps {
+  open: boolean;
+  onClose: () => void;
+  dateRange: string;
+}
+
+export default function ProcessedReportModal({ open, onClose, dateRange }: ProcessedReportModalProps) {
+  if (!open) return null;
+
+  const toolbarBtn =
+    "h-10 w-10 flex items-center justify-center rounded-full bg-white text-[#04589b] border border-[#04589b] font-bold hover:bg-[#003578] hover:text-white hover:border-[#003578] transition-colors cursor-pointer";
+  const toolbarBtnDisabled =
+    "h-10 w-10 flex items-center justify-center rounded-full bg-white text-[#979797] border border-[#979797] cursor-not-allowed";
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+      <div className="bg-white rounded-[12px] shadow-2xl border border-[#BBBBBB] w-[1200px] max-h-[92vh] overflow-hidden flex flex-col">
+        <div className="bg-[#00263e] text-white px-5 py-3 flex items-center justify-between">
+          <span className="font-['Livvic'] text-base font-semibold">Print Report</span>
+          <button
+            onClick={onClose}
+            className="text-white hover:bg-white/10 w-8 h-8 rounded-full flex items-center justify-center cursor-pointer"
+          >
+            <MdClose className="text-lg" />
+          </button>
+        </div>
+
+        <div className="bg-white border-b border-[#BBBBBB] px-5 py-3 flex items-center gap-2 flex-wrap">
+          <button title="Single page" className={toolbarBtn}><MdInsertDriveFile className="text-xl" /></button>
+          <button title="Multiple pages" className={toolbarBtn}><MdViewModule className="text-xl" /></button>
+          <button title="Page width" className={toolbarBtn}><MdViewAgenda className="text-xl" /></button>
+          <div className="w-px h-6 bg-[#BBBBBB] mx-2" />
+          <button title="First page" disabled className={toolbarBtnDisabled}><MdSkipPrevious className="text-xl" /></button>
+          <button title="Previous page" disabled className={toolbarBtnDisabled}><MdChevronLeft className="text-xl" /></button>
+          <span className="font-['Mulish'] text-sm text-[#3d3d3d] px-2">1 of 1</span>
+          <button title="Next page" disabled className={toolbarBtnDisabled}><MdChevronRight className="text-xl" /></button>
+          <button title="Last page" disabled className={toolbarBtnDisabled}><MdSkipNext className="text-xl" /></button>
+          <div className="w-px h-6 bg-[#BBBBBB] mx-2" />
+          <button title="Print" className={toolbarBtn}><MdPrint className="text-xl" /></button>
+          <button title="Quick print" className={toolbarBtn}><MdLocalPrintshop className="text-xl" /></button>
+          <div className="w-px h-6 bg-[#BBBBBB] mx-2" />
+          <button title="Save" className={toolbarBtn}><MdSave className="text-xl" /></button>
+          <button title="Open" className={toolbarBtn}><MdFolderOpen className="text-xl" /></button>
+        </div>
+
+        <div className="flex-1 overflow-auto bg-[#f0f0f0] p-6">
+          <div className="bg-white shadow-md mx-auto rounded-[8px] border border-[#BBBBBB] px-12 py-10" style={{ width: "1080px", minHeight: "700px" }}>
+            <div className="flex items-center justify-between mb-16">
+              <h2 className="font-['Livvic'] text-2xl font-bold text-[#002f5c]">
+                Payments Report <span className="ml-12 font-normal text-[#3d3d3d]">{dateRange}</span>
+              </h2>
+              <span className="font-['Mulish'] text-xs text-[#3d3d3d]">Page 1 of 1</span>
+            </div>
+
+            <div className="mt-12 flex flex-col gap-10 max-w-[420px]">
+              <div className="flex items-end gap-3">
+                <span className="font-['Mulish'] text-sm text-[#3d3d3d] whitespace-nowrap">Checked by:</span>
+                <span className="flex-1 border-b border-dotted border-[#3d3d3d] h-5" />
+              </div>
+              <div className="flex items-end gap-3">
+                <span className="font-['Mulish'] text-sm text-[#3d3d3d] whitespace-nowrap">Authorised by:</span>
+                <span className="flex-1 border-b border-dotted border-[#3d3d3d] h-5" />
+              </div>
+            </div>
+
+            <div className="mt-16 text-right font-['Mulish'] text-xs text-[#979797]">
+              Page 1 of 1
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

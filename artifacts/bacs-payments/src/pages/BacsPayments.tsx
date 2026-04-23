@@ -10,6 +10,7 @@ import InfoDialog from "../components/InfoDialog";
 import PrintPreviewModal, { type PrintRow } from "../components/PrintPreviewModal";
 import ReportPrintModal, { type ReportColumn, type ReportTotal } from "../components/ReportPrintModal";
 import FirstPaymentReportModal from "../components/FirstPaymentReportModal";
+import ProcessedReportModal from "../components/ProcessedReportModal";
 import { MdCheck } from "react-icons/md";
 import lvLogo from "@assets/image_1775892371361.png";
 
@@ -301,6 +302,7 @@ export default function BacsPayments() {
   const [reportPrintOpen, setReportPrintOpen] = useState(false);
   const [reportPrintWarningOpen, setReportPrintWarningOpen] = useState(false);
   const [firstReportOpen, setFirstReportOpen] = useState(false);
+  const [processedReportOpen, setProcessedReportOpen] = useState(false);
   const handlePrintReport = () => {
     const tabHasData =
       (["Tax Free", "First and One Off Payments", "Maturities", "FirstPayments MCP"].includes(activeTab) && showData) ||
@@ -417,6 +419,11 @@ export default function BacsPayments() {
       <FirstPaymentReportModal
         open={firstReportOpen}
         onClose={() => setFirstReportOpen(false)}
+        dateRange={`${reportsStartRun} to ${reportsEndRun}`}
+      />
+      <ProcessedReportModal
+        open={processedReportOpen}
+        onClose={() => setProcessedReportOpen(false)}
         dateRange={`${reportsStartRun} to ${reportsEndRun}`}
       />
       <InfoDialog
@@ -622,7 +629,7 @@ export default function BacsPayments() {
                     <DateInput label="End Run Month" value={reportsEndRun} onChange={setReportsEndRun} />
                     <div className="ml-auto flex items-center gap-3">
                       <ActionButton label="Print First" variant="secondary" onClick={() => setFirstReportOpen(true)} />
-                      <ActionButton label="Print Processed" variant="secondary" />
+                      <ActionButton label="Print Processed" variant="secondary" onClick={() => setProcessedReportOpen(true)} />
                     </div>
                   </div>
                   <label className="flex items-center gap-2 font-['Livvic'] text-sm font-medium text-[#3d3d3d] cursor-pointer ml-1">
