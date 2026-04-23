@@ -690,7 +690,7 @@ export default function BacsPayments() {
                 <div className="flex items-center gap-3 mt-4 justify-center flex-wrap">
                   <ActionButton label="Save To Bacs" icon variant="primary" disabled={!showProcessed} onClick={() => openSaveAs("BACS")} />
                   <ActionButton label="Save And Commit To BACS" icon variant="primary" disabled={!showProcessed} onClick={handleSaveCommitBacs} />
-                  <ActionButton label="Save To CSV" icon variant="primary" onClick={() => openSaveAs("CSV")} />
+                  <ActionButton label="Save To CSV" icon variant="primary" disabled={!showProcessed} onClick={() => { setSaveAsType("CSV"); setSaveAsOpen(true); }} />
                 </div>
               </Tabs.Content>
 
