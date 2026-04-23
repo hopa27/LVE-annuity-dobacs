@@ -543,7 +543,7 @@ export default function BacsPayments() {
                   <ReadOnlyInput label="Payments" value={showData ? String(TAX_FREE_TOTALS.count) : ""} />
                   <ReadOnlyInput label="Total Tax Free Cash" width="w-[200px]" value={showData ? fmt(TAX_FREE_TOTALS.totalTaxFreeCash) : ""} />
                   <div className="ml-auto">
-                    <ActionButton label="Save To Bacs" icon variant="primary" onClick={() => openSaveAs("BACS")} />
+                    <ActionButton label="Save To Bacs" icon variant="primary" disabled={!showData} onClick={() => openSaveAs("BACS")} />
                   </div>
                 </div>
               </Tabs.Content>
@@ -558,8 +558,8 @@ export default function BacsPayments() {
                   <ReadOnlyInput label="Total First Payments" width="w-[180px]" value={showData ? fmt(FIRST_PAYMENTS_TOTALS.totalFirstPayments) : ""} />
                   <ReadOnlyInput label="Total Tax" width="w-[120px]" value={showData ? fmt(FIRST_PAYMENTS_TOTALS.totalTax) : ""} />
                   <div className="ml-auto flex items-center gap-3">
-                    <ActionButton label="Save To Bacs" icon variant="primary" onClick={() => openSaveAs("BACS")} />
-                    <ActionButton label="Save And Commit To BACS" icon variant="primary" onClick={handleSaveCommitBacs} />
+                    <ActionButton label="Save To Bacs" icon variant="primary" disabled={!showData} onClick={() => openSaveAs("BACS")} />
+                    <ActionButton label="Save And Commit To BACS" icon variant="primary" disabled={!showData} onClick={handleSaveCommitBacs} />
                   </div>
                 </div>
               </Tabs.Content>
@@ -607,9 +607,9 @@ export default function BacsPayments() {
                   <ReadOnlyInput label="Total Tax" width="w-[120px]" value={showProcessed ? fmt(PROCESSED_TOTALS.totalTax) : ""} />
                 </div>
                 <div className="flex items-center gap-3 mt-4 justify-center flex-wrap">
-                  <ActionButton label="Save To Bacs" icon variant="primary" onClick={() => openSaveAs("BACS")} />
-                  <ActionButton label="Save And Commit To BACS" icon variant="primary" onClick={handleSaveCommitBacs} />
-                  <ActionButton label="Save To CSV" icon variant="primary" onClick={() => openSaveAs("CSV")} />
+                  <ActionButton label="Save To Bacs" icon variant="primary" disabled={!showProcessed} onClick={() => openSaveAs("BACS")} />
+                  <ActionButton label="Save And Commit To BACS" icon variant="primary" disabled={!showProcessed} onClick={handleSaveCommitBacs} />
+                  <ActionButton label="Save To CSV" icon variant="primary" disabled={!showProcessed} onClick={() => openSaveAs("CSV")} />
                 </div>
               </Tabs.Content>
 
@@ -651,7 +651,7 @@ export default function BacsPayments() {
                   <ReadOnlyInput label="Payments" value={showData ? String(MATURITY_TOTALS.count) : ""} />
                   <ReadOnlyInput label="Total Maturity Payments" width="w-[200px]" value={showData ? fmt(MATURITY_TOTALS.totalMaturityPayments) : ""} />
                   <div className="ml-auto">
-                    <ActionButton label="Save and Commit To Bacs" icon variant="primary" />
+                    <ActionButton label="Save and Commit To Bacs" icon variant="primary" disabled={!showData} onClick={handleSaveCommitBacs} />
                   </div>
                 </div>
               </Tabs.Content>
@@ -691,8 +691,8 @@ export default function BacsPayments() {
                   <ReadOnlyInput label="Total First Payments" width="w-[180px]" value={showData ? fmt(FIRST_PAYMENTS_MCP_TOTALS.totalFirstPayments) : ""} />
                   <ReadOnlyInput label="Total Tax" width="w-[120px]" value={showData ? fmt(FIRST_PAYMENTS_MCP_TOTALS.totalTax) : ""} />
                   <div className="ml-auto flex items-center gap-3">
-                    <ActionButton label="Save To Bacs" icon variant="primary" onClick={() => openSaveAs("BACS")} />
-                    <ActionButton label="Save And Commit To BACS" icon variant="primary" onClick={handleSaveCommitBacs} />
+                    <ActionButton label="Save To Bacs" icon variant="primary" disabled={!showData} onClick={() => openSaveAs("BACS")} />
+                    <ActionButton label="Save And Commit To BACS" icon variant="primary" disabled={!showData} onClick={handleSaveCommitBacs} />
                   </div>
                 </div>
               </Tabs.Content>
