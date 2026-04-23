@@ -280,6 +280,7 @@ const maturityColumns = [
 
 export default function BacsPayments() {
   const [activeTab, setActiveTab] = useState("Tax Free");
+  const topControlsDisabled = ["Processed", "Monthly Differences", "Reports", "Processed MCP"].includes(activeTab);
   const [completionStart, setCompletionStart] = useState("01/03/2025");
   const [completionEnd, setCompletionEnd] = useState("21/03/2026");
   const [startRunMonth, setStartRunMonth] = useState("01/01/2026");
@@ -511,8 +512,8 @@ export default function BacsPayments() {
             <DateInput label="Completion Start" value={completionStart} onChange={setCompletionStart} />
             <DateInput label="Completion End" value={completionEnd} onChange={setCompletionEnd} />
             <div className="ml-auto flex items-center gap-3">
-              <ActionButton label="Show Payments" variant="secondary" onClick={handleShowPayments} />
-              <ActionButton label="Print Report" variant="secondary" onClick={handlePrintReport} />
+              <ActionButton label="Show Payments" variant="secondary" disabled={topControlsDisabled} onClick={handleShowPayments} />
+              <ActionButton label="Print Report" variant="secondary" disabled={topControlsDisabled} onClick={handlePrintReport} />
             </div>
           </div>
 
