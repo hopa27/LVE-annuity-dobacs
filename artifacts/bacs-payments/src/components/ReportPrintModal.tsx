@@ -1,5 +1,4 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import PrintDialog from "./PrintDialog";
 import {
   MdSkipPrevious,
   MdSkipNext,
@@ -12,7 +11,7 @@ import {
   MdZoomIn,
   MdFitScreen,
   MdFolderOpen,
-  MdLocalPrintshop,
+  MdSettings,
 } from "react-icons/md";
 
 export interface ReportColumn {
@@ -56,7 +55,6 @@ export default function ReportPrintModal({
 }: ReportPrintModalProps) {
   const [zoomMode, setZoomMode] = useState<ZoomMode>("actual");
   const [zoom, setZoom] = useState(1);
-  const [printDialogOpen, setPrintDialogOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const pageRef = useRef<HTMLDivElement>(null);
   const naturalHRef = useRef<number | null>(null);
@@ -135,7 +133,7 @@ export default function ReportPrintModal({
           <button title="Next page" className={toolbarBtn}><MdChevronRight className="text-xl" /></button>
           <button title="Last page" className={toolbarBtn}><MdSkipNext className="text-xl" /></button>
           <div className="w-px h-6 bg-[#BBBBBB] mx-2" />
-          <button title="Printer Setup" onClick={() => setPrintDialogOpen(true)} className={toolbarBtn}><MdPrint className="text-xl" /></button>
+          <button title="Printer Setup" onClick={() => window.print()} className={toolbarBtn}><MdSettings className="text-xl" /></button>
           <button title="Print" onClick={() => window.print()} className={toolbarBtn}><MdLocalPrintshop className="text-xl" /></button>
           <div className="w-px h-6 bg-[#BBBBBB] mx-2" />
           <button title="Save" className={toolbarBtn}><MdSave className="text-xl" /></button>
@@ -238,7 +236,6 @@ export default function ReportPrintModal({
           </button>
         </div>
       </div>
-      <PrintDialog open={printDialogOpen} onClose={() => setPrintDialogOpen(false)} totalPages={1} />
     </div>
   );
 }
