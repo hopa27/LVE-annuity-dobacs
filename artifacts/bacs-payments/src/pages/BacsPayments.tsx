@@ -313,7 +313,27 @@ export default function BacsPayments() {
   const [commitWarningOpen, setCommitWarningOpen] = useState(false);
   const [saveAsOpen, setSaveAsOpen] = useState(false);
   const [saveAsType, setSaveAsType] = useState<"BACS" | "CSV">("BACS");
-  const openSaveAs = (type: "BACS" | "CSV") => { setSaveAsType(type); setSaveAsOpen(true); };
+  const parseDmy = (s: string) => {
+    const [d, m, y] = s.split("/").map(Number);
+    if (!d || !m || !y) return null;
+    return new Date(y, m - 1, d);
+  };
+  const datesAreInPast = () => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const start = parseDmy(completionStart);
+    const end = parseDmy(completionEnd);
+    return (start && start < today) || (end && end < today);
+  };
+  const openSaveAs = (type: "BACS" | "CSV") => {
+    if (datesAreInPast()) {
+      setNoDataMessage("Completion Start Date and End Date cannot be in the past.");
+      setNoDataOpen(true);
+      return;
+    }
+    setSaveAsType(type);
+    setSaveAsOpen(true);
+  };
   const handleSaveCommitBacs = () => {
     const tabHasData =
       (["Tax Free", "First and One Off Payments", "Maturities", "FirstPayments MCP"].includes(activeTab) && showData) ||
