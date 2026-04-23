@@ -145,7 +145,7 @@ export default function ReportPrintModal({
         <div ref={containerRef} className="flex-1 overflow-auto bg-[#f0f0f0] p-6">
           <div
             ref={pageRef}
-            className="bg-white shadow-md mx-auto rounded-[8px] border border-[#BBBBBB] px-12 py-10"
+            className="print-area bg-white shadow-md mx-auto rounded-[8px] border border-[#BBBBBB] px-12 py-10"
             style={{ width: `${PAGE_W}px`, zoom }}
           >
             <h2 className="font-['Livvic'] text-2xl font-bold text-[#002f5c] mb-8">

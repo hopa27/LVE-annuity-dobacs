@@ -296,7 +296,7 @@ export default function FirstPaymentReportModal({ open, onClose, dateRange }: Fi
         </div>
 
         <div ref={containerRef} className="flex-1 overflow-auto bg-[#f0f0f0] p-6">
-          <div ref={pageRef} className="bg-white shadow-md mx-auto rounded-[8px] border border-[#BBBBBB] px-12 py-10" style={{ width: `${PAGE_W}px`, zoom }}>
+          <div ref={pageRef} className="print-area bg-white shadow-md mx-auto rounded-[8px] border border-[#BBBBBB] px-12 py-10" style={{ width: `${PAGE_W}px`, zoom }}>
             <div className="flex items-center justify-between mb-6">
               <h2 className="font-['Livvic'] text-2xl font-bold text-[#002f5c]">
                 First Payments Report : <span className="font-normal text-[#3d3d3d]">{dateRange}</span>

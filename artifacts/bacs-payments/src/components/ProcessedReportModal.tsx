@@ -134,7 +134,7 @@ export default function ProcessedReportModal({ open, onClose, dateRange, columns
         <div ref={containerRef} className="flex-1 overflow-auto bg-[#f0f0f0] p-6">
           <div
             ref={pageRef}
-            className="bg-white shadow-md mx-auto rounded-[8px] border border-[#BBBBBB] px-12 py-10"
+            className="print-area bg-white shadow-md mx-auto rounded-[8px] border border-[#BBBBBB] px-12 py-10"
             style={{ width: `${PAGE_W}px`, minHeight: "700px", zoom }}
           >
             <div className="flex items-center justify-between mb-12">
