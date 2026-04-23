@@ -1,0 +1,398 @@
+# BACS Payments — Screen Flow (ASCII)
+
+This document captures every screen, tab, modal, and dialog in the BACS
+Payments web app, plus the navigation paths between them.
+
+---
+
+## 1. Application Shell (always visible)
+
+```
++------------------------------------------------------------------------------------------------+
+| [LV=]  BACS Payments for Liverpool Victoria Friendly Society Limited                [ Logout ] |
++------------------------------------------------------------------------------------------------+
+| Completion Start: [ 23/04/2026 [v] ]   Completion End: [ 23/04/2026 [v] ]                      |
+|                                              [ Show Payments ]   [ Print Report ]              |
++------------------------------------------------------------------------------------------------+
+| [ Tax Free | First and One Off Payments | Processed | Monthly Differences |                    |
+|   Maturities | Reports | FirstPayments MCP | Processed MCP ]                                   |
++------------------------------------------------------------------------------------------------+
+|                                                                                                |
+|                              <<< ACTIVE TAB CONTENT >>>                                        |
+|                                                                                                |
++------------------------------------------------------------------------------------------------+
+| [LV=]                                Liverpool Victoria Friendly Society Limited,              |
+|                                      County Gates, Bournemouth BH1 2NF                         |
++------------------------------------------------------------------------------------------------+
+```
+
+Legend: `[ Button ]`, `[ field ]`, `[v]` = dropdown / picker, `( )` radio, `[x]` checkbox.
+
+---
+
+## 2. Tab Layouts
+
+### 2A. Tax Free
+```
++------------------------------------------------------------------------------------------------+
+| Bank Sort Code | Bank Acc No | 0 | TaxFreeCash | Bank Acc Name | Bank Ref | 99 | C_DATE | ... |
+|----------------+-------------+---+-------------+---------------+----------+----+--------+-----|
+|  ...rows...                                                                                    |
++------------------------------------------------------------------------------------------------+
+| Payments: [____]                          Total Tax Free Cash: [_________]                     |
++------------------------------------------------------------------------------------------------+
+|                                  [ Save To Bacs ]                                              |
++------------------------------------------------------------------------------------------------+
+```
+
+### 2B. First and One Off Payments
+```
++------------------------------------------------------------------------------------------------+
+| Sort Code | Acc No | 0 | Amount To Pay | Acc Name | Ref | 99 | BACS Date | Policy | Tax | ... |
+|-----------+--------+---+---------------+----------+-----+----+-----------+--------+-----+-----|
+|  ...rows...                                                                                    |
++------------------------------------------------------------------------------------------------+
+| Payments: [____]   Total First Payments: [_________]   Total Tax: [_________]                  |
++------------------------------------------------------------------------------------------------+
+|                  [ Save To Bacs ]   [ Save And Commit To BACS ]                                |
++------------------------------------------------------------------------------------------------+
+```
+
+### 2C. Processed
+```
++------------------------------------------------------------------------------------------------+
+| Start Run Month: [ 04/2026 [v] ]   End Run Month: [ 04/2026 [v] ]                              |
+| Payment Type: [ All [v] ]   [x] Include non-PAYE cases                                         |
+|                                              [ Show Payments ]   [ Print Report ]              |
++------------------------------------------------------------------------------------------------+
+| Sort Code | Acc No | 0 | Amount To Pay | Acc Name | Ref | 99 | BACS Date | Policy | Tax | ... |
+|-----------+--------+---+---------------+----------+-----+----+-----------+--------+-----+-----|
+|  ...rows...                                                                                    |
++------------------------------------------------------------------------------------------------+
+| Payments: [____] Total Net: [____] Total Gross: [____] Total Tax: [____]                       |
++------------------------------------------------------------------------------------------------+
+|       [ Save To Bacs ]   [ Save And Commit To BACS ]   [ Save To CSV ]                         |
++------------------------------------------------------------------------------------------------+
+```
+
+### 2D. Monthly Differences
+```
++------------------------------------------------------------------------------------------------+
+| Start Run Month: [ 04/2026 [v] ]   End Run Month: [ 04/2026 [v] ]                              |
+| [ Produce List ]   [ Produce Nil-Income List ]   [ Print Preview ]                             |
++------------------------------------------------------------------------------------------------+
+| Policy No | Cur Date | Cur Ref | Cur Gross | Prev Date | Prev Ref | Prev Gross                 |
+|-----------+----------+---------+-----------+-----------+----------+-----------                 |
+|  ...rows...                                                                                    |
++------------------------------------------------------------------------------------------------+
+```
+
+### 2E. Maturities
+```
++------------------------------------------------------------------------------------------------+
+| Sort Code | Acc No | 0 | Amount | Acc Name | Ref | 99 | BACS Date | Policy                    |
+|-----------+--------+---+--------+----------+-----+----+-----------+--------                    |
+|  ...rows...                                                                                    |
++------------------------------------------------------------------------------------------------+
+| Payments: [____]                          Total Maturity Payments: [_________]                 |
++------------------------------------------------------------------------------------------------+
+|                            [ Save and Commit To Bacs ]                                         |
++------------------------------------------------------------------------------------------------+
+```
+
+### 2F. Reports
+```
++------------------------------------------------------------------------------------------------+
+| Start Run Month: [ 04/2026 [v] ]   End Run Month: [ 04/2026 [v] ]                              |
+| [x] Include non-PAYE cases                                                                     |
+|                                  [ Print First ]   [ Print Processed ]                         |
++------------------------------------------------------------------------------------------------+
+```
+
+### 2G. FirstPayments MCP
+```
++------------------------------------------------------------------------------------------------+
+| Sort Code | Acc No | 0 | Amount To Pay | Acc Name | Ref | 99 | BACS Date | Policy | Tax | ... |
+|-----------+--------+---+---------------+----------+-----+----+-----------+--------+-----+-----|
+|  ...rows...                                                                                    |
++------------------------------------------------------------------------------------------------+
+| Payments: [____]   Total First Payments: [_________]   Total Tax: [_________]                  |
++------------------------------------------------------------------------------------------------+
+|                  [ Save To Bacs ]   [ Save And Commit To BACS ]                                |
++------------------------------------------------------------------------------------------------+
+```
+
+### 2H. Processed MCP
+```
++------------------------------------------------------------------------------------------------+
+| Start Run Month: [ 04/2026 [v] ]   End Run Month: [ 04/2026 [v] ]                              |
+| Payment Type: [ All [v] ]   [x] Include non-PAYE cases                                         |
++------------------------------------------------------------------------------------------------+
+| Sort Code | Acc No | 0 | Amount To Pay | Acc Name | Ref | 99 | BACS Date | Policy | Tax | ... |
+|-----------+--------+---+---------------+----------+-----+----+-----------+--------+-----+-----|
+|  ...rows...                                                                                    |
++------------------------------------------------------------------------------------------------+
+| Payments: [____]                          Total Tax Free Cash: [_________]                     |
++------------------------------------------------------------------------------------------------+
+|                            [ Save And Commit To Bacs ]                                         |
++------------------------------------------------------------------------------------------------+
+```
+
+---
+
+## 3. Date Picker Popover (DateInput)
+
+Triggered by clicking the calendar icon in any date field.
+
+```
+Days view                       Months view                    Years view
++--------------------+          +--------------------+         +--------------------+
+| <  April 2026   >  |          | <     2026      >  |         | <  2025-2049    >  |
++--------------------+          +--------------------+         +--------------------+
+| Mo Tu We Th Fr Sa Su          |  1   2   3   4    |         | 2025 2026 2027 ... |
+| 30 31  1  2  3  4  5          |  5   6   7   8    |         | 2030 2031 2032 ... |
+|  6  7  8  9 10 11 12          |  9  10  11  12    |         |    ...             |
+| ...                           +--------------------+         +--------------------+
++--------------------+
+```
+
+Tap month name -> Months view. Tap year number -> Years view.
+
+---
+
+## 4. Modals & Dialogs
+
+### 4A. Save As Dialog (Windows 11 File Explorer style)
+
+Triggered from any *Save To Bacs / CSV / QRP* button or the **Save** icon
+inside any print modal.
+
+```
++--------------------------------------------------------------------------------------+
+| Save As                                                              _   ▢   X       |
++--------------------------------------------------------------------------------------+
+| < > ↑ ⟳   [📁 This PC > Ual3 (H:) > Annuities                ]   [🔍 Search ...   ]  |
++--------------------------------------------------------------------------------------+
+| ⭐ Home                       | Name                  Date modified      Type        |
+| 🖼️ Gallery                    |-------------------------------------------------------|
+| ☁️ OneDrive       v           | 📁 2024 Tax Codes     15/03/2026 09:14   File folder|
+| This PC                       | 📁 ANB Controls       02/04/2026 11:32   File folder|
+|   🖥 Desktop                   | 📁 Annuity Archive... 21/01/2026 15:08   File folder|
+|   📄 Documents                 | 📁 BACS               12/04/2026 09:02   File folder|
+|   ⬇ Downloads                  |  ...                                                |
+|   💽 Ual3 (H:)   [active]      |                                                     |
+| 💻 Network                    |                                                     |
++--------------------------------------------------------------------------------------+
+| File name:      [ Payments_Report.qrp                              ] [v]             |
+| Save as type:   [ QuickReport file (*.QRP)                         ] [v]             |
++--------------------------------------------------------------------------------------+
+| ▲ Hide Folders                                          [ Save ]   [ Cancel ]        |
++--------------------------------------------------------------------------------------+
+```
+
+`Save as type` is BACS / CSV / QRP depending on which button opened the
+dialog. Clicking **Save** triggers a browser download with the chosen filename.
+
+### 4B. Print Preview Modal (Monthly Differences)
+
+```
++----------------------------------------------------------------------------------+
+| Print Preview                                                              X     |
++----------------------------------------------------------------------------------+
+| ⏮  ⏪   1 of 1+   ⏩  ⏭   |   🖨   💾   |  Zoom [100% v]                          |
+|                                            Total: 3   Zoom: 100%   Showing: 3/3 |
++----------------------------------------------------------------------------------+
+|     +------------------------------------------------------------------+         |
+|     |                  Monthly Differences Report                       |         |
+|     |                                                23/04/2026         |         |
+|     |  Policy | Ref | Paykey |   Current   |  Previous  | Pay |  %      |         |
+|     |---------+-----+--------+-------------+------------+-----+---------|         |
+|     |  ...rows                                                          |         |
+|     +------------------------------------------------------------------+         |
++----------------------------------------------------------------------------------+
+|                                              [ Close ]   [ 🖨 Print ]            |
++----------------------------------------------------------------------------------+
+```
+
+* 🖨 (toolbar or footer) → browser print of the report area.
+* 💾 → Save As Dialog (file type **QRP**).
+
+### 4C. Report Print Modal (Tax Free / First Payments / Maturities / MCP)
+
+```
++----------------------------------------------------------------------------------+
+| Report                                                                     X     |
++----------------------------------------------------------------------------------+
+| ⤢ ⤡ ⛶  | ⏮ ⏪  Page 1 / N  ⏩ ⏭ |  ⚙ Printer Setup   🖨   💾   📂              |
++----------------------------------------------------------------------------------+
+|     +------------------------------------------------------------------+         |
+|     |  {Title}: {Date Range}                                            |         |
+|     |  ...table...                                                      |         |
+|     |  Totals: Count, Net, Gross, Tax                                   |         |
+|     |                                                                   |         |
+|     |  Checked by: ............         Authorised by: ............    |         |
+|     +------------------------------------------------------------------+         |
++----------------------------------------------------------------------------------+
+|                                              [ Close ]   [ 🖨 Print ]            |
++----------------------------------------------------------------------------------+
+```
+
+* ⚙ → Print Dialog
+* 🖨 → browser print
+* 💾 → Save As Dialog (QRP)
+
+### 4D. Print Dialog (classic look, opened by ⚙ Printer Setup)
+
+```
++--------------------------------------------------------+
+| Print                                              X   |
++--------------------------------------------------------+
+| Printer ----------------------------------------------+|
+|  Name:    [ Microsoft Print to PDF      v ]  [ Properties ] |
+|  Status:  Ready                                       |
+|  Type:    Microsoft Print to PDF                      |
+|  Where:   PORTPROMPT:                                 |
+|  Comment:                                             |
+| -----------------------------------------------------+|
+| Print range -----------------+ Copies ----------------|
+| (•) All                      | Number of copies: [1] |
+| ( ) Pages from [_] to [_]    | [x] Collate           |
+| ( ) Selection                |   [📄][📄] [📄][📄]   |
+| -----------------------------+----------------------+|
+|                                    [ OK ]   [ Cancel ]|
++--------------------------------------------------------+
+```
+
+### 4E. First Payment Report Modal / Processed Report Modal
+
+Opened from the **Reports** tab via *Print First* / *Print Processed*.
+Same toolbar as Report Print Modal (⏮⏪⏩⏭, ⚙, 🖨, 💾, 📂) and footer
+(`Close`, `Print`). The body renders the appropriate report layout.
+
+### 4F. Information Dialog (`InfoDialog` / "DoBacs")
+
+```
++----------------------------------+
+| DoBacs                       X   |
++----------------------------------+
+|  ℹ  No data found.               |
+|                                  |
+|                       [  OK  ]   |
++----------------------------------+
+```
+Used for: "No Data", "Dates in past", "Nil-Income list empty",
+"From and To date should not be in past date to save the BACS file."
+
+### 4G. Warning Dialog (Commit / Exclude already-committed)
+
+```
++--------------------------------------------------+
+| BACS Payments                                X   |
++--------------------------------------------------+
+|  ⚠  Some of the payments have already been       |
+|     committed. Would you like to exclude them?   |
+|                                                  |
+|                              [ Yes ]   [ No ]    |
++--------------------------------------------------+
+```
+
+---
+
+## 5. Navigation / Flow Diagrams
+
+### 5.1 Show Payments / Print Report (header buttons)
+
+```
+   [ Show Payments ]                          [ Print Report ]
+        │                                            │
+        ▼                                            ▼
+  Warning Dialog ──No──▶ (no action)         Warning Dialog ──No──▶ (no action)
+        │ Yes                                       │ Yes
+        ▼                                            ▼
+   Active tab grid                            Report Print Modal
+   populated                                    │   │   │
+                                                │   │   └─▶ 💾 Save As Dialog (QRP)
+                                                │   └─────▶ 🖨 Browser Print
+                                                └────────▶ ⚙ Print Dialog
+```
+
+### 5.2 Save To Bacs / Save To CSV (per-tab buttons)
+
+```
+      [ Save To Bacs ]                         [ Save To CSV ]
+            │                                         │
+            ▼                                         ▼
+    (disabled if no data)                    (disabled if no data)
+            │                                         │
+            ▼                                         ▼
+    Date-in-past check                       Save As Dialog (CSV)
+            │                                         │
+   ┌────────┴─────────┐                               ▼
+   ▼                  ▼                       Browser Download
+ Info Dialog     Save As Dialog
+ (past date)     (BACS) ─▶ Browser Download
+```
+
+### 5.3 Save And Commit To BACS
+
+```
+   [ Save And Commit To BACS ]
+            │
+            ▼
+   tab has data? ──No──▶ Info Dialog ("No BACS payments present.")
+            │ Yes
+            ▼
+   commit conflict? ──Yes──▶ Warning Dialog ──Yes──▶ proceed
+            │ No                            └─No───▶ cancel
+            ▼
+   Info Dialog ("From and To date should not be in past date...")
+```
+
+### 5.4 Monthly Differences
+
+```
+  [ Produce List ] ────────▶ grid populated
+  [ Produce Nil-Income List ] ▶ Info Dialog (no records)
+  [ Print Preview ] ────────▶ Print Preview Modal
+                                    │
+                                    ├─▶ 🖨 Browser Print
+                                    └─▶ 💾 Save As Dialog (QRP)
+```
+
+### 5.5 Reports tab
+
+```
+  [ Print First ] ─────────▶ First Payment Report Modal
+  [ Print Processed ] ─────▶ Processed Report Modal
+                                    │
+                                    ├─▶ ⚙ Print Dialog
+                                    ├─▶ 🖨 Browser Print
+                                    └─▶ 💾 Save As Dialog (QRP)
+```
+
+### 5.6 Date Picker
+
+```
+  [ DD/MM/YYYY 📅 ]
+        │
+        ▼
+   Days view ◀──┐
+        │       │ (header click)
+        ▼       │
+   Months view ─┤
+        │       │
+        ▼       │
+   Years view ──┘
+```
+
+---
+
+## 6. Cross-cutting Components
+
+| Component        | Triggered By                                     | Result                                                |
+|------------------|--------------------------------------------------|-------------------------------------------------------|
+| Save As Dialog   | Save To Bacs / CSV, 💾 in any print modal        | Filename + folder browse, then browser download      |
+| Print Dialog     | ⚙ in any print modal                             | Mock printer settings (informational only)            |
+| Browser Print    | 🖨 in any print modal                            | Native `window.print()` of the report area           |
+| Info Dialog      | No-data, past-date, nil-income, save-failure     | OK button to dismiss                                  |
+| Warning Dialog   | Show Payments, Print Report, Commit conflicts    | Yes / No, branches to next action or cancels         |

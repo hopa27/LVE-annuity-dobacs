@@ -1,0 +1,8 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "HuGOaO4HTg9BlJIg4iKUY"
+uri = "file://artifacts/bacs-payments/SCREEN_FLOW.md"
+type = "text"
+title = "BACS Payments — Screen Flow"
