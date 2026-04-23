@@ -50,7 +50,7 @@ export default function PrintPreviewModal({
     "h-10 w-10 flex items-center justify-center rounded-full bg-white text-[#979797] border border-[#979797] cursor-not-allowed";
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 print-modal">
       <div className="bg-white rounded-[12px] shadow-2xl border border-[#BBBBBB] w-[1024px] max-h-[90vh] overflow-hidden flex flex-col">
         <div className="bg-[#00263e] text-white px-5 py-3 flex items-center justify-between">
           <span className="font-['Livvic'] text-base font-semibold">Print Preview</span>
@@ -69,7 +69,7 @@ export default function PrintPreviewModal({
           <button className={toolbarBtn}><MdChevronRight className="text-xl" /></button>
           <button className={toolbarBtn}><MdSkipNext className="text-xl" /></button>
           <div className="w-px h-6 bg-[#BBBBBB] mx-2" />
-          <button className={toolbarBtn}><MdPrint className="text-xl" /></button>
+          <button onClick={() => window.print()} className={toolbarBtn}><MdPrint className="text-xl" /></button>
           <button className={toolbarBtn}><MdSave className="text-xl" /></button>
           <div className="w-px h-6 bg-[#BBBBBB] mx-2" />
           <select
@@ -91,7 +91,7 @@ export default function PrintPreviewModal({
         </div>
 
         <div className="flex-1 overflow-auto bg-[#f0f0f0] p-6">
-          <div className="bg-white shadow-md mx-auto rounded-[8px] border border-[#BBBBBB] px-12 py-10" style={{ width: "880px" }}>
+          <div className="print-area bg-white shadow-md mx-auto rounded-[8px] border border-[#BBBBBB] px-12 py-10" style={{ width: "880px" }}>
             <div className="flex items-start justify-between mb-8">
               <div className="flex-1" />
               <h2 className="font-['Livvic'] text-2xl font-bold text-[#002f5c] text-center">
@@ -156,6 +156,7 @@ export default function PrintPreviewModal({
             Close
           </button>
           <button
+            onClick={() => window.print()}
             className="h-[44px] px-8 rounded-[30px] font-['Livvic'] text-base font-bold bg-[#006cf4] text-white hover:bg-[#003578] transition-colors cursor-pointer flex items-center gap-2"
           >
             <MdPrint className="text-lg" />
