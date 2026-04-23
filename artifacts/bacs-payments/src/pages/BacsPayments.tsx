@@ -303,6 +303,7 @@ export default function BacsPayments() {
   const [reportPrintWarningOpen, setReportPrintWarningOpen] = useState(false);
   const [firstReportOpen, setFirstReportOpen] = useState(false);
   const [processedReportOpen, setProcessedReportOpen] = useState(false);
+  const [commitWarningOpen, setCommitWarningOpen] = useState(false);
   const handleSaveCommitBacs = () => {
     const tabHasData =
       (["Tax Free", "First and One Off Payments", "Maturities", "FirstPayments MCP"].includes(activeTab) && showData) ||
@@ -311,9 +312,14 @@ export default function BacsPayments() {
       (activeTab === "Monthly Differences" && showMonthlyDiff);
     if (!tabHasData) {
       setNoDataMessage("No BACS payments present.");
-    } else {
-      setNoDataMessage("From and To date should not be in past date to save the BACS file.");
+      setNoDataOpen(true);
+      return;
     }
+    if (Math.floor(Math.random() * 3) === 0) {
+      setCommitWarningOpen(true);
+      return;
+    }
+    setNoDataMessage("From and To date should not be in past date to save the BACS file.");
     setNoDataOpen(true);
   };
   const handlePrintReport = () => {
@@ -428,6 +434,12 @@ export default function BacsPayments() {
         message="Some of the payments have already been committed. Would you like to exclude these payments?"
         onYes={handleProcessedMcpYes}
         onNo={handleProcessedMcpYes}
+      />
+      <WarningDialog
+        open={commitWarningOpen}
+        message="Some of the payments have already been committed. Would you like to exclude these payments?"
+        onYes={() => setCommitWarningOpen(false)}
+        onNo={() => setCommitWarningOpen(false)}
       />
       <FirstPaymentReportModal
         open={firstReportOpen}
