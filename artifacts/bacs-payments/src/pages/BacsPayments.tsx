@@ -37,9 +37,13 @@ const paymentColumns = [
   { key: "bacsDate", label: "BACS Date" },
   { key: "policyNo", label: "Policy No" },
   { key: "tax", label: "Tax" },
-  { key: "hash", label: "Hash Code" },
+  { key: "hash", label: "Hash" },
   { key: "payMethod", label: "Pay Method" },
 ];
+
+const processedColumns = paymentColumns.map((c) =>
+  c.key === "hash" ? { ...c, label: "Hash Code" } : c
+);
 
 const SAMPLE_PAYMENTS = [
   { sortCode: "77-48-14", accountNo: "24782346", zero: "0", amount: "608.58", accountName: "Testmnccfebd", bankRef: "225413", nineNine: "99", bacsDate: "31/12/2025", policyNo: "225413", tax: "0.00", hash: "/LHH", payMethod: "B" },
@@ -600,7 +604,7 @@ export default function BacsPayments() {
                   </div>
                 </div>
                 <div className="min-h-[300px]">
-                  <DataGrid columns={paymentColumns} data={showProcessed ? PROCESSED_PAYMENTS : []} />
+                  <DataGrid columns={processedColumns} data={showProcessed ? PROCESSED_PAYMENTS : []} />
                 </div>
                 <div className="flex items-center gap-6 mt-5 flex-wrap">
                   <ReadOnlyInput label="Payments" value={showProcessed ? String(PROCESSED_TOTALS.count) : ""} />
