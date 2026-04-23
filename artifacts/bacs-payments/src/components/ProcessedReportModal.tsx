@@ -13,14 +13,36 @@ import {
   MdLocalPrintshop,
 } from "react-icons/md";
 
+interface ProcessedRow {
+  sortCode?: string;
+  accountNo?: string;
+  amount?: string;
+  accountName?: string;
+  bankRef?: string;
+  bacsDate?: string;
+  policyNo?: string;
+  tax?: string;
+  hash?: string;
+}
+
+interface ProcessedReportTotals {
+  count: number;
+  totalNet: number;
+  totalGross: number;
+  totalTax: number;
+}
+
 interface ProcessedReportModalProps {
   open: boolean;
   onClose: () => void;
   dateRange: string;
+  rows?: ProcessedRow[];
+  totals?: ProcessedReportTotals;
 }
 
-export default function ProcessedReportModal({ open, onClose, dateRange }: ProcessedReportModalProps) {
+export default function ProcessedReportModal({ open, onClose, dateRange, rows, totals }: ProcessedReportModalProps) {
   if (!open) return null;
+  const fmt = (n: number) => n.toLocaleString("en-GB", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
   const toolbarBtn =
     "h-10 w-10 flex items-center justify-center rounded-full bg-white text-[#04589b] border border-[#04589b] font-bold hover:bg-[#003578] hover:text-white hover:border-[#003578] transition-colors cursor-pointer";
@@ -66,6 +88,60 @@ export default function ProcessedReportModal({ open, onClose, dateRange }: Proce
               </h2>
               <span className="font-['Mulish'] text-xs text-[#3d3d3d]">Page 1 of 1</span>
             </div>
+
+            {rows && rows.length > 0 && (
+              <div className="mt-2 mb-8">
+                <table className="w-full border-collapse">
+                  <thead>
+                    <tr className="border-y-[2px] border-[#002f5c]">
+                      <th className="py-2 px-2 text-left font-['Livvic'] text-xs font-bold text-[#002f5c]">Sort Code</th>
+                      <th className="py-2 px-2 text-left font-['Livvic'] text-xs font-bold text-[#002f5c]">Account No</th>
+                      <th className="py-2 px-2 text-right font-['Livvic'] text-xs font-bold text-[#002f5c]">Amount</th>
+                      <th className="py-2 px-2 text-left font-['Livvic'] text-xs font-bold text-[#002f5c]">Account Name</th>
+                      <th className="py-2 px-2 text-left font-['Livvic'] text-xs font-bold text-[#002f5c]">Bank Ref</th>
+                      <th className="py-2 px-2 text-left font-['Livvic'] text-xs font-bold text-[#002f5c]">BACS Date</th>
+                      <th className="py-2 px-2 text-left font-['Livvic'] text-xs font-bold text-[#002f5c]">Policy No</th>
+                      <th className="py-2 px-2 text-right font-['Livvic'] text-xs font-bold text-[#002f5c]">Tax</th>
+                      <th className="py-2 px-2 text-left font-['Livvic'] text-xs font-bold text-[#002f5c]">Hash Code</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {rows.map((r, i) => (
+                      <tr key={i} className="border-b border-[#BBBBBB]/40">
+                        <td className="py-1.5 px-2 font-['Mulish'] text-xs text-[#3d3d3d]">{r.sortCode}</td>
+                        <td className="py-1.5 px-2 font-['Mulish'] text-xs text-[#3d3d3d]">{r.accountNo}</td>
+                        <td className="py-1.5 px-2 font-['Mulish'] text-xs text-[#3d3d3d] text-right">{r.amount}</td>
+                        <td className="py-1.5 px-2 font-['Mulish'] text-xs text-[#3d3d3d]">{r.accountName}</td>
+                        <td className="py-1.5 px-2 font-['Mulish'] text-xs text-[#3d3d3d]">{r.bankRef}</td>
+                        <td className="py-1.5 px-2 font-['Mulish'] text-xs text-[#3d3d3d]">{r.bacsDate}</td>
+                        <td className="py-1.5 px-2 font-['Mulish'] text-xs text-[#3d3d3d]">{r.policyNo}</td>
+                        <td className="py-1.5 px-2 font-['Mulish'] text-xs text-[#3d3d3d] text-right">{r.tax}</td>
+                        <td className="py-1.5 px-2 font-['Mulish'] text-xs text-[#3d3d3d]">{r.hash}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                  {totals && (
+                    <tfoot>
+                      <tr className="border-t-[2px] border-[#002f5c]">
+                        <td colSpan={2} className="py-2 px-2 font-['Livvic'] text-xs font-bold text-[#002f5c]">
+                          Count: {totals.count}
+                        </td>
+                        <td className="py-2 px-2 font-['Livvic'] text-xs font-bold text-[#002f5c] text-right">
+                          {fmt(totals.totalNet)}
+                        </td>
+                        <td colSpan={4} className="py-2 px-2 font-['Livvic'] text-xs font-bold text-[#002f5c]">
+                          Gross: {fmt(totals.totalGross)}
+                        </td>
+                        <td className="py-2 px-2 font-['Livvic'] text-xs font-bold text-[#002f5c] text-right">
+                          {fmt(totals.totalTax)}
+                        </td>
+                        <td />
+                      </tr>
+                    </tfoot>
+                  )}
+                </table>
+              </div>
+            )}
 
             <div className="mt-12 flex flex-col gap-10 max-w-[420px]">
               <div className="flex items-end gap-3">

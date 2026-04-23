@@ -310,6 +310,7 @@ export default function BacsPayments() {
   const [reportPrintWarningOpen, setReportPrintWarningOpen] = useState(false);
   const [firstReportOpen, setFirstReportOpen] = useState(false);
   const [processedReportOpen, setProcessedReportOpen] = useState(false);
+  const [processedReportFromTab, setProcessedReportFromTab] = useState(false);
   const [commitWarningOpen, setCommitWarningOpen] = useState(false);
   const [saveAsOpen, setSaveAsOpen] = useState(false);
   const [saveAsType, setSaveAsType] = useState<"BACS" | "CSV">("BACS");
@@ -484,8 +485,14 @@ export default function BacsPayments() {
       />
       <ProcessedReportModal
         open={processedReportOpen}
-        onClose={() => setProcessedReportOpen(false)}
-        dateRange={`${reportsStartRun} to ${reportsEndRun}`}
+        onClose={() => { setProcessedReportOpen(false); setProcessedReportFromTab(false); }}
+        dateRange={
+          processedReportFromTab
+            ? `${startRunMonth} to ${endRunMonth}`
+            : `${reportsStartRun} to ${reportsEndRun}`
+        }
+        rows={processedReportFromTab ? PROCESSED_PAYMENTS : undefined}
+        totals={processedReportFromTab ? PROCESSED_TOTALS : undefined}
       />
       <InfoDialog
         open={noDataOpen}
@@ -598,7 +605,19 @@ export default function BacsPayments() {
                     <DateInput label="End Run Month" value={endRunMonth} onChange={setEndRunMonth} />
                     <div className="ml-auto flex items-center gap-3">
                       <ActionButton label="Show Payments" variant="secondary" onClick={handleShowProcessed} />
-                      <ActionButton label="Print Report" variant="secondary" />
+                      <ActionButton
+                        label="Print Report"
+                        variant="secondary"
+                        onClick={() => {
+                          if (!showProcessed) {
+                            setNoDataMessage("No Data found");
+                            setNoDataOpen(true);
+                            return;
+                          }
+                          setProcessedReportFromTab(true);
+                          setProcessedReportOpen(true);
+                        }}
+                      />
                     </div>
                   </div>
                   <div className="flex items-center gap-6 flex-wrap">
