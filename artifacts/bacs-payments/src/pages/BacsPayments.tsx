@@ -499,6 +499,13 @@ export default function BacsPayments() {
               ? `${mcpStartRunMonth} to ${mcpEndRunMonth}`
               : `${reportsStartRun} to ${reportsEndRun}`
         }
+        columns={
+          processedReportFromTab === "processed"
+            ? processedColumns
+            : processedReportFromTab === "mcp"
+              ? paymentColumns
+              : undefined
+        }
         rows={
           processedReportFromTab === "processed"
             ? PROCESSED_PAYMENTS

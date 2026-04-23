@@ -13,16 +13,10 @@ import {
   MdLocalPrintshop,
 } from "react-icons/md";
 
-interface ProcessedRow {
-  sortCode?: string;
-  accountNo?: string;
-  amount?: string;
-  accountName?: string;
-  bankRef?: string;
-  bacsDate?: string;
-  policyNo?: string;
-  tax?: string;
-  hash?: string;
+export interface ProcessedReportColumn {
+  key: string;
+  label: string;
+  align?: "left" | "right";
 }
 
 interface ProcessedReportTotals {
@@ -36,11 +30,12 @@ interface ProcessedReportModalProps {
   open: boolean;
   onClose: () => void;
   dateRange: string;
-  rows?: ProcessedRow[];
+  columns?: ProcessedReportColumn[];
+  rows?: Record<string, string | number>[];
   totals?: ProcessedReportTotals;
 }
 
-export default function ProcessedReportModal({ open, onClose, dateRange, rows, totals }: ProcessedReportModalProps) {
+export default function ProcessedReportModal({ open, onClose, dateRange, columns, rows, totals }: ProcessedReportModalProps) {
   if (!open) return null;
   const fmt = (n: number) => n.toLocaleString("en-GB", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
@@ -82,64 +77,56 @@ export default function ProcessedReportModal({ open, onClose, dateRange, rows, t
 
         <div className="flex-1 overflow-auto bg-[#f0f0f0] p-6">
           <div className="bg-white shadow-md mx-auto rounded-[8px] border border-[#BBBBBB] px-12 py-10" style={{ width: "1080px", minHeight: "700px" }}>
-            <div className="flex items-center justify-between mb-16">
+            <div className="flex items-center justify-between mb-12">
               <h2 className="font-['Livvic'] text-2xl font-bold text-[#002f5c]">
                 Payments Report <span className="ml-12 font-normal text-[#3d3d3d]">{dateRange}</span>
               </h2>
               <span className="font-['Mulish'] text-xs text-[#3d3d3d]">Page 1 of 1</span>
             </div>
 
-            {rows && rows.length > 0 && (
-              <div className="mt-2 mb-8">
+            {columns && rows && rows.length > 0 && (
+              <div className="mt-2 mb-8 overflow-x-auto">
                 <table className="w-full border-collapse">
                   <thead>
                     <tr className="border-y-[2px] border-[#002f5c]">
-                      <th className="py-2 px-2 text-left font-['Livvic'] text-xs font-bold text-[#002f5c]">Sort Code</th>
-                      <th className="py-2 px-2 text-left font-['Livvic'] text-xs font-bold text-[#002f5c]">Account No</th>
-                      <th className="py-2 px-2 text-right font-['Livvic'] text-xs font-bold text-[#002f5c]">Amount</th>
-                      <th className="py-2 px-2 text-left font-['Livvic'] text-xs font-bold text-[#002f5c]">Account Name</th>
-                      <th className="py-2 px-2 text-left font-['Livvic'] text-xs font-bold text-[#002f5c]">Bank Ref</th>
-                      <th className="py-2 px-2 text-left font-['Livvic'] text-xs font-bold text-[#002f5c]">BACS Date</th>
-                      <th className="py-2 px-2 text-left font-['Livvic'] text-xs font-bold text-[#002f5c]">Policy No</th>
-                      <th className="py-2 px-2 text-right font-['Livvic'] text-xs font-bold text-[#002f5c]">Tax</th>
-                      <th className="py-2 px-2 text-left font-['Livvic'] text-xs font-bold text-[#002f5c]">Hash Code</th>
+                      {columns.map((c) => (
+                        <th
+                          key={c.key}
+                          className={`py-2 px-2 font-['Livvic'] text-xs font-bold text-[#002f5c] whitespace-nowrap ${
+                            c.align === "right" ? "text-right" : "text-left"
+                          }`}
+                        >
+                          {c.label}
+                        </th>
+                      ))}
                     </tr>
                   </thead>
                   <tbody>
                     {rows.map((r, i) => (
                       <tr key={i} className="border-b border-[#BBBBBB]/40">
-                        <td className="py-1.5 px-2 font-['Mulish'] text-xs text-[#3d3d3d]">{r.sortCode}</td>
-                        <td className="py-1.5 px-2 font-['Mulish'] text-xs text-[#3d3d3d]">{r.accountNo}</td>
-                        <td className="py-1.5 px-2 font-['Mulish'] text-xs text-[#3d3d3d] text-right">{r.amount}</td>
-                        <td className="py-1.5 px-2 font-['Mulish'] text-xs text-[#3d3d3d]">{r.accountName}</td>
-                        <td className="py-1.5 px-2 font-['Mulish'] text-xs text-[#3d3d3d]">{r.bankRef}</td>
-                        <td className="py-1.5 px-2 font-['Mulish'] text-xs text-[#3d3d3d]">{r.bacsDate}</td>
-                        <td className="py-1.5 px-2 font-['Mulish'] text-xs text-[#3d3d3d]">{r.policyNo}</td>
-                        <td className="py-1.5 px-2 font-['Mulish'] text-xs text-[#3d3d3d] text-right">{r.tax}</td>
-                        <td className="py-1.5 px-2 font-['Mulish'] text-xs text-[#3d3d3d]">{r.hash}</td>
+                        {columns.map((c) => (
+                          <td
+                            key={c.key}
+                            className={`py-1.5 px-2 font-['Mulish'] text-xs text-[#3d3d3d] whitespace-nowrap ${
+                              c.align === "right" ? "text-right" : "text-left"
+                            }`}
+                          >
+                            {r[c.key] ?? ""}
+                          </td>
+                        ))}
                       </tr>
                     ))}
                   </tbody>
-                  {totals && (
-                    <tfoot>
-                      <tr className="border-t-[2px] border-[#002f5c]">
-                        <td colSpan={2} className="py-2 px-2 font-['Livvic'] text-xs font-bold text-[#002f5c]">
-                          Count: {totals.count}
-                        </td>
-                        <td className="py-2 px-2 font-['Livvic'] text-xs font-bold text-[#002f5c] text-right">
-                          {fmt(totals.totalNet)}
-                        </td>
-                        <td colSpan={4} className="py-2 px-2 font-['Livvic'] text-xs font-bold text-[#002f5c]">
-                          Gross: {fmt(totals.totalGross)}
-                        </td>
-                        <td className="py-2 px-2 font-['Livvic'] text-xs font-bold text-[#002f5c] text-right">
-                          {fmt(totals.totalTax)}
-                        </td>
-                        <td />
-                      </tr>
-                    </tfoot>
-                  )}
                 </table>
+
+                {totals && (
+                  <div className="mt-4 pt-3 border-t-[2px] border-[#002f5c] flex flex-wrap gap-x-10 gap-y-1 font-['Livvic'] text-xs font-bold text-[#002f5c]">
+                    <span>Count: {totals.count}</span>
+                    <span>Total Net: {fmt(totals.totalNet)}</span>
+                    <span>Total Gross: {fmt(totals.totalGross)}</span>
+                    <span>Total Tax: {fmt(totals.totalTax)}</span>
+                  </div>
+                )}
               </div>
             )}
 
