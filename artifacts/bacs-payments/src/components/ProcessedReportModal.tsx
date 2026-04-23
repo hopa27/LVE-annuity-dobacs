@@ -1,3 +1,4 @@
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
   MdSkipPrevious,
   MdSkipNext,
@@ -6,7 +7,7 @@ import {
   MdPrint,
   MdSave,
   MdClose,
-  MdInsertDriveFile,
+  MdCropFree,
   MdZoomIn,
   MdFitScreen,
   MdFolderOpen,
@@ -35,14 +36,67 @@ interface ProcessedReportModalProps {
   totals?: ProcessedReportTotals;
 }
 
+const PAGE_W = 1080;
+
+type ZoomMode = "fit" | "actual" | "width";
+
 export default function ProcessedReportModal({ open, onClose, dateRange, columns, rows, totals }: ProcessedReportModalProps) {
+  const [zoomMode, setZoomMode] = useState<ZoomMode>("actual");
+  const [zoom, setZoom] = useState(1);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const pageRef = useRef<HTMLDivElement>(null);
+  const naturalHRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    if (!open) {
+      naturalHRef.current = null;
+      setZoomMode("actual");
+      setZoom(1);
+    }
+  }, [open]);
+
+  useLayoutEffect(() => {
+    if (!open) return;
+    if (naturalHRef.current === null && pageRef.current) {
+      naturalHRef.current = pageRef.current.offsetHeight / zoom;
+    }
+    const c = containerRef.current;
+    if (!c) return;
+    const cw = c.clientWidth - 48;
+    const ch = c.clientHeight - 48;
+    const naturalH = naturalHRef.current ?? 1000;
+    if (zoomMode === "actual") setZoom(1);
+    else if (zoomMode === "width") setZoom(Math.max(0.3, Math.min(2, cw / PAGE_W)));
+    else setZoom(Math.max(0.3, Math.min(cw / PAGE_W, ch / naturalH)));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [zoomMode, open]);
+
+  useEffect(() => {
+    if (!open) return;
+    const c = containerRef.current;
+    if (!c) return;
+    const ro = new ResizeObserver(() => {
+      const cw = c.clientWidth - 48;
+      const ch = c.clientHeight - 48;
+      const naturalH = naturalHRef.current ?? 1000;
+      if (zoomMode === "width") setZoom(Math.max(0.3, Math.min(2, cw / PAGE_W)));
+      else if (zoomMode === "fit") setZoom(Math.max(0.3, Math.min(cw / PAGE_W, ch / naturalH)));
+    });
+    ro.observe(c);
+    return () => ro.disconnect();
+  }, [zoomMode, open]);
+
   if (!open) return null;
   const fmt = (n: number) => n.toLocaleString("en-GB", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
   const toolbarBtn =
     "h-10 w-10 flex items-center justify-center rounded-full bg-white text-[#04589b] border border-[#04589b] font-bold hover:bg-[#003578] hover:text-white hover:border-[#003578] transition-colors cursor-pointer";
+  const toolbarBtnActive =
+    "h-10 w-10 flex items-center justify-center rounded-full bg-[#003578] text-white border border-[#003578] font-bold cursor-pointer";
   const toolbarBtnDisabled =
     "h-10 w-10 flex items-center justify-center rounded-full bg-white text-[#979797] border border-[#979797] cursor-not-allowed";
+
+  const zoomBtn = (mode: ZoomMode) => (zoomMode === mode ? toolbarBtnActive : toolbarBtn);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
@@ -58,9 +112,9 @@ export default function ProcessedReportModal({ open, onClose, dateRange, columns
         </div>
 
         <div className="bg-white border-b border-[#BBBBBB] px-5 py-3 flex items-center gap-2 flex-wrap">
-          <button title="Single page" className={toolbarBtn}><MdInsertDriveFile className="text-xl" /></button>
-          <button title="100% Zoom" className={toolbarBtn}><MdZoomIn className="text-xl" /></button>
-          <button title="Zoom to Width" className={toolbarBtn}><MdFitScreen className="text-xl" /></button>
+          <button title="Zoom to Fit" onClick={() => setZoomMode("fit")} className={zoomBtn("fit")}><MdCropFree className="text-xl" /></button>
+          <button title="100% Zoom" onClick={() => setZoomMode("actual")} className={zoomBtn("actual")}><MdZoomIn className="text-xl" /></button>
+          <button title="Zoom to Width" onClick={() => setZoomMode("width")} className={zoomBtn("width")}><MdFitScreen className="text-xl" /></button>
           <div className="w-px h-6 bg-[#BBBBBB] mx-2" />
           <button title="First page" disabled className={toolbarBtnDisabled}><MdSkipPrevious className="text-xl" /></button>
           <button title="Previous page" disabled className={toolbarBtnDisabled}><MdChevronLeft className="text-xl" /></button>
@@ -75,8 +129,12 @@ export default function ProcessedReportModal({ open, onClose, dateRange, columns
           <button title="Open" className={toolbarBtn}><MdFolderOpen className="text-xl" /></button>
         </div>
 
-        <div className="flex-1 overflow-auto bg-[#f0f0f0] p-6">
-          <div className="bg-white shadow-md mx-auto rounded-[8px] border border-[#BBBBBB] px-12 py-10" style={{ width: "1080px", minHeight: "700px" }}>
+        <div ref={containerRef} className="flex-1 overflow-auto bg-[#f0f0f0] p-6">
+          <div
+            ref={pageRef}
+            className="bg-white shadow-md mx-auto rounded-[8px] border border-[#BBBBBB] px-12 py-10"
+            style={{ width: `${PAGE_W}px`, minHeight: "700px", zoom }}
+          >
             <div className="flex items-center justify-between mb-12">
               <h2 className="font-['Livvic'] text-2xl font-bold text-[#002f5c]">
                 Payments Report <span className="ml-12 font-normal text-[#3d3d3d]">{dateRange}</span>
