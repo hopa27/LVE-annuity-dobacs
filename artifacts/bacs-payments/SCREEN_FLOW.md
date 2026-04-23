@@ -210,12 +210,11 @@ dialog. Clicking **Save** triggers a browser download with the chosen filename.
 |     |  ...rows                                                          |         |
 |     +------------------------------------------------------------------+         |
 +----------------------------------------------------------------------------------+
-|                                              [ Close ]   [ 🖨 Print ]            |
-+----------------------------------------------------------------------------------+
 ```
 
-* 🖨 (toolbar or footer) → browser print of the report area.
+* 🖨 (toolbar) → browser print of the report area.
 * 💾 → Save As Dialog (file type **QRP**).
+* Window header `X` closes the modal.
 
 ### 4C. Report Print Modal (Tax Free / First Payments / Maturities / MCP)
 
@@ -233,13 +232,13 @@ dialog. Clicking **Save** triggers a browser download with the chosen filename.
 |     |  Checked by: ............         Authorised by: ............    |         |
 |     +------------------------------------------------------------------+         |
 +----------------------------------------------------------------------------------+
-|                                              [ Close ]   [ 🖨 Print ]            |
-+----------------------------------------------------------------------------------+
 ```
 
 * ⚙ → Print Dialog
 * 🖨 → browser print
 * 💾 → Save As Dialog (QRP)
+* Window header `X` closes the modal.
+* Zoom-to-Width / Zoom-to-Fit calculations leave a 2px buffer so no horizontal scrollbar appears in those modes.
 
 ### 4D. Print Dialog (classic look, opened by ⚙ Printer Setup)
 
@@ -266,8 +265,9 @@ dialog. Clicking **Save** triggers a browser download with the chosen filename.
 ### 4E. First Payment Report Modal / Processed Report Modal
 
 Opened from the **Reports** tab via *Print First* / *Print Processed*.
-Same toolbar as Report Print Modal (⏮⏪⏩⏭, ⚙, 🖨, 💾, 📂) and footer
-(`Close`, `Print`). The body renders the appropriate report layout.
+Same toolbar as Report Print Modal (⏮⏪⏩⏭, ⚙, 🖨, 💾, 📂). All actions are
+in the toolbar; the modal is closed via the header `X` button.
+The body renders the appropriate report layout.
 
 ### 4F. Information Dialog (`InfoDialog` / "DoBacs")
 

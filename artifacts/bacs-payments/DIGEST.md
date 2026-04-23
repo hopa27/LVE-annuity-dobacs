@@ -213,9 +213,7 @@ body:
   class: print-area  # only this prints via @media print
   content: 11-column compare table
            (Policy / Ref / Paykey / Current.../Previous.../Type / % Change)
-footer:
-  - Close (outline)
-  - Print (primary, calls window.print)
+footer: none  # closed via header X; print/save are toolbar-only
 ```
 
 ### 4.4 ReportPrintModal (`src/components/ReportPrintModal.tsx`)
@@ -234,7 +232,11 @@ body:
   class: print-area
   content: report header + table + totals + signature lines
            ("Checked by: ............    Authorised by: ............")
-footer: [Close, Print]
+footer: none  # closed via header X; print/save are toolbar-only
+notes:
+  - Zoom-to-Width / Zoom-to-Fit reserve a 2px buffer in the zoom
+    calculation so subpixel rounding does not produce a horizontal
+    scrollbar in the preview area.
 ```
 
 ### 4.5 FirstPaymentReportModal (`src/components/FirstPaymentReportModal.tsx`)
