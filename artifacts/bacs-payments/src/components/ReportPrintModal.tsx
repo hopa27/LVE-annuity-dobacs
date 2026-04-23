@@ -12,6 +12,7 @@ import {
   MdFitScreen,
   MdFolderOpen,
   MdSettings,
+  MdLocalPrintshop,
 } from "react-icons/md";
 
 export interface ReportColumn {
