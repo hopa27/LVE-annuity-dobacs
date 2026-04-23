@@ -289,7 +289,7 @@ export default function FirstPaymentReportModal({ open, onClose, dateRange }: Fi
           <button title="Last page" onClick={goLast} disabled={isLast} className={isLast ? toolbarBtnDisabled : toolbarBtn}><MdSkipNext className="text-xl" /></button>
           <div className="w-px h-6 bg-[#BBBBBB] mx-2" />
           <button title="Printer Setup" onClick={() => setPrintDialogOpen(true)} className={toolbarBtn}><MdPrint className="text-xl" /></button>
-          <button title="Quick print" className={toolbarBtn}><MdLocalPrintshop className="text-xl" /></button>
+          <button title="Print" onClick={() => window.print()} className={toolbarBtn}><MdLocalPrintshop className="text-xl" /></button>
           <div className="w-px h-6 bg-[#BBBBBB] mx-2" />
           <button title="Save" className={toolbarBtn}><MdSave className="text-xl" /></button>
           <button title="Open" className={toolbarBtn}><MdFolderOpen className="text-xl" /></button>
