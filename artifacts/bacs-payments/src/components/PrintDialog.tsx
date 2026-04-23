@@ -1,203 +1,176 @@
-import { useEffect, useState } from "react";
-import { MdClose } from "react-icons/md";
+import { useState } from "react";
 
 interface PrintDialogProps {
   open: boolean;
   onClose: () => void;
-  onPrint?: (opts: { printer: string; range: "all" | "pages" | "selection"; from: number; to: number; copies: number; collate: boolean }) => void;
   totalPages?: number;
 }
 
 const PRINTERS = [
-  "Microsoft Print to PDF (from vmavdpsshx02)",
-  "Citrix Universal Printer",
-  "Client2:Microsoft Print to PDF",
-  "Auto Created Client Printer vmavdpsshx0250",
+  "Microsoft Print to PDF",
   "Microsoft XPS Document Writer",
   "OneNote (Desktop)",
+  "Fax",
 ];
 
-export default function PrintDialog({ open, onClose, onPrint, totalPages = 27 }: PrintDialogProps) {
+export default function PrintDialog({ open, onClose, totalPages = 1 }: PrintDialogProps) {
   const [printer, setPrinter] = useState(PRINTERS[0]);
   const [range, setRange] = useState<"all" | "pages" | "selection">("all");
-  const [from, setFrom] = useState(1);
-  const [to, setTo] = useState(totalPages);
+  const [pageFrom, setPageFrom] = useState("1");
+  const [pageTo, setPageTo] = useState(String(totalPages));
   const [copies, setCopies] = useState(1);
   const [collate, setCollate] = useState(false);
-
-  useEffect(() => {
-    if (open) {
-      setPrinter(PRINTERS[0]);
-      setRange("all");
-      setFrom(1);
-      setTo(totalPages);
-      setCopies(1);
-      setCollate(false);
-    }
-  }, [open, totalPages]);
 
   if (!open) return null;
 
   const handleOk = () => {
-    onPrint?.({ printer, range, from, to, copies, collate });
     onClose();
+    setTimeout(() => window.print(), 50);
   };
 
-  const radio = (checked: boolean) => (
-    <span
-      className={`inline-flex items-center justify-center w-[18px] h-[18px] rounded-full border ${
-        checked ? "border-[#0067c0]" : "border-[#8a8a8a]"
-      } bg-white`}
-    >
-      {checked && <span className="w-[8px] h-[8px] rounded-full bg-[#0067c0]" />}
-    </span>
-  );
-
-  const checkbox = (checked: boolean) => (
-    <span
-      className={`inline-flex items-center justify-center w-[18px] h-[18px] rounded-[3px] border ${
-        checked ? "bg-[#0067c0] border-[#0067c0]" : "bg-white border-[#8a8a8a]"
-      }`}
-    >
-      {checked && (
-        <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
-          <path d="M3 8.5l3.5 3.5 7-8" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-      )}
-    </span>
-  );
-
-  const groupBox = "border border-[#d6d6d6] rounded-[6px] bg-white relative pt-4 pb-4 px-4";
-  const groupLegend = "absolute -top-[10px] left-3 px-1.5 bg-[#f3f3f3] text-[12px] font-['Segoe_UI',sans-serif] text-[#1a1a1a]";
-  const fieldLabel = "font-['Segoe_UI',sans-serif] text-[12px] text-[#1a1a1a]";
-  const fieldValue = "font-['Segoe_UI',sans-serif] text-[12px] text-[#1a1a1a]";
-
   return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/30">
-      <div
-        className="bg-[#f3f3f3] rounded-[8px] shadow-2xl border border-[#cfcfcf] w-[520px] overflow-hidden"
-        style={{ fontFamily: "'Segoe UI', system-ui, sans-serif" }}
-      >
-        <div className="flex items-center justify-between px-3 py-2 bg-[#f3f3f3]">
-          <span className="text-[13px] text-[#1a1a1a] font-semibold">Print</span>
+    <div
+      className="fixed inset-0 z-[60] flex items-center justify-center bg-black/30"
+      style={{ fontFamily: "'Segoe UI', system-ui, sans-serif" }}
+    >
+      <div className="bg-[#f3f3f3] rounded-[8px] shadow-2xl border border-[#d1d1d1] w-[480px] overflow-hidden">
+        <div className="flex items-center justify-between px-4 py-2 bg-[#f3f3f3] border-b border-[#e5e5e5]">
+          <span className="text-sm font-semibold text-[#1f1f1f]">Print</span>
           <button
             onClick={onClose}
-            className="w-8 h-7 flex items-center justify-center hover:bg-[#e81123] hover:text-white text-[#1a1a1a] rounded-[4px] cursor-pointer"
-            title="Close"
+            className="w-8 h-8 flex items-center justify-center rounded hover:bg-[#e5e5e5] text-[#1f1f1f] text-base cursor-pointer"
+            aria-label="Close"
           >
-            <MdClose className="text-base" />
+            ✕
           </button>
         </div>
 
-        <div className="px-5 pt-2 pb-5 space-y-5">
-          <div className={groupBox}>
-            <span className={groupLegend}>Printer</span>
-            <div className="flex items-center gap-3 mb-3">
-              <label className={fieldLabel + " w-[60px]"}>Name:</label>
+        <div className="px-5 pt-4 pb-5 space-y-4">
+          <fieldset className="border border-[#c5c5c5] rounded-[4px] px-3 pt-2 pb-3 bg-white">
+            <legend className="px-1 text-xs text-[#1f1f1f] font-semibold">Printer</legend>
+            <div className="flex items-center gap-2 mb-2">
+              <label className="text-xs text-[#1f1f1f] w-14 underline">Name:</label>
               <select
                 value={printer}
                 onChange={(e) => setPrinter(e.target.value)}
-                className="flex-1 h-[28px] px-2 rounded-[4px] border border-[#8a8a8a] bg-white text-[12px] text-[#1a1a1a] focus:outline-none focus:border-[#0067c0]"
+                className="flex-1 h-7 px-2 text-xs border border-[#8a8a8a] rounded-[2px] bg-white text-[#1f1f1f] focus:outline-none focus:border-[#0067c0]"
               >
-                {PRINTERS.map((p) => (
-                  <option key={p} value={p}>{p}</option>
-                ))}
+                {PRINTERS.map((p) => <option key={p} value={p}>{p}</option>)}
               </select>
-              <button className="h-[28px] px-3 rounded-[4px] border border-[#8a8a8a] bg-white text-[12px] text-[#1a1a1a] hover:bg-[#e5e5e5] cursor-pointer">
+              <button className="h-7 px-3 text-xs border border-[#8a8a8a] rounded-[2px] bg-[#f3f3f3] hover:bg-[#e5e5e5] cursor-pointer">
                 Properties...
               </button>
             </div>
-            <div className="grid grid-cols-[60px_1fr] gap-y-1 gap-x-3">
-              <span className={fieldLabel}>Status:</span>
-              <span className={fieldValue}>Ready</span>
-              <span className={fieldLabel}>Type:</span>
-              <span className={fieldValue}>Citrix Universal Printer</span>
-              <span className={fieldLabel}>Where:</span>
-              <span className={fieldValue}>Client2:Microsoft Print to PDF</span>
-              <span className={fieldLabel}>Comment:</span>
-              <span className={fieldValue}>Auto Created Client Printer vmavdpsshx0250</span>
+            <div className="grid grid-cols-[60px_1fr] gap-x-2 gap-y-0.5 text-xs text-[#1f1f1f] pl-1">
+              <span className="font-semibold">Status:</span><span>Ready</span>
+              <span className="font-semibold">Type:</span><span>Citrix Universal Printer</span>
+              <span className="font-semibold">Where:</span><span>Client2:Microsoft Print to PDF</span>
+              <span className="font-semibold">Comment:</span><span>Auto Created Client Printer</span>
             </div>
-          </div>
+          </fieldset>
 
-          <div className="grid grid-cols-2 gap-4">
-            <div className={groupBox}>
-              <span className={groupLegend}>Print range</span>
-              <div className="space-y-2">
-                <label className="flex items-center gap-2 cursor-pointer" onClick={() => setRange("all")}>
-                  {radio(range === "all")}
-                  <span className={fieldValue}>All</span>
-                </label>
-                <label className="flex items-center gap-2 cursor-pointer" onClick={() => setRange("pages")}>
-                  {radio(range === "pages")}
-                  <span className={fieldValue}>Pages</span>
-                  <span className={fieldLabel + " ml-1"}>from:</span>
+          <div className="grid grid-cols-2 gap-3">
+            <fieldset className="border border-[#c5c5c5] rounded-[4px] px-3 pt-2 pb-3 bg-white">
+              <legend className="px-1 text-xs text-[#1f1f1f] font-semibold">Print range</legend>
+              <div className="space-y-1.5">
+                <label className="flex items-center gap-2 text-xs text-[#1f1f1f] cursor-pointer">
                   <input
-                    type="number"
-                    min={1}
-                    value={from}
-                    onChange={(e) => { setFrom(Number(e.target.value)); setRange("pages"); }}
-                    className="w-[44px] h-[24px] px-1 rounded-[4px] border border-[#8a8a8a] bg-white text-[12px] text-center focus:outline-none focus:border-[#0067c0]"
+                    type="radio"
+                    checked={range === "all"}
+                    onChange={() => setRange("all")}
+                    className="accent-[#0067c0]"
                   />
-                  <span className={fieldLabel}>to:</span>
-                  <input
-                    type="number"
-                    min={1}
-                    value={to}
-                    onChange={(e) => { setTo(Number(e.target.value)); setRange("pages"); }}
-                    className="w-[44px] h-[24px] px-1 rounded-[4px] border border-[#8a8a8a] bg-white text-[12px] text-center focus:outline-none focus:border-[#0067c0]"
-                  />
+                  <span className="underline">A</span>ll
                 </label>
-                <label className="flex items-center gap-2 opacity-50 cursor-not-allowed">
-                  {radio(range === "selection")}
-                  <span className={fieldValue}>Selection</span>
+                <div className="flex items-center gap-2 text-xs text-[#1f1f1f]">
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="radio"
+                      checked={range === "pages"}
+                      onChange={() => setRange("pages")}
+                      className="accent-[#0067c0]"
+                    />
+                    <span><span className="underline">P</span>ages</span>
+                  </label>
+                  <span>from:</span>
+                  <input
+                    type="text"
+                    value={pageFrom}
+                    onChange={(e) => setPageFrom(e.target.value)}
+                    disabled={range !== "pages"}
+                    className="w-10 h-6 px-1 text-xs border border-[#8a8a8a] rounded-[2px] bg-white text-center disabled:bg-[#f3f3f3] disabled:text-[#9e9e9e]"
+                  />
+                  <span>to:</span>
+                  <input
+                    type="text"
+                    value={pageTo}
+                    onChange={(e) => setPageTo(e.target.value)}
+                    disabled={range !== "pages"}
+                    className="w-10 h-6 px-1 text-xs border border-[#8a8a8a] rounded-[2px] bg-white text-center disabled:bg-[#f3f3f3] disabled:text-[#9e9e9e]"
+                  />
+                </div>
+                <label className="flex items-center gap-2 text-xs text-[#9e9e9e] cursor-not-allowed">
+                  <input
+                    type="radio"
+                    disabled
+                    checked={range === "selection"}
+                    onChange={() => setRange("selection")}
+                  />
+                  <span><span className="underline">S</span>election</span>
                 </label>
               </div>
-            </div>
+            </fieldset>
 
-            <div className={groupBox}>
-              <span className={groupLegend}>Copies</span>
-              <div className="flex items-center gap-2 mb-3">
-                <span className={fieldLabel}>Number of copies:</span>
+            <fieldset className="border border-[#c5c5c5] rounded-[4px] px-3 pt-2 pb-3 bg-white">
+              <legend className="px-1 text-xs text-[#1f1f1f] font-semibold">Copies</legend>
+              <div className="flex items-center justify-between gap-2 mb-2">
+                <label className="text-xs text-[#1f1f1f]">Number of <span className="underline">c</span>opies:</label>
                 <input
                   type="number"
                   min={1}
                   value={copies}
-                  onChange={(e) => setCopies(Math.max(1, Number(e.target.value)))}
-                  className="w-[56px] h-[24px] px-1 rounded-[4px] border border-[#8a8a8a] bg-white text-[12px] text-right focus:outline-none focus:border-[#0067c0]"
+                  onChange={(e) => setCopies(Math.max(1, parseInt(e.target.value) || 1))}
+                  className="w-12 h-6 px-1 text-xs border border-[#8a8a8a] rounded-[2px] bg-white text-center"
                 />
               </div>
               <div className="flex items-center justify-between">
-                <div className="flex items-end gap-1">
+                <div className="flex gap-1">
                   {[1, 2, 3].map((n) => (
-                    <div key={n} className="relative">
-                      <div className="w-[28px] h-[36px] bg-white border border-[#8a8a8a] rounded-[2px] flex items-end justify-end pr-1 pb-0.5">
-                        <span className="text-[9px] text-[#1a1a1a]">{n}</span>
-                      </div>
+                    <div
+                      key={n}
+                      className="w-6 h-7 border border-[#8a8a8a] bg-white flex items-end justify-center text-[9px] text-[#1f1f1f] pb-0.5"
+                    >
+                      {n}
                     </div>
                   ))}
                 </div>
-                <label className="flex items-center gap-2 cursor-pointer" onClick={() => setCollate(!collate)}>
-                  {checkbox(collate)}
-                  <span className={fieldValue}>Collate</span>
+                <label className="flex items-center gap-1.5 text-xs text-[#1f1f1f] cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={collate}
+                    onChange={(e) => setCollate(e.target.checked)}
+                    className="accent-[#0067c0]"
+                  />
+                  C<span className="underline">o</span>llate
                 </label>
               </div>
-            </div>
+            </fieldset>
           </div>
-        </div>
 
-        <div className="bg-[#f3f3f3] px-5 py-3 flex items-center justify-end gap-2 border-t border-[#e0e0e0]">
-          <button
-            onClick={handleOk}
-            className="h-[30px] min-w-[88px] px-4 rounded-[4px] bg-[#0067c0] text-white text-[12px] font-semibold hover:bg-[#005ba1] cursor-pointer"
-          >
-            OK
-          </button>
-          <button
-            onClick={onClose}
-            className="h-[30px] min-w-[88px] px-4 rounded-[4px] bg-white border border-[#8a8a8a] text-[#1a1a1a] text-[12px] hover:bg-[#e5e5e5] cursor-pointer"
-          >
-            Cancel
-          </button>
+          <div className="flex items-center justify-end gap-2 pt-1">
+            <button
+              onClick={handleOk}
+              className="h-8 px-6 text-xs font-semibold border border-[#0067c0] bg-[#0067c0] text-white rounded-[4px] hover:bg-[#005ba1] cursor-pointer"
+            >
+              OK
+            </button>
+            <button
+              onClick={onClose}
+              className="h-8 px-6 text-xs border border-[#8a8a8a] bg-[#f3f3f3] text-[#1f1f1f] rounded-[4px] hover:bg-[#e5e5e5] cursor-pointer"
+            >
+              Cancel
+            </button>
+          </div>
         </div>
       </div>
     </div>

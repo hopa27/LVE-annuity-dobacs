@@ -15,6 +15,7 @@ import {
   MdLocalPrintshop,
 } from "react-icons/md";
 import { saveReportAsQrp } from "../lib/saveQrp";
+import PrintDialog from "./PrintDialog";
 
 const PAGE_W = 1080;
 type ZoomMode = "fit" | "actual" | "width";
@@ -193,6 +194,7 @@ export default function FirstPaymentReportModal({ open, onClose, dateRange }: Fi
   const [page, setPage] = useState(1);
   const [zoomMode, setZoomMode] = useState<ZoomMode>("actual");
   const [zoom, setZoom] = useState(1);
+  const [printDialogOpen, setPrintDialogOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const pageRef = useRef<HTMLDivElement>(null);
   const naturalHRef = useRef<number | null>(null);
@@ -288,7 +290,7 @@ export default function FirstPaymentReportModal({ open, onClose, dateRange }: Fi
           <button title="Next page" onClick={goNext} disabled={isLast} className={isLast ? toolbarBtnDisabled : toolbarBtn}><MdChevronRight className="text-xl" /></button>
           <button title="Last page" onClick={goLast} disabled={isLast} className={isLast ? toolbarBtnDisabled : toolbarBtn}><MdSkipNext className="text-xl" /></button>
           <div className="w-px h-6 bg-[#BBBBBB] mx-2" />
-          <button title="Printer Setup" onClick={() => window.print()} className={toolbarBtn}><MdSettings className="text-xl" /></button>
+          <button title="Printer Setup" onClick={() => setPrintDialogOpen(true)} className={toolbarBtn}><MdSettings className="text-xl" /></button>
           <button title="Print" onClick={() => window.print()} className={toolbarBtn}><MdLocalPrintshop className="text-xl" /></button>
           <div className="w-px h-6 bg-[#BBBBBB] mx-2" />
           <button title="Save" onClick={() => saveReportAsQrp({ title: "First Payments Report", dateRange, columns: [{key:"sortCode",label:"Bank Sort Code"},{key:"accountNo",label:"Bank Account No"},{key:"zero",label:"0"},{key:"accountName",label:"Bank Account Name"},{key:"bankRef",label:"Bank Ref"},{key:"nineNine",label:"99"},{key:"grossAnn",label:"Gross Ann"},{key:"amountToPay",label:"Amount To Pay"},{key:"tax",label:"Tax"},{key:"policyRef",label:"Policy Ref"}], rows: ROWS as unknown as Record<string, unknown>[], totals: { Count: TOTAL_COUNT, "Total Gross": TOTAL_GROSS, "Total Amount": TOTAL_AMOUNT, "Total Tax": TOTAL_TAX } }, "First_Payments_Report.qrp")} className={toolbarBtn}><MdSave className="text-xl" /></button>
@@ -377,6 +379,7 @@ export default function FirstPaymentReportModal({ open, onClose, dateRange }: Fi
           </div>
         </div>
       </div>
+      <PrintDialog open={printDialogOpen} onClose={() => setPrintDialogOpen(false)} totalPages={TOTAL_PAGES} />
     </div>
   );
 }
