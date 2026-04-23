@@ -1,4 +1,5 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import PrintDialog from "./PrintDialog";
 import {
   MdSkipPrevious,
   MdSkipNext,
@@ -43,6 +44,7 @@ type ZoomMode = "fit" | "actual" | "width";
 export default function ProcessedReportModal({ open, onClose, dateRange, columns, rows, totals }: ProcessedReportModalProps) {
   const [zoomMode, setZoomMode] = useState<ZoomMode>("actual");
   const [zoom, setZoom] = useState(1);
+  const [printDialogOpen, setPrintDialogOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const pageRef = useRef<HTMLDivElement>(null);
   const naturalHRef = useRef<number | null>(null);
@@ -122,7 +124,7 @@ export default function ProcessedReportModal({ open, onClose, dateRange, columns
           <button title="Next page" disabled className={toolbarBtnDisabled}><MdChevronRight className="text-xl" /></button>
           <button title="Last page" disabled className={toolbarBtnDisabled}><MdSkipNext className="text-xl" /></button>
           <div className="w-px h-6 bg-[#BBBBBB] mx-2" />
-          <button title="Print" className={toolbarBtn}><MdPrint className="text-xl" /></button>
+          <button title="Printer Setup" onClick={() => setPrintDialogOpen(true)} className={toolbarBtn}><MdPrint className="text-xl" /></button>
           <button title="Quick print" className={toolbarBtn}><MdLocalPrintshop className="text-xl" /></button>
           <div className="w-px h-6 bg-[#BBBBBB] mx-2" />
           <button title="Save" className={toolbarBtn}><MdSave className="text-xl" /></button>
@@ -205,6 +207,7 @@ export default function ProcessedReportModal({ open, onClose, dateRange, columns
           </div>
         </div>
       </div>
+      <PrintDialog open={printDialogOpen} onClose={() => setPrintDialogOpen(false)} totalPages={1} />
     </div>
   );
 }
