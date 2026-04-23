@@ -9,7 +9,7 @@ import {
   MdClose,
   MdInsertDriveFile,
   MdZoomIn,
-  MdViewAgenda,
+  MdFitScreen,
   MdFolderOpen,
   MdLocalPrintshop,
 } from "react-icons/md";
@@ -224,7 +224,7 @@ export default function FirstPaymentReportModal({ open, onClose, dateRange }: Fi
         <div className="bg-white border-b border-[#BBBBBB] px-5 py-3 flex items-center gap-2 flex-wrap">
           <button title="Single page" className={toolbarBtn}><MdInsertDriveFile className="text-xl" /></button>
           <button title="100% Zoom" className={toolbarBtn}><MdZoomIn className="text-xl" /></button>
-          <button title="Page width" className={toolbarBtn}><MdViewAgenda className="text-xl" /></button>
+          <button title="Zoom to Width" className={toolbarBtn}><MdFitScreen className="text-xl" /></button>
           <div className="w-px h-6 bg-[#BBBBBB] mx-2" />
           <button title="First page" onClick={goFirst} disabled={isFirst} className={isFirst ? toolbarBtnDisabled : toolbarBtn}><MdSkipPrevious className="text-xl" /></button>
           <button title="Previous page" onClick={goPrev} disabled={isFirst} className={isFirst ? toolbarBtnDisabled : toolbarBtn}><MdChevronLeft className="text-xl" /></button>
