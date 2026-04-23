@@ -8,7 +8,7 @@ import {
   MdSave,
   MdClose,
   MdInsertDriveFile,
-  MdViewModule,
+  MdZoomIn,
   MdViewAgenda,
   MdFolderOpen,
   MdLocalPrintshop,
@@ -223,7 +223,7 @@ export default function FirstPaymentReportModal({ open, onClose, dateRange }: Fi
 
         <div className="bg-white border-b border-[#BBBBBB] px-5 py-3 flex items-center gap-2 flex-wrap">
           <button title="Single page" className={toolbarBtn}><MdInsertDriveFile className="text-xl" /></button>
-          <button title="Multiple pages" className={toolbarBtn}><MdViewModule className="text-xl" /></button>
+          <button title="100% Zoom" className={toolbarBtn}><MdZoomIn className="text-xl" /></button>
           <button title="Page width" className={toolbarBtn}><MdViewAgenda className="text-xl" /></button>
           <div className="w-px h-6 bg-[#BBBBBB] mx-2" />
           <button title="First page" onClick={goFirst} disabled={isFirst} className={isFirst ? toolbarBtnDisabled : toolbarBtn}><MdSkipPrevious className="text-xl" /></button>
