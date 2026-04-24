@@ -7,6 +7,7 @@ import DataGrid from "../components/DataGrid";
 import SelectInput from "../components/SelectInput";
 import WarningDialog from "../components/WarningDialog";
 import InfoDialog from "../components/InfoDialog";
+import ConfirmDialog from "../components/ConfirmDialog";
 import PrintPreviewModal, { type PrintRow } from "../components/PrintPreviewModal";
 import ReportPrintModal, { type ReportColumn, type ReportTotal } from "../components/ReportPrintModal";
 import FirstPaymentReportModal from "../components/FirstPaymentReportModal";
@@ -299,6 +300,27 @@ export default function BacsPayments() {
   const [arEndRunMonth, setArEndRunMonth] = useState("31/05/2025");
   const [adStartRunMonth, setAdStartRunMonth] = useState("01/06/2025");
   const [adEndRunMonth, setAdEndRunMonth] = useState("24/06/2025");
+  const [nonStandardConfirm, setNonStandardConfirm] = useState<{
+    open: boolean;
+    pending: { setter: (v: string) => void; previous: string; next: string } | null;
+  }>({ open: false, pending: null });
+
+  function isNonStandardDate(value: string): boolean {
+    const parts = value.split("/");
+    if (parts.length !== 3) return false;
+    const year = parseInt(parts[2], 10);
+    return !isNaN(year) && year >= 2026;
+  }
+
+  function makeParameterDateHandler(setter: (v: string) => void, current: string) {
+    return (next: string) => {
+      if (next !== current && isNonStandardDate(next)) {
+        setNonStandardConfirm({ open: true, pending: { setter, previous: current, next } });
+      } else {
+        setter(next);
+      }
+    };
+  }
   const [reportsStartRun, setReportsStartRun] = useState("01/05/2025");
   const [reportsEndRun, setReportsEndRun] = useState("05/04/2026");
   const [paymentType, setPaymentType] = useState("All");
@@ -541,6 +563,18 @@ export default function BacsPayments() {
         message={noDataMessage}
         onOk={() => setNoDataOpen(false)}
       />
+      <ConfirmDialog
+        open={nonStandardConfirm.open}
+        title="Confirm"
+        message="The date entered is for a non-standard processing period. Is this correct?"
+        onOk={() => {
+          if (nonStandardConfirm.pending) {
+            nonStandardConfirm.pending.setter(nonStandardConfirm.pending.next);
+          }
+          setNonStandardConfirm({ open: false, pending: null });
+        }}
+        onCancel={() => setNonStandardConfirm({ open: false, pending: null })}
+      />
       <WarningDialog
         open={reportPrintWarningOpen}
         message="Some of the payments have already been committed. Would you like to exclude these payments?"
@@ -710,10 +744,10 @@ export default function BacsPayments() {
                   </div>
 
                   <div className="flex flex-col gap-4 max-w-[260px]">
-                    <DateInput label="ARSTARTRUNMONTH" value={arStartRunMonth} onChange={setArStartRunMonth} stacked />
-                    <DateInput label="ARENDRUNMONTH"   value={arEndRunMonth}   onChange={setArEndRunMonth}   stacked />
-                    <DateInput label="ADSTARTRUNMONTH" value={adStartRunMonth} onChange={setAdStartRunMonth} stacked />
-                    <DateInput label="ADENDRUNMONTH"   value={adEndRunMonth}   onChange={setAdEndRunMonth}   stacked />
+                    <DateInput label="ARSTARTRUNMONTH" value={arStartRunMonth} onChange={makeParameterDateHandler(setArStartRunMonth, arStartRunMonth)} stacked />
+                    <DateInput label="ARENDRUNMONTH"   value={arEndRunMonth}   onChange={makeParameterDateHandler(setArEndRunMonth,   arEndRunMonth)}   stacked />
+                    <DateInput label="ADSTARTRUNMONTH" value={adStartRunMonth} onChange={makeParameterDateHandler(setAdStartRunMonth, adStartRunMonth)} stacked />
+                    <DateInput label="ADENDRUNMONTH"   value={adEndRunMonth}   onChange={makeParameterDateHandler(setAdEndRunMonth,   adEndRunMonth)}   stacked />
                   </div>
                 </div>
 
