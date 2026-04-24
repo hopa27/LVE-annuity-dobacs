@@ -300,9 +300,25 @@ export default function BacsPayments() {
   const [arEndRunMonth, setArEndRunMonth] = useState("31/05/2025");
   const [adStartRunMonth, setAdStartRunMonth] = useState("01/06/2025");
   const [adEndRunMonth, setAdEndRunMonth] = useState("24/06/2025");
+
+  type ParamKey = "arStart" | "arEnd" | "adStart" | "adEnd";
+  const committedParams = {
+    arStart: arStartRunMonth,
+    arEnd: arEndRunMonth,
+    adStart: adStartRunMonth,
+    adEnd: adEndRunMonth,
+  };
+  const [draftParams, setDraftParams] = useState(committedParams);
+  const [paramsStatus, setParamsStatus] = useState("");
+  const paramsDirty =
+    draftParams.arStart !== arStartRunMonth ||
+    draftParams.arEnd !== arEndRunMonth ||
+    draftParams.adStart !== adStartRunMonth ||
+    draftParams.adEnd !== adEndRunMonth;
+
   const [nonStandardConfirm, setNonStandardConfirm] = useState<{
     open: boolean;
-    pending: { setter: (v: string) => void; previous: string; next: string } | null;
+    pending: { key: ParamKey; previous: string; next: string } | null;
   }>({ open: false, pending: null });
 
   function isNonStandardDate(value: string): boolean {
@@ -312,17 +328,36 @@ export default function BacsPayments() {
     return !isNaN(year) && year >= 2026;
   }
 
-  function makeParameterDateHandler(setter: (v: string) => void, current: string) {
+  function makeParameterDateHandler(key: ParamKey, current: string) {
     return (next: string) => {
       if (next === current) return;
       if (isNonStandardDate(next)) {
-        setNonStandardConfirm({ open: true, pending: { setter, previous: current, next } });
+        setNonStandardConfirm({ open: true, pending: { key, previous: current, next } });
       } else {
-        setter(next);
+        setDraftParams((p) => ({ ...p, [key]: next }));
         setNoDataMessage("If you wish to save the change, please click on the tick button");
         setNoDataOpen(true);
       }
     };
+  }
+
+  function handleParamsPost() {
+    if (!paramsDirty) return;
+    setArStartRunMonth(draftParams.arStart);
+    setArEndRunMonth(draftParams.arEnd);
+    setAdStartRunMonth(draftParams.adStart);
+    setAdEndRunMonth(draftParams.adEnd);
+    setParamsStatus("Changes saved");
+  }
+
+  function handleParamsCancel() {
+    setDraftParams(committedParams);
+    setParamsStatus(paramsDirty ? "Changes cancelled" : "");
+  }
+
+  function handleParamsRefresh() {
+    setDraftParams(committedParams);
+    setParamsStatus("");
   }
   const [reportsStartRun, setReportsStartRun] = useState("01/05/2025");
   const [reportsEndRun, setReportsEndRun] = useState("05/04/2026");
@@ -572,7 +607,10 @@ export default function BacsPayments() {
         message="The date entered is for a non-standard processing period. Is this correct?"
         onOk={() => {
           if (nonStandardConfirm.pending) {
-            nonStandardConfirm.pending.setter(nonStandardConfirm.pending.next);
+            const { key, next } = nonStandardConfirm.pending;
+            setDraftParams((p) => ({ ...p, [key]: next }));
+            setNoDataMessage("If you wish to save the change, please click on the tick button");
+            setNoDataOpen(true);
           }
           setNonStandardConfirm({ open: false, pending: null });
         }}
@@ -741,23 +779,44 @@ export default function BacsPayments() {
                 <div className="border border-[#BBBBBB]/40 rounded-[8px] p-4 mb-4 bg-[#fafbfc]">
                   <div className="flex items-center gap-2 mb-5">
                     <button title="Insert" className="h-8 w-9 border border-[#BBBBBB] bg-white rounded-[4px] hover:bg-[#f0f0f0] cursor-pointer flex items-center justify-center text-[#3d3d3d]">▲</button>
-                    <button title="Post" className="h-8 w-9 border border-[#BBBBBB] bg-white rounded-[4px] hover:bg-[#f0f0f0] cursor-pointer flex items-center justify-center text-[#3d3d3d]">✓</button>
-                    <button title="Cancel" className="h-8 w-9 border border-[#BBBBBB] bg-white rounded-[4px] hover:bg-[#f0f0f0] cursor-pointer flex items-center justify-center text-[#3d3d3d]">✗</button>
-                    <button title="Refresh" className="h-8 w-9 border border-[#BBBBBB] bg-white rounded-[4px] hover:bg-[#f0f0f0] cursor-pointer flex items-center justify-center text-[#3d3d3d]">↻</button>
+                    <button
+                      title="Post (save changes)"
+                      onClick={handleParamsPost}
+                      disabled={!paramsDirty}
+                      className="h-8 w-9 border border-[#BBBBBB] bg-white rounded-[4px] hover:bg-[#f0f0f0] cursor-pointer flex items-center justify-center text-[#3d3d3d] disabled:opacity-40 disabled:cursor-not-allowed"
+                    >
+                      ✓
+                    </button>
+                    <button
+                      title="Cancel changes"
+                      onClick={handleParamsCancel}
+                      disabled={!paramsDirty}
+                      className="h-8 w-9 border border-[#BBBBBB] bg-white rounded-[4px] hover:bg-[#f0f0f0] cursor-pointer flex items-center justify-center text-[#3d3d3d] disabled:opacity-40 disabled:cursor-not-allowed"
+                    >
+                      ✗
+                    </button>
+                    <button
+                      title="Refresh"
+                      onClick={handleParamsRefresh}
+                      className="h-8 w-9 border border-[#BBBBBB] bg-white rounded-[4px] hover:bg-[#f0f0f0] cursor-pointer flex items-center justify-center text-[#3d3d3d]"
+                    >
+                      ↻
+                    </button>
                   </div>
 
                   <div className="flex flex-col gap-4 max-w-[260px]">
-                    <DateInput label="ARSTARTRUNMONTH" value={arStartRunMonth} onChange={makeParameterDateHandler(setArStartRunMonth, arStartRunMonth)} stacked />
-                    <DateInput label="ARENDRUNMONTH"   value={arEndRunMonth}   onChange={makeParameterDateHandler(setArEndRunMonth,   arEndRunMonth)}   stacked />
-                    <DateInput label="ADSTARTRUNMONTH" value={adStartRunMonth} onChange={makeParameterDateHandler(setAdStartRunMonth, adStartRunMonth)} stacked />
-                    <DateInput label="ADENDRUNMONTH"   value={adEndRunMonth}   onChange={makeParameterDateHandler(setAdEndRunMonth,   adEndRunMonth)}   stacked />
+                    <DateInput label="ARSTARTRUNMONTH" value={draftParams.arStart} onChange={makeParameterDateHandler("arStart", draftParams.arStart)} stacked />
+                    <DateInput label="ARENDRUNMONTH"   value={draftParams.arEnd}   onChange={makeParameterDateHandler("arEnd",   draftParams.arEnd)}   stacked />
+                    <DateInput label="ADSTARTRUNMONTH" value={draftParams.adStart} onChange={makeParameterDateHandler("adStart", draftParams.adStart)} stacked />
+                    <DateInput label="ADENDRUNMONTH"   value={draftParams.adEnd}   onChange={makeParameterDateHandler("adEnd",   draftParams.adEnd)}   stacked />
                   </div>
                 </div>
 
                 <div className="flex justify-center mt-3">
                   <input
                     readOnly
-                    className="w-[280px] h-7 px-2 border border-[#BBBBBB] bg-white text-[12px] text-[#3d3d3d] rounded-[3px] focus:outline-none"
+                    value={paramsDirty ? "Unsaved changes — click ✓ to save" : paramsStatus}
+                    className="w-[280px] h-7 px-2 border border-[#BBBBBB] bg-white text-[12px] text-[#3d3d3d] rounded-[3px] focus:outline-none text-center"
                   />
                 </div>
               </Tabs.Content>
