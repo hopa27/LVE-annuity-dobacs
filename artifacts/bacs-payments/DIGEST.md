@@ -7,7 +7,7 @@
 | Name          | BACS Payments                                                                                                                                                                                                        |
 | Version       | 1.0.0                                                                                                                                                                                                                |
 | Type          | Static web app (no backend) — recreation of legacy Windows desktop tool                                                                                                                                              |
-| Description   | Liverpool Victoria Friendly Society Limited internal tool for previewing, validating, exporting and committing BACS payment files across 8 payment workflows. Built with React + Vite, deployable as a static site. |
+| Description   | Liverpool Victoria Friendly Society Limited internal tool for previewing, validating, exporting and committing BACS payment files across 9 tabs (8 payment workflows plus a Parameters tab). Built with React + Vite, deployable as a static site. |
 | Framework     | React 18 + Vite + TypeScript                                                                                                                                                                                         |
 | Styling       | Tailwind CSS                                                                                                                                                                                                         |
 | Icons         | react-icons (Material Design)                                                                                                                                                                                        |
@@ -66,11 +66,12 @@ elements:
 1. Tax Free
 2. First and One Off Payments
 3. Processed
-4. Monthly Differences
-5. Maturities
-6. Reports
-7. FirstPayments MCP
-8. Processed MCP
+4. Parameters
+5. Monthly Differences
+6. Maturities
+7. Reports
+8. FirstPayments MCP
+9. Processed MCP
 
 ### 2.4 Footer
 
@@ -98,7 +99,7 @@ elements:
 
 ### 3.3 Processed
 
-- **Tab filters:** Start Run Month · End Run Month · Payment Type *(All / First / One Off)* · `[x] Include non-PAYE cases` · Show Payments · Print Report
+- **Tab filters:** Start Run Month · End Run Month · Payment Type *(B / C / T / R / All — default All)* · `[x] Include non-PAYE cases` · Show Payments · Print Report
 - **Columns:** standard 12-column payment grid
 - **Totals bar:** Payments · Total Net · Total Gross · Total Tax
 - **Actions:**
@@ -106,7 +107,29 @@ elements:
   - **Save And Commit To BACS** — disabled when `!showProcessed` → `handleSaveCommitBacs`
   - **Save To CSV** — disabled when `!showProcessed`, when enabled opens `SaveAsDialog (CSV)` **directly** (no preceding info dialog, no date check)
 
-### 3.4 Monthly Differences
+### 3.4 Parameters
+
+A "system parameters" editor that mirrors the legacy desktop screen. Four
+date fields are edited as a **draft** and committed via the toolbar.
+
+- **Toolbar:**
+  - `▲ Insert` — reserved (no-op in this static recreation)
+  - `✓ Post` — commits all draft values; status reads *"Changes saved"*; disabled until there are unsaved drafts
+  - `✗ Cancel` — reverts drafts to last-saved values; status reads *"Changes cancelled"*; disabled until there are unsaved drafts
+  - `↻ Refresh` — reverts drafts to last-saved values and clears the status text
+- **Fields (stacked label above input):**
+  - `ARSTARTRUNMONTH` — default `01/05/2025`
+  - `ARENDRUNMONTH`   — default `31/05/2025`
+  - `ADSTARTRUNMONTH` — default `01/06/2025`
+  - `ADENDRUNMONTH`   — default `24/06/2025`
+- **Status field (read-only, centered below card):**
+  - shows *"Unsaved changes — click ✓ to save"* whenever drafts ≠ committed
+  - otherwise shows the most recent action ("Changes saved" / "Changes cancelled" / empty)
+- **Per-edit behavior:**
+  - Year ≥ 2026 → `ConfirmDialog` ("non-standard processing period") first; OK stages the change, Cancel reverts
+  - Year < 2026 → change is staged immediately and `InfoDialog` *"If you wish to save the change, please click on the tick button"* is shown
+
+### 3.5 Monthly Differences
 
 - **Tab filters:** Start Run Month · End Run Month
 - **Buttons:**
@@ -115,28 +138,29 @@ elements:
   - **Print Preview** → `PrintPreviewModal`
 - **Columns:** Policy No · Current Date · Current Ref · Current Gross · Previous Date · Previous Ref · Previous Gross
 
-### 3.5 Maturities
+### 3.6 Maturities
 
 - **Columns:** 9-column maturity grid
 - **Totals bar:** Payments · Total Maturity Payments
 - **Actions:** **Save and Commit To Bacs**
 
-### 3.6 Reports
+### 3.7 Reports
 
 - **Tab filters:** Start Run Month · End Run Month · `[x] Include non-PAYE cases`
 - **Buttons:**
   - **Print First** → `FirstPaymentReportModal`
   - **Print Processed** → `ProcessedReportModal`
 
-### 3.7 FirstPayments MCP
+### 3.8 FirstPayments MCP
 
 - **Columns:** standard 12-column payment grid
 - **Totals bar:** Payments · Total First Payments · Total Tax
 - **Actions:** **Save To Bacs** · **Save And Commit To BACS**
 
-### 3.8 Processed MCP
+### 3.9 Processed MCP
 
-- **Tab filters:** Start Run Month · End Run Month · Payment Type · `[x] Include non-PAYE cases`
+- **Tab filters:** Start Run Month · End Run Month · Payment Type *(B / C / T / R / All — default All)* · `[x] Include non-PAYE cases`
+- **Buttons:** **Show Payments** · **Print Report** (Print Report → InfoDialog "No Data found" until payments are shown)
 - **Columns:** standard 12-column payment grid
 - **Totals bar:** Payments · Total Tax Free Cash
 - **Actions:** **Save And Commit To Bacs**
@@ -330,8 +354,27 @@ actions: [OK, Cancel]
 - "No BACS payments present."
 - "From and To date should not be in past date to save the BACS file."
 - Nil-Income empty result
+- Parameters tab — "If you wish to save the change, please click on the tick button" (after editing a date with year < 2026)
 
-### 4.9 WarningDialog (title **BACS Payments**)
+### 4.9 ConfirmDialog (`src/components/ConfirmDialog.tsx`, title **Confirm**)
+
+LVE-styled confirmation dialog (navy `#00263e` title bar, white card,
+pill OK / Cancel buttons, soft-blue help icon). Used by the
+**Parameters** tab whenever a date field is changed to a year ≥ 2026
+(non-standard processing period).
+
+```yaml
+title: "Confirm"
+message: "The date entered is for a non-standard processing period. Is this correct?"
+icon: MdHelpOutline (blue circle)
+buttons:
+  OK:     primary (filled #006cf4 -> hover #003578) — stages the new value into the draft
+  Cancel: secondary (outline #04589b)               — keeps the previous draft value
+header_X: behaves as Cancel
+z_index: 60   # above other modals/popovers
+```
+
+### 4.10 WarningDialog (title **BACS Payments**)
 
 `⚠ message [Yes] [No]` — used for:
 
@@ -432,6 +475,26 @@ InfoDialog "From and To date should not be in past date to save the BACS file."
 [ Print Processed ]  ─▶ ProcessedReportModal    ─▶ { ⚙ PrintDialog | 🖨 print | 💾 SaveAsDialog QRP | 📂 LoadReportDialog }
 ```
 
+### 5.8 Parameters tab
+
+```text
+edit AR/AD date field
+   │
+   ▼
+isNonStandardDate(value)?  (year >= 2026)
+   │ Yes                                        │ No
+   ▼                                            ▼
+ConfirmDialog                              stage value into draftParams
+   ├─ Cancel ─▶ keep previous draft         InfoDialog "click ✓ to save"
+   └─ OK     ─▶ stage value into draftParams
+                InfoDialog "click ✓ to save"
+
+[ ✓ Post ]    ─▶ commit draftParams to ar/ad state; status = "Changes saved"
+[ ✗ Cancel ]  ─▶ draftParams := committedParams; status = "Changes cancelled"
+[ ↻ Refresh ] ─▶ draftParams := committedParams; status cleared
+[ ▲ Insert ]  ─▶ reserved (no-op)
+```
+
 ---
 
 ## 6. Print Behaviour
@@ -484,13 +547,24 @@ InfoDialog "From and To date should not be in past date to save the BACS file."
 ```yaml
 global:
   - completionStart, completionEnd          # dd/mm/yyyy strings
-  - activeTab                               # one of 8 tab ids
+  - activeTab                               # one of 9 tab ids
   - showData, showProcessed,
-    showProcessedMcp, showMonthlyDiff       # per-tab "data populated" flags
+    showProcessedMcp, showMonthlyDiff,
+    showNilIncome                           # per-tab "data populated" flags
   - saveAsOpen, saveAsType (BACS|CSV|QRP)   # SaveAsDialog state
   - loadOpen                                # LoadReportDialog state (per print modal)
-  - noDataOpen, noDataMessage               # InfoDialog state
+  - noDataOpen, noDataMessage               # InfoDialog state (also reused for "click ✓ to save" reminder)
   - commitWarningOpen                       # WarningDialog state for commits
+  - paymentType                             # default "All", options: B|C|T|R|All
+parameters_tab:
+  - arStartRunMonth, arEndRunMonth,
+    adStartRunMonth, adEndRunMonth          # committed values (defaults: 01/05/2025, 31/05/2025, 01/06/2025, 24/06/2025)
+  - draftParams: { arStart, arEnd, adStart, adEnd }   # editable draft mirror of the four committed values
+  - paramsDirty                             # derived: true when any draft != committed
+  - paramsStatus                            # "" | "Changes saved" | "Changes cancelled" (status field text)
+  - nonStandardConfirm:
+      open: boolean
+      pending: { key: ParamKey, previous: string, next: string } | null
 ```
 
 ---
@@ -504,3 +578,6 @@ global:
 - **Tables:** zebra rows `#e7ebec34`; full-row hover `#05579B` with white text.
 - **Print modals:** open over a 40% black backdrop, `shadow-2xl`, 12px radius.
 - **SaveAsDialog, LoadReportDialog and PrintDialog** match Windows 11 Fluent visuals: Segoe UI Variable, 4px corner radius, accent `#0067c0`, light Mica grey `#f3f3f3`.
+- **InfoDialog and ConfirmDialog** follow the LVE design language: navy `#00263e` title bar, white card with 12px radius and `border-[#BBBBBB]` border, pill OK / Cancel buttons in brand blues.
+- **Parameters tab toolbar buttons (▲ ✓ ✗ ↻):** 32×36, white background, `#BBBBBB` border, 4px radius, `#3d3d3d` glyph, hover `#f0f0f0`. ✓ and ✗ fade to 40% opacity and become non-clickable when there are no unsaved drafts.
+- **DateInput `stacked` variant** (used in Parameters): renders the label above the input as small uppercase grey text (`text-[11px] tracking-wide uppercase text-[#5f5f5f]`) instead of the default inline label.

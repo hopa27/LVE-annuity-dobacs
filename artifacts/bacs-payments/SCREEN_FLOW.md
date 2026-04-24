@@ -14,8 +14,8 @@ Payments web app, plus the navigation paths between them.
 | Completion Start: [ 23/04/2026 [v] ]   Completion End: [ 23/04/2026 [v] ]                      |
 |                                              [ Show Payments ]   [ Print Report ]              |
 +------------------------------------------------------------------------------------------------+
-| [ Tax Free | First and One Off Payments | Processed | Monthly Differences |                    |
-|   Maturities | Reports | FirstPayments MCP | Processed MCP ]                                   |
+| [ Tax Free | First and One Off Payments | Processed | Parameters |                            |
+|   Monthly Differences | Maturities | Reports | FirstPayments MCP | Processed MCP ]              |
 +------------------------------------------------------------------------------------------------+
 |                                                                                                |
 |                              <<< ACTIVE TAB CONTENT >>>                                        |
@@ -75,7 +75,41 @@ Legend: `[ Button ]`, `[ field ]`, `[v]` = dropdown / picker, `( )` radio, `[x]`
 +------------------------------------------------------------------------------------------------+
 ```
 
-### 2D. Monthly Differences
+`Payment Type` options: **B · C · T · R · All** (default **All**).
+
+### 2D. Parameters
+```
++------------------------------------------------------------------------------------------------+
+| [ ▲ Insert ] [ ✓ Post ] [ ✗ Cancel ] [ ↻ Refresh ]                                              |
+|                                                                                                 |
+|   ARSTARTRUNMONTH                                                                               |
+|   [ 01/05/2025 📅 ]                                                                             |
+|                                                                                                 |
+|   ARENDRUNMONTH                                                                                 |
+|   [ 31/05/2025 📅 ]                                                                             |
+|                                                                                                 |
+|   ADSTARTRUNMONTH                                                                               |
+|   [ 01/06/2025 📅 ]                                                                             |
+|                                                                                                 |
+|   ADENDRUNMONTH                                                                                 |
+|   [ 24/06/2025 📅 ]                                                                             |
++------------------------------------------------------------------------------------------------+
+|                  [ status: "Unsaved changes — click ✓ to save" / "Changes saved" ]              |
++------------------------------------------------------------------------------------------------+
+```
+
+Behavior:
+* Editing a date stages a **draft** value (not yet committed).
+* `✓ Post` commits all drafts → status reads *"Changes saved"*.
+* `✗ Cancel` reverts drafts to last saved values → status reads *"Changes cancelled"*.
+* `↻ Refresh` also reverts drafts and clears the status text.
+* `▲ Insert` is reserved (no-op in this static recreation).
+* `✓` and `✗` are disabled when there are no unsaved drafts.
+* Whenever a date is edited:
+  * If year ≥ 2026 → **ConfirmDialog** ("non-standard processing period") first; OK stages the change, Cancel keeps the previous draft.
+  * Otherwise → the change is staged immediately and **InfoDialog** *"If you wish to save the change, please click on the tick button"* is shown.
+
+### 2E. Monthly Differences
 ```
 +------------------------------------------------------------------------------------------------+
 | Start Run Month: [ 04/2026 [v] ]   End Run Month: [ 04/2026 [v] ]                              |
@@ -87,7 +121,7 @@ Legend: `[ Button ]`, `[ field ]`, `[v]` = dropdown / picker, `( )` radio, `[x]`
 +------------------------------------------------------------------------------------------------+
 ```
 
-### 2E. Maturities
+### 2F. Maturities
 ```
 +------------------------------------------------------------------------------------------------+
 | Sort Code | Acc No | 0 | Amount | Acc Name | Ref | 99 | BACS Date | Policy                    |
@@ -100,7 +134,7 @@ Legend: `[ Button ]`, `[ field ]`, `[v]` = dropdown / picker, `( )` radio, `[x]`
 +------------------------------------------------------------------------------------------------+
 ```
 
-### 2F. Reports
+### 2G. Reports
 ```
 +------------------------------------------------------------------------------------------------+
 | Start Run Month: [ 04/2026 [v] ]   End Run Month: [ 04/2026 [v] ]                              |
@@ -109,7 +143,7 @@ Legend: `[ Button ]`, `[ field ]`, `[v]` = dropdown / picker, `( )` radio, `[x]`
 +------------------------------------------------------------------------------------------------+
 ```
 
-### 2G. FirstPayments MCP
+### 2H. FirstPayments MCP
 ```
 +------------------------------------------------------------------------------------------------+
 | Sort Code | Acc No | 0 | Amount To Pay | Acc Name | Ref | 99 | BACS Date | Policy | Tax | ... |
@@ -122,7 +156,7 @@ Legend: `[ Button ]`, `[ field ]`, `[v]` = dropdown / picker, `( )` radio, `[x]`
 +------------------------------------------------------------------------------------------------+
 ```
 
-### 2H. Processed MCP
+### 2I. Processed MCP
 ```
 +------------------------------------------------------------------------------------------------+
 | Start Run Month: [ 04/2026 [v] ]   End Run Month: [ 04/2026 [v] ]                              |
@@ -137,6 +171,8 @@ Legend: `[ Button ]`, `[ field ]`, `[v]` = dropdown / picker, `( )` radio, `[x]`
 |                            [ Save And Commit To Bacs ]                                         |
 +------------------------------------------------------------------------------------------------+
 ```
+
+`Payment Type` options: **B · C · T · R · All** (default **All**).
 
 ---
 
@@ -328,7 +364,30 @@ Visually mirrors the Save As dialog — a Windows 11 File Explorer
 Used for: "No Data", "Dates in past", "Nil-Income list empty",
 "From and To date should not be in past date to save the BACS file."
 
-### 4G. Warning Dialog (Commit / Exclude already-committed)
+### 4G. Confirm Dialog (`ConfirmDialog`)
+
+Used by the **Parameters** tab when a date with year ≥ 2026 is entered
+(non-standard processing period).
+
+```
++------------------------------------------------+
+| Confirm                                    X   |
++------------------------------------------------+
+|  ❓  The date entered is for a non-standard     |
+|      processing period. Is this correct?       |
+|                                                |
+|                       [  OK  ]   [ Cancel ]    |
++------------------------------------------------+
+```
+
+* Style follows the LVE design language (navy `#00263e` title bar,
+  white card, pill OK/Cancel buttons in brand blues).
+* `OK` stages the new date in the draft (then InfoDialog "click ✓ to
+  save" appears).
+* `Cancel` (or header X) discards the change — the previous draft
+  value is kept.
+
+### 4H. Warning Dialog (Commit / Exclude already-committed)
 
 ```
 +--------------------------------------------------+
@@ -404,7 +463,28 @@ Used for: "No Data", "Dates in past", "Nil-Income list empty",
                                     └─▶ 💾 Save As Dialog (QRP)
 ```
 
-### 5.5 Reports tab
+### 5.5 Parameters tab
+
+```
+  Edit a date in any of the 4 fields
+        │
+        ▼
+   year >= 2026 ? ──Yes──▶ ConfirmDialog ──Cancel──▶ keep previous draft
+        │ No                       │ OK
+        ▼                          ▼
+   stage value into draft  ◀──── stage value into draft
+        │                          │
+        ▼                          ▼
+   InfoDialog "click ✓ to save"   InfoDialog "click ✓ to save"
+        │
+        ▼
+  [ ✓ Post ]   ──▶ commit drafts → status: "Changes saved"
+  [ ✗ Cancel ] ──▶ revert drafts  → status: "Changes cancelled"
+  [ ↻ Refresh ]──▶ revert drafts  → clear status
+  [ ▲ Insert ] ──▶ (reserved, no-op)
+```
+
+### 5.6 Reports tab
 
 ```
   [ Print First ] ─────────▶ First Payment Report Modal
@@ -439,5 +519,7 @@ Used for: "No Data", "Dates in past", "Nil-Income list empty",
 | Save As Dialog   | Save To Bacs / CSV, 💾 in any print modal        | Filename + folder browse, then browser download      |
 | Print Dialog     | ⚙ in any print modal                             | Mock printer settings (informational only)            |
 | Browser Print    | 🖨 in any print modal                            | Native `window.print()` of the report area           |
-| Info Dialog      | No-data, past-date, nil-income, save-failure     | OK button to dismiss                                  |
+| Info Dialog      | No-data, past-date, nil-income, save-failure, "click ✓ to save" reminder in Parameters | OK button to dismiss                                  |
+| Confirm Dialog   | Parameters tab — date with year ≥ 2026           | OK stages the date as draft; Cancel reverts          |
 | Warning Dialog   | Show Payments, Print Report, Commit conflicts    | Yes / No, branches to next action or cancels         |
+| Load Report Dialog | 📂 in any print modal                          | Loads `.qrp` file via mock list or Browse this computer |
