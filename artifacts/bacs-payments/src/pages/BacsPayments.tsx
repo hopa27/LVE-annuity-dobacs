@@ -314,10 +314,13 @@ export default function BacsPayments() {
 
   function makeParameterDateHandler(setter: (v: string) => void, current: string) {
     return (next: string) => {
-      if (next !== current && isNonStandardDate(next)) {
+      if (next === current) return;
+      if (isNonStandardDate(next)) {
         setNonStandardConfirm({ open: true, pending: { setter, previous: current, next } });
       } else {
         setter(next);
+        setNoDataMessage("If you wish to save the change, please click on the tick button");
+        setNoDataOpen(true);
       }
     };
   }
