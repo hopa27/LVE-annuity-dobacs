@@ -361,7 +361,7 @@ export default function BacsPayments() {
   }
   const [reportsStartRun, setReportsStartRun] = useState("01/05/2025");
   const [reportsEndRun, setReportsEndRun] = useState("05/04/2026");
-  const [paymentType, setPaymentType] = useState("All");
+  const [paymentType, setPaymentType] = useState("B");
   const [includeNonPaye, setIncludeNonPaye] = useState(true);
   const [statusBarText] = useState("");
   const [showData, setShowData] = useState(false);
@@ -741,7 +741,7 @@ export default function BacsPayments() {
                       <SelectInput
                         label="Payment Type"
                         value={paymentType}
-                        options={["All", "First", "One Off"]}
+                        options={["B", "C", "T", "R", "All"]}
                         onChange={setPaymentType}
                       />
                     </div>
@@ -933,7 +933,7 @@ export default function BacsPayments() {
                       <SelectInput
                         label="Payment Type"
                         value={paymentType}
-                        options={["All", "First", "One Off"]}
+                        options={["B", "C", "T", "R", "All"]}
                         onChange={setPaymentType}
                       />
                     </div>
